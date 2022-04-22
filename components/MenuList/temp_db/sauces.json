@@ -1,0 +1,14 @@
+[
+   {
+      "id": 1,
+      "name": "molho especial caseiro",
+      "price": 0,
+      "types": [""]
+   },
+   {
+      "id": 2,
+      "name": "maionese artesanal",
+      "price": 0,
+      "types": ["tradicional", "bacon", "ervas", "alho", "maionese do mês (consultar sabor)"]
+   }
+]

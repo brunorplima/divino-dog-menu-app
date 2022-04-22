@@ -1,0 +1,27 @@
+[
+   {
+      "id": 1,
+      "name": "molho",
+      "order": 1
+   },
+   {
+      "id": 2,
+      "name": "chapa",
+      "order": 2
+   },
+   {
+      "id": 3,
+      "name": "especiais",
+      "order": 3
+   },
+   {
+      "id": 4,
+      "name": "bebidas",
+      "order": 4
+   },
+   {
+      "id": 5,
+      "name": "combo",
+      "order": 0
+   }
+]

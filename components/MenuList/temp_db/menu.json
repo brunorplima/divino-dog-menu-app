@@ -1,0 +1,90 @@
+[
+   {
+      "id": 1,
+      "name": "Dog Simples",
+      "description": "Pão, salsicha perdigão, molho especial caseiro, muçarela, milho, batata gourmet e maionese artesanal.",
+      "toppings": [1, 2, 3],
+      "sauces": [1, 2],
+      "category": 2,
+      "price": 12,
+      "img": "",
+      "order": 0
+   },
+   {
+      "id": 2,
+      "name": "Dog Duplo",
+      "description": "Pão, 2 salsichas perdigão, molho especial caseiro, muçarela, milho, batata gourmet e maionese artesanal.",
+      "toppings": [1, 2, 3],
+      "sauces": [1, 2],
+      "category": 2,
+      "price": 15,
+      "img": "",
+      "order": 1
+   },
+   {
+      "id": 3,
+      "name": "Divino Bacon",
+      "description": "Pão, 2 salsichas perdigão, molho especial caseiro, creme de cheddar, farofa de bacon e maionese artesanal.",
+      "toppings": [4, 5],
+      "sauces": [1, 2],
+      "category": 2,
+      "price": 15,
+      "img": "",
+      "order": 2
+   },
+   {
+      "id": 4,
+      "name": "Dognoff (de sexta a domingo)",
+      "description": "Pão, strogonoff de frango, molho especial caseiro, muçarela, milho, batata gourmet.",
+      "toppings": [1, 2, 3],
+      "sauces": [1, 2],
+      "category": 3,
+      "price": 15,
+      "img": "",
+      "order": 3
+   },
+   {
+      "id": 5,
+      "name": "Suco natural",
+      "description": "Acerola, Caju e Maracujá",
+      "toppings": [0],
+      "sauces": [0],
+      "category": 4,
+      "price": 6,
+      "img": "",
+      "order": 4
+   },
+   {
+      "id": 6,
+      "name": "Refrigerante",
+      "description": "Lata",
+      "toppings": [0],
+      "sauces": [0],
+      "category": 4,
+      "price": 5,
+      "img": "",
+      "order": 5
+   },
+   {
+      "id": 7,
+      "name": "Chá gelado",
+      "description": "Consultar sabores",
+      "toppings": [0],
+      "sauces": [0],
+      "category": 4,
+      "price": 6,
+      "img": "",
+      "order": 6
+   },
+   {
+      "id": 8,
+      "name": "H2O",
+      "description": "Acerola, Caju e Maracujá",
+      "toppings": [0],
+      "sauces": [0],
+      "category": 4,
+      "price": 6,
+      "img": "",
+      "order": 7
+   }
+]
