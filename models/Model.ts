@@ -1,3 +1,48 @@
+/**
+ * Blueprint class to shape all models in the app
+ * 
+ * @typeParam T - Type of the model
+ */
+export default abstract class Model<T> {
+
+   /**
+    * Gets the current values of the model
+    * 
+    * @returns The current values of the model
+    */
+   abstract values(): T
+
+   /**
+    * Evaluates the model values and returns whether or not the values are valid.
+    * This function doesn't evaluate typing only values.
+    * 
+    * @returns Boolean indicating whether the values are valid or not
+    */
+   abstract isValid(): boolean
+
+   /**
+    * Modifies the current value of the model
+    * 
+    * @param values - set of values to be used to set the current value of the model
+    */
+   abstract modify(values: Partial<Omit<T, 'id'>>): void
+
+   /**
+    * Saves the model to the database
+    * 
+    * @throws {@link Error}
+    * Thrown if the current value of the model is not valid
+    */
+   abstract save(): void
+
+   /**
+    * Delete the model from the database
+    */
+   abstract delete(): void
+
+   abstract toString(): string
+}
+
 /*
    All Models must also implement the following:
 
@@ -8,15 +53,6 @@
    static async listenToQuery(q: Query, setFunction: Function): Unsubscribe
 
 */
-
-export default abstract class Model<T> {
-   abstract values(): T
-   abstract isValid(): boolean
-   abstract modify(values: Partial<Omit<T, 'id'>>): void
-   save(): void {}
-   delete(): void {}
-   abstract toString(): string
-}
 
 /*
    ChildModel template

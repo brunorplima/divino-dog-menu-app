@@ -10,8 +10,18 @@ export default class MenuItemModel extends Model<MenuItem> {
       super()
    }
    
+   /**
+    * Gets the collection path of this model in the database.
+    * @returns The collection path
+    * @readonly
+    */
    static get PATH(): string { return 'menuItems' }
 
+   /**
+    * Retrieves a document from the database with the provided ID. 
+    * @param id The ID of the document in the database
+    * @returns Promise to deliver the document if found
+    */
    static async find(id: string) {
       const docRef = await getDoc(doc(db, MenuItemModel.PATH, id))
       
@@ -20,6 +30,11 @@ export default class MenuItemModel extends Model<MenuItem> {
       return docRef.data() as MenuItem
    }
 
+   /**
+    * Opens a real time connection with the collection in the databse.
+    * @param setFunction - The function to set external state to values return from collection
+    * @returns A function returned by firestore's ```onSnapshot()``` that removes the listener when invoked.
+    */
    static listenToAll(setFunction: Function): Unsubscribe {
       const q = query(collection(db, MenuItemModel.PATH))
       
@@ -32,6 +47,12 @@ export default class MenuItemModel extends Model<MenuItem> {
       return unsubscribe
    }
 
+   /**
+    * Opens a real time connection with the collection in the databse based on the given query.
+    * @param q - The ```Query``` to be used
+    * @param setFunction - The function to set external state to values returned from query
+    * @returns A function returned by firestore's ```onSnapshot()``` that removes the listener when invoked.
+    */
    static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
       const unsubscribe = onSnapshot(q, snapshot => {
          const menuItems: MenuItem[] = []
