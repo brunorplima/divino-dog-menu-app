@@ -47,38 +47,38 @@ export default class SauceModel extends Model<Sauce> {
    }
 
    isValid() {
-      const { id, name, price } = this.sauce
+      const { id, name, price } = this.values()
 
       if (id.length !== 13) return false
 
       if (!name) return false
 
-      if (price < 0) return false
+      if (price && price < 0) return false
 
       return true
    }
 
    modify(values: Partial<Omit<Sauce, 'id'>>) {
-      this.sauce = R.mergeRight(this.sauce, values)
+      this.sauce = R.mergeRight(this.values(), values)
    }
 
    async save() {
       if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
 
-      const { id } = this.sauce
+      const { id } = this.values()
       
       const docRef = doc(db, SauceModel.PATH, id)
       
-      await setDoc(docRef, this.sauce)
+      await setDoc(docRef, this.values())
    }
 
    async delete() {
-      const { id } = this.sauce
+      const { id } = this.values()
 
       return await deleteDoc(doc(db, SauceModel.PATH, id))
    }
 
    toString() {
-      return this.sauce.name
+      return this.values().name
    }
 }

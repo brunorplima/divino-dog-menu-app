@@ -47,38 +47,38 @@ export default class ToppingModel extends Model<Topping> {
    }
 
    isValid() {
-      const { id, name, price } = this.topping
+      const { id, name, price } = this.values()
 
       if (id.length !== 13) return false
 
       if (!name) return false
 
-      if (price < 0) return false
+      if (price && price < 0) return false
 
       return true
    }
 
    modify(values: Partial<Omit<Topping, 'id'>>) {
-      this.topping = R.mergeRight(this.topping, values)
+      this.topping = R.mergeRight(this.values(), values)
    }
 
    async save() {
       if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
 
-      const { id } = this.topping
+      const { id } = this.values()
       
       const docRef = doc(db, ToppingModel.PATH, id)
       
-      await setDoc(docRef, this.topping)
+      await setDoc(docRef, this.values())
    }
 
    async delete() {
-      const { id } = this.topping
+      const { id } = this.values()
 
       return await deleteDoc(doc(db, ToppingModel.PATH, id))
    }
 
    toString() {
-      return this.topping.name
+      return this.values().name
    }
 }

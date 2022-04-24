@@ -70,7 +70,7 @@ export default abstract class Model<T> {
       }
 
       isValid() {
-         const { id, fieldStr, fieldNum } = this.model
+         const { id, fieldStr, fieldNum } = this.values()
 
          if (id.length !== 13) return false
 
@@ -80,27 +80,27 @@ export default abstract class Model<T> {
       }
 
       modify(values: Partial<Omit<T, 'id'>>) {
-         this.model = R.mergeRight(this.model, values)
+         this.model = R.mergeRight(this.values(), values)
       }
 
       async save() {
          if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
 
-         const { id } = this.model
+         const { id } = this.values()
          
          const docRef = doc(db, ChildModel.PATH, id)
          
-         await setDoc(docRef, this.model)
+         await setDoc(docRef, this.values())
       }
 
       async delete() {
-         const { id } = this.model
+         const { id } = this.values()
 
          return await deleteDoc(doc(db, ChildModel.PATH, id))
       }
 
       toString() {
-         return this.model.fieldStr
+         return this.values().fieldStr
       }
    }
    

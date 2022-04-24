@@ -47,7 +47,7 @@ export default class MenuItemGroupModel extends Model<MenuItemGroup> {
    }
 
    getPrefixedPath(): string {
-      return `orders/${this.menuItemGroup.orderId}/${MenuItemGroupModel.PATH}`
+      return `orders/${this.values().orderId}/${MenuItemGroupModel.PATH}`
    }
 
    values() {
@@ -55,7 +55,7 @@ export default class MenuItemGroupModel extends Model<MenuItemGroup> {
    }
 
    isValid() {
-      const { id, orderId, menuItemId, subTotal } = this.menuItemGroup
+      const { id, orderId, menuItemId, subTotal } = this.values()
 
       if (id && id.length !== 13) return false
 
@@ -67,26 +67,26 @@ export default class MenuItemGroupModel extends Model<MenuItemGroup> {
    }
 
    modify(values: Partial<Omit<MenuItemGroup, 'id'>>) {
-      this.menuItemGroup = R.mergeRight(this.menuItemGroup, values)
+      this.menuItemGroup = R.mergeRight(this.values(), values)
    }
 
    async save() {
       if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
 
-      const { id } = this.menuItemGroup
+      const { id } = this.values()
       
       const docRef = doc(db, this.getPrefixedPath(), id)
       
-      await setDoc(docRef, this.menuItemGroup)
+      await setDoc(docRef, this.values())
    }
 
    async delete() {
-      const { id } = this.menuItemGroup
+      const { id } = this.values()
 
       return await deleteDoc(doc(db, this.getPrefixedPath(), id))
    }
 
    toString() {
-      return `R$ ${this.menuItemGroup.subTotal.toFixed(2)}`
+      return `R$ ${this.values().subTotal.toFixed(2)}`
    }
 }

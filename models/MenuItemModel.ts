@@ -47,7 +47,7 @@ export default class MenuItemModel extends Model<MenuItem> {
    }
 
    isValid() {
-      const { id, name, price, categoryId } = this.menuItem
+      const { id, name, price, categoryId } = this.values()
 
       if (!id || !name || !categoryId) return false
 
@@ -59,26 +59,25 @@ export default class MenuItemModel extends Model<MenuItem> {
    }
 
    modify(values: Partial<Omit<MenuItem, 'id'>>) {
-      this.menuItem = R.mergeRight(this.menuItem, values)
+      this.menuItem = R.mergeRight(this.values(), values)
    }
 
    async save() {
       if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
 
-      const { id } = this.menuItem
-      
+      const { id } = this.values()
       const docRef = doc(db, MenuItemModel.PATH, id)
       
-      await setDoc(docRef, this.menuItem)
+      await setDoc(docRef, this.values())
    }
 
    async delete() {
-      const { id } = this.menuItem
+      const { id } = this.values()
 
       return await deleteDoc(doc(db, MenuItemModel.PATH, id))
    }
 
    toString() {
-      return this.menuItem.name
+      return this.values().name
    }
 }

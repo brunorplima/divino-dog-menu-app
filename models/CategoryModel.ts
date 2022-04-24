@@ -47,7 +47,7 @@ export default class CategoryModel extends Model<Category> {
    }
 
    isValid() {
-      const { id, name } = this.category
+      const { id, name } = this.values()
 
       if (!id || !name) return false
 
@@ -57,26 +57,26 @@ export default class CategoryModel extends Model<Category> {
    }
 
    modify(values: Partial<Omit<Category, 'id'>>) {
-      this.category = R.mergeRight(this.category, values)
+      this.category = R.mergeRight(this.values(), values)
    }
 
    async save() {
       if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
 
-      const { id } = this.category
+      const { id } = this.values()
       
       const docRef = doc(db, CategoryModel.PATH, id)
       
-      await setDoc(docRef, this.category)
+      await setDoc(docRef, this.values())
    }
 
    async delete() {
-      const { id } = this.category
+      const { id } = this.values()
 
       return await deleteDoc(doc(db, CategoryModel.PATH, id))
    }
 
    toString() {
-      return this.category.name
+      return this.values().name
    }
 }
