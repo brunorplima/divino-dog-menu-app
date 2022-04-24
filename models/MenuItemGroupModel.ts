@@ -12,13 +12,13 @@ export default class MenuItemGroupModel extends Model<MenuItemGroup> {
    
    static get PATH(): string { return `menuItemGroups` }
 
-   // static async find(id: string = '', orderId: string = '') {
-   //    const docRef = await getDoc(doc(db, this.getPrefixedPath(orderId), id))
+   static async find(id: string = '', orderId: string = '') {
+      const docRef = await getDoc(doc(db, MenuItemGroupModel.getPrefixedPath(orderId), id))
       
-   //    if (!docRef.exists()) return null
+      if (!docRef.exists()) return null
 
-   //    return docRef.data() as MenuItemGroup
-   // }
+      return docRef.data() as MenuItemGroup
+   }
 
    static listenToAll(orderId: string, setFunction: Function): Unsubscribe {
       const q = query(collection(db, MenuItemGroupModel.getPrefixedPath(orderId)))
