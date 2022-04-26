@@ -40,7 +40,13 @@ export default class MenuItemModel extends Model<MenuItem> {
       
       const unsubscribe = onSnapshot(q, snapshot => {
          const menuItems: MenuItem[] = []
-         snapshot.forEach(document => menuItems.push(document.data() as MenuItem))
+         snapshot.forEach(document => {
+            const menuItem = document.data()
+            if (menuItem.promoPrice) {
+               menuItem.promoPrice.dateLimit = menuItem.promoPrice.dateLimit.toDate()
+            }
+            menuItems.push(menuItem as MenuItem)
+         })
          setFunction(menuItems)
       })
       

@@ -36,7 +36,11 @@ export default class OrderModel extends Model<Order> {
       
       const unsubscribe = onSnapshot(q, snapshot => {
          const orders: Order[] = []
-         snapshot.forEach(document => orders.push(document.data() as Order))
+         snapshot.forEach(document => {
+            const order = document.data()
+            order.dateTime = order.dateTime.toDate()
+            orders.push(order as Order)
+         })
          setFunction(orders)
       })
       
