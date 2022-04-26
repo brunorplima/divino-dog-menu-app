@@ -1,11 +1,5 @@
-interface PromoPrice {
-   readonly price: number
-   readonly dateLimit: Date
-}
 
-
-// Models with collections on Firebase
-// Menu Items (Firestore)
+// Menu Items (Firestore path: menuItems)
 export interface MenuItem {
    readonly id: string
    readonly name: string
@@ -18,10 +12,11 @@ export interface MenuItem {
    readonly toppingIds?: string[]
    readonly sauceIds?: string[]
    readonly description?: string
+   readonly listOrder?: number
    readonly promoPrice?: PromoPrice
 }
 
-// Toppings (Firestore)
+// Toppings (Firestore path: toppings)
 export interface Topping {
    readonly id: string
    readonly name: string
@@ -29,7 +24,7 @@ export interface Topping {
    readonly price?: number
 }
 
-// Sauces (Firestore)
+// Sauces (Firestore path: sauces)
 export interface Sauce {
    readonly id: string
    readonly name: string
@@ -37,7 +32,7 @@ export interface Sauce {
    readonly price?: number
 }
 
-// Flavors (Firestore)
+// Flavors (Firestore path: flavors)
 export interface Flavor {
    readonly id: string
    readonly name: string
@@ -45,26 +40,27 @@ export interface Flavor {
    readonly price?: number
 }
 
-// Categories (Firestore)
+// Categories (Firestore path: categories)
 export interface Category {
    readonly id: string
    readonly name: string
+   readonly listOrder?: number
 }
 
-// Orders (Firestore)
+// Orders (Firestore path: orders)
 export interface Order {
-   readonly id: string;
-   readonly totalPrice: number;
-   readonly codeNumber: string;
-   readonly status: 'confirmar' | 'confirmado' | 'preparando' | 'chamar' | 'finalizado';
-   readonly items: MenuItemGroup[];
-   readonly dateTime?: Date;
+   readonly id: string
+   readonly totalPrice: number
+   readonly codeNumber: string
+   readonly status: 'confirmar' | 'confirmado' | 'preparando' | 'chamar' | 'finalizado'
+   readonly items: MenuItemGroup[]
+   readonly dateTime?: Date
 }
 
 
 
-// Models with subCollections on Firebase
-// Menu Items (Firestore: Order > MenuItemGroup)
+
+// Menu Items
 export interface MenuItemGroup {
    readonly id: string
    readonly orderId: string
@@ -72,4 +68,9 @@ export interface MenuItemGroup {
    readonly subTotal: number
    readonly extraToppingIds?: string[]
    readonly extraSauceIds?: string[]
+}
+
+interface PromoPrice {
+   readonly price: number
+   readonly dateLimit: Date
 }
