@@ -1,13 +1,13 @@
 interface Props {
    name: string
-   capitalize: (string: string) => string
+   capitalizeFirstString: (string: string) => string
 }
 
-export default function MenuCategories({ name, capitalize }: Props) {
+export default function MenuCategories({ name, capitalizeFirstString }: Props) {
    return (
       <>
          <li>
-            <a href="#">{capitalize(name)}</a>
+            <a href="#">{capitalizeFirstString(name)}</a>
          </li>
       </>
    )

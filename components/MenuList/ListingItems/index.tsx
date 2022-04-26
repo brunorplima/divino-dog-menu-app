@@ -7,12 +7,12 @@ export default function Listing(props: Props) {
    const { name, description, price } = props
 
    return (
-      <ul className={style.menuItems}>
-         <li>
+      <div className={style.menuItems}>
+         <div>
             <h3>{name}</h3>
-         </li>
-         <li>{description}</li>
-         <li className={style.neonPrice}>R$ {price}</li>
-      </ul>
+         </div>
+         <div>{description}</div>
+         <div className={style.neonPrice}>R$ {price}</div>
+      </div>
    )
 }

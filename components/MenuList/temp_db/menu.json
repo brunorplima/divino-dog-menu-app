@@ -8,7 +8,7 @@
       "category": 2,
       "price": 12,
       "img": "",
-      "order": 0
+      "sequence": 0
    },
    {
       "id": 2,
@@ -19,7 +19,7 @@
       "category": 2,
       "price": 15,
       "img": "",
-      "order": 1
+      "sequence": 1
    },
    {
       "id": 3,
@@ -30,7 +30,7 @@
       "category": 2,
       "price": 15,
       "img": "",
-      "order": 2
+      "sequence": 2
    },
    {
       "id": 4,
@@ -41,7 +41,7 @@
       "category": 3,
       "price": 15,
       "img": "",
-      "order": 3
+      "sequence": 3
    },
    {
       "id": 5,
@@ -52,7 +52,7 @@
       "category": 4,
       "price": 6,
       "img": "",
-      "order": 4
+      "sequence": 4
    },
    {
       "id": 6,
@@ -63,7 +63,7 @@
       "category": 4,
       "price": 5,
       "img": "",
-      "order": 5
+      "sequence": 5
    },
    {
       "id": 7,
@@ -74,7 +74,7 @@
       "category": 4,
       "price": 6,
       "img": "",
-      "order": 6
+      "sequence": 6
    },
    {
       "id": 8,
@@ -85,6 +85,6 @@
       "category": 4,
       "price": 6,
       "img": "",
-      "order": 7
+      "sequence": 7
    }
 ]
