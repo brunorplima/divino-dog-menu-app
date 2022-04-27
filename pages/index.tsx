@@ -32,12 +32,13 @@ const Home: NextPage = () => {
          sauces,
          toppings
       } = context
-      console.log(menuItems)
-      console.log(categories)
-      console.log(flavors)
-      console.log(orders)
-      console.log(sauces)
-      console.log(toppings)
+
+      console.log(menuItems.map(model  => model.values()))
+      console.log(categories.map(model => model.values()))
+      console.log(flavors.map(model    => model.values()))
+      console.log(orders.map(model     => model.values()))
+      console.log(sauces.map(model     => model.values()))
+      console.log(toppings.map(model   => model.values()))
    }, [context])
 
    return (

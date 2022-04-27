@@ -12,12 +12,12 @@ import ToppingModel from '../../models/ToppingModel'
 
 //The context type.
 interface MenuContext {
-   readonly menuItems: MenuItem[]
-   readonly toppings: Topping[]
-   readonly sauces: Sauce[]
-   readonly flavors: Flavor[]
-   readonly categories: Category[]
-   readonly orders: Order[]
+   readonly menuItems: MenuItemModel[]
+   readonly toppings: ToppingModel[]
+   readonly sauces: SauceModel[]
+   readonly flavors: FlavorModel[]
+   readonly categories: CategoryModel[]
+   readonly orders: OrderModel[]
 }
 
 /**
@@ -45,12 +45,12 @@ export const menuContext = createContext<MenuContext>({
  */
 const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
    // context data comes from internal state inside of the context component
-   const [menuItems, setMenuItems] = useState<MenuItem[]>([])
-   const [toppings, setToppings] = useState<Topping[]>([])
-   const [sauces, setSauces] = useState<Sauce[]>([])
-   const [flavors, setFlavors] = useState<Flavor[]>([])
-   const [categories, setCategories] = useState<Category[]>([])
-   const [orders, setOrders] = useState<Order[]>([])
+   const [menuItems, setMenuItems] = useState<MenuItemModel[]>([])
+   const [toppings, setToppings] = useState<ToppingModel[]>([])
+   const [sauces, setSauces] = useState<SauceModel[]>([])
+   const [flavors, setFlavors] = useState<FlavorModel[]>([])
+   const [categories, setCategories] = useState<CategoryModel[]>([])
+   const [orders, setOrders] = useState<OrderModel[]>([])
 
    useEffect(() => {
       // As you saw in the Models this static function (listenToAll), it opens a real time
