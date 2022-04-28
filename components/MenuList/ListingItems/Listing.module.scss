@@ -6,19 +6,9 @@ $neonRed: #ff3131;
 
 .menuItems {
    border-top: 1px solid white;
-   padding: 20px 0;
-   margin-bottom: 20px;
    min-height: 120px;
-   position: relative;
-
-   h3,
-   strong {
-      font-weight: 800;
-   }
 
    .neonPrice {
       color: $neonGreen;
-      position: absolute;
-      bottom: 0;
    }
 }

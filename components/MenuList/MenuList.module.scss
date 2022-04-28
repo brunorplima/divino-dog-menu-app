@@ -1,25 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;800;900&display=swap");
 
 .menuGeneral {
-   background-color: #2d2930;
-   color: #cdcbcb;
    font-family: Nunito;
-   font-weight: 500;
-   padding: 0 15px;
-
-   h2.categories {
-      color: white;
-      font-size: 25px;
-      font-weight: 800;
-      margin-bottom: 20px;
-   }
 
    .fixedMenu {
-      color: white;
       font-size: larger;
-      font-weight: 800;
-      white-space: nowrap;
-      overflow-x: scroll;
 
       /* Hiding scrollbars */
       -ms-overflow-style: none; /* IE and Edge */
@@ -29,24 +14,9 @@
       }
    }
 
-   .listCategories {
-      text-decoration: none;
-      z-index: 2;
-
-      li {
-         display: inline-block;
-         margin: 10px 10px;
-         padding: 10px 40px;
-      }
-   }
-
    .menuContent {
-      max-height: 100vh;
-      overflow: auto;
       padding-bottom: 30%;
-      top: 65px;
       scroll-behavior: smooth;
-      z-index: 1;
 
       -ms-overflow-style: none; /* IE and Edge */
       scrollbar-width: none; /* Firefox */
