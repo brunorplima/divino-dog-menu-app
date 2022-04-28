@@ -13,6 +13,7 @@ export interface MenuItem {
    readonly sauceIds?: string[]
    readonly description?: string
    readonly listOrder?: number
+   readonly img?: string
    readonly promoPrice?: PromoPrice
 }
 
