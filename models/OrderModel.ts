@@ -17,7 +17,7 @@ import { Order } from './interfaces';
 
 export default class OrderModel extends Model<Order> {
 
-   constructor(public order: Order) {
+   constructor(private order: Order) {
       super()
    }
    
@@ -28,15 +28,22 @@ export default class OrderModel extends Model<Order> {
       
       if (!docRef.exists()) return null
 
-      return docRef.data() as Order
+      const orderModel = new OrderModel(docRef.data() as Order)
+
+      return orderModel
    }
 
    static listenToAll(setFunction: Function): Unsubscribe {
       const q = query(collection(db, OrderModel.PATH))
       
       const unsubscribe = onSnapshot(q, snapshot => {
-         const orders: Order[] = []
-         snapshot.forEach(document => orders.push(document.data() as Order))
+         const orders: OrderModel[] = []
+         snapshot.forEach(document => {
+            const order = document.data()
+            order.dateTime = order.dateTime.toDate()
+            const orderModel = new OrderModel(order as Order)
+            orders.push(orderModel)
+         })
          setFunction(orders)
       })
       
@@ -45,8 +52,13 @@ export default class OrderModel extends Model<Order> {
 
    static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
       const unsubscribe = onSnapshot(q, snapshot => {
-         const orders: Order[] = []
-         snapshot.forEach(document => orders.push(document.data() as Order))
+         const orders: OrderModel[] = []
+         snapshot.forEach(document => {
+            const order = document.data()
+            order.dateTime = order.dateTime.toDate()
+            const orderModel = new OrderModel(order as Order)
+            orders.push(orderModel)
+         })
          setFunction(orders)
       })
       
