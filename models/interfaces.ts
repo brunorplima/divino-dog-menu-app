@@ -53,7 +53,7 @@ export interface Order {
    readonly id: string
    readonly totalPrice: number
    readonly codeNumber: string
-   readonly status: 'confirmar' | 'confirmado' | 'preparando' | 'chamar' | 'finalizado'
+   readonly status: 'confirmar' | 'confirmado' | 'preparando' | 'finalizando' | 'finalizado' | 'cancelado'
    readonly items: MenuItemGroup[]
    readonly dateTime?: Date
 }
