@@ -50,6 +50,11 @@ export default class ToppingModel extends Model<Topping> {
       return unsubscribe
    }
 
+   get id()          { return this.topping.id }
+   get name()        { return this.topping.name }
+   get price()       { return this.topping.price }
+   get isAvailable() { return this.topping.isAvailable }
+
    values() {
       return this.topping
    }

@@ -50,6 +50,11 @@ export default class SauceModel extends Model<Sauce> {
       return unsubscribe
    }
 
+   get id()          { return this.sauce.id }
+   get name()        { return this.sauce.name }
+   get price()       { return this.sauce.price }
+   get isAvailable() { return this.sauce.isAvailable }
+
    values() {
       return this.sauce
    }

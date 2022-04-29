@@ -65,6 +65,13 @@ export default class OrderModel extends Model<Order> {
       return unsubscribe
    }
 
+   get id()          { return this.order.id }
+   get totalPrice()  { return this.order.totalPrice }
+   get codeNumber()  { return this.order.codeNumber }
+   get status()      { return this.order.status }
+   get items()       { return this.order.items }
+   get dateTime()    { return this.order.dateTime }
+
    values() {
       return this.order
    }
