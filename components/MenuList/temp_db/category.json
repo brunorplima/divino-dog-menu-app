@@ -2,26 +2,26 @@
    {
       "id": 1,
       "name": "molho",
-      "sequence": 1
+      "listOrder": 1
    },
    {
       "id": 2,
       "name": "chapa",
-      "sequence": 2
+      "listOrder": 2
    },
    {
       "id": 3,
       "name": "especiais",
-      "sequence": 3
+      "listOrder": 3
    },
    {
       "id": 4,
       "name": "bebidas",
-      "sequence": 4
+      "listOrder": 4
    },
    {
       "id": 5,
       "name": "combo",
-      "sequence": 0
+      "listOrder": 0
    }
 ]

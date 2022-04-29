@@ -7,8 +7,8 @@
       font-size: larger;
 
       /* Hiding scrollbars */
-      -ms-overflow-style: none; /* IE and Edge */
-      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+      scrollbar-width: none; /* Hide scrollbar for Firefox */
       &::-webkit-scrollbar {
          display: none; /* Hide scrollbar for Chrome, Safari and Opera */
       }
@@ -18,10 +18,11 @@
       padding-bottom: 30%;
       scroll-behavior: smooth;
 
-      -ms-overflow-style: none; /* IE and Edge */
-      scrollbar-width: none; /* Firefox */
+      /* Hiding scrollbars */
+      -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+      scrollbar-width: none; /* Hide scrollbar for Firefox */
       &::-webkit-scrollbar {
-         display: none;
+         display: none; /* Hide scrollbar for Chrome, Safari and Opera */
       }
    }
 }

@@ -7,11 +7,13 @@ import style from "./MenuList.module.scss"
 import * as R from "ramda"
 
 export default function MenuList() {
-   const capitalizeFirstString = (string: string) =>
-      string.toLowerCase().charAt(0).toUpperCase() + string.slice(1)
+   const capitalizeFirstLetter = (word: string) =>
+      word.toLowerCase().charAt(0).toUpperCase() + word.slice(1)
 
    const excludeEmptyCategory = () => {
-      const sortedCategories = categories.sort((a, b) => a.sequence - b.sequence)
+      const sortedCategories = categories.sort(
+         (a, b) => a.listOrder - b.listOrder
+      )
       const newCategories = sortedCategories.map(
          (cat) => menu.find((x) => x.category === cat.id) && cat
       )
@@ -19,29 +21,37 @@ export default function MenuList() {
    }
 
    return (
-      <div className={`${style.menuGeneral} px-4 font-medium text-gray-300 bg-gray-700`}>
-         <div className={`${style.fixedMenu} text-white font-extrabold whitespace-nowrap overflow-x-scroll`}>
-            <ul className={`${style.listCategories} z-20`}>
+      <div
+         className={`${style.menuGeneral} px-4 font-medium text-gray-300 bg-gray-700`}
+      >
+         <div
+            className={`${style.fixedMenu} text-white font-extrabold whitespace-nowrap overflow-x-scroll`}
+         >
+            <div className={`${style.listCategories} z-20`}>
                {excludeEmptyCategory().map((category) => (
                   <Fragment key={category.id}>
                      <MenuCategories
                         name={category.name}
-                        capitalizeFirstString={capitalizeFirstString}
+                        capitalizeFirstLetter={capitalizeFirstLetter}
                      />
                   </Fragment>
                ))}
-            </ul>
+            </div>
          </div>
          <hr />
          <br />
-         <div className={`${style.menuContent} max-h-screen overflow-auto inset-y-16 z-10`}>
+         <div
+            className={`${style.menuContent} max-h-screen overflow-auto inset-y-16 z-10`}
+         >
             {excludeEmptyCategory().map((category) => (
                <div id={category.name} key={category.id}>
-                  <h2 className={`${style.categories} text-2xl font-extrabold mb-5 text-white`}>
-                     {capitalizeFirstString(category.name)}
+                  <h2
+                     className={`${style.categories} text-2xl font-extrabold mb-5 text-white`}
+                  >
+                     {capitalizeFirstLetter(category.name)}
                   </h2>
                   {menu
-                     .sort((a, b) => a.sequence - b.sequence)
+                     .sort((a, b) => a.listOrder - b.listOrder)
                      .map(
                         (item) =>
                            category.id === item.category && (
