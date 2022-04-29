@@ -6,7 +6,7 @@ import Model from './Model';
 
 export default class MenuItemModel extends Model<MenuItem> {
 
-   constructor(public menuItem: MenuItem) {
+   constructor(private menuItem: MenuItem) {
       super()
    }
    
@@ -27,7 +27,9 @@ export default class MenuItemModel extends Model<MenuItem> {
       
       if (!docRef.exists()) return null
 
-      return docRef.data() as MenuItem
+      const menuItemModel = new MenuItemModel(docRef.data() as MenuItem)
+
+      return menuItemModel
    }
 
    /**
@@ -39,8 +41,15 @@ export default class MenuItemModel extends Model<MenuItem> {
       const q = query(collection(db, MenuItemModel.PATH))
       
       const unsubscribe = onSnapshot(q, snapshot => {
-         const menuItems: MenuItem[] = []
-         snapshot.forEach(document => menuItems.push(document.data() as MenuItem))
+         const menuItems: MenuItemModel[] = []
+         snapshot.forEach(document => {
+            const menuItem = document.data()
+            if (menuItem.promoPrice) {
+               menuItem.promoPrice.dateLimit = menuItem.promoPrice.dateLimit.toDate()
+            }
+            const menuItemModel = new MenuItemModel(menuItem as MenuItem)
+            menuItems.push(menuItemModel)
+         })
          setFunction(menuItems)
       })
       
@@ -55,13 +64,35 @@ export default class MenuItemModel extends Model<MenuItem> {
     */
    static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
       const unsubscribe = onSnapshot(q, snapshot => {
-         const menuItems: MenuItem[] = []
-         snapshot.forEach(document => menuItems.push(document.data() as MenuItem))
+         const menuItems: MenuItemModel[] = []
+         snapshot.forEach(document => {
+            const menuItem = document.data()
+            if (menuItem.promoPrice) {
+               menuItem.promoPrice.dateLimit = menuItem.promoPrice.dateLimit.toDate()
+            }
+            const menuItemModel = new MenuItemModel(menuItem as MenuItem)
+            menuItems.push(menuItemModel)
+         })
          setFunction(menuItems)
       })
       
       return unsubscribe
    }
+
+   get id()          { return this.menuItem.id }
+   get name()        { return this.menuItem.name }
+   get price()       { return this.menuItem.price }
+   get isAvailable() { return this.menuItem.isAvailable }
+   get categoryId()  { return this.menuItem.categoryId }
+   get options()     { return this.menuItem.options }
+   get uniqOptions() { return this.menuItem.uniqOptions }
+   get flavorIds()   { return this.menuItem.flavorIds }
+   get toppingIds()  { return this.menuItem.toppingIds }
+   get sauceIds()    { return this.menuItem.sauceIds }
+   get description() { return this.menuItem.description }
+   get listOrder()   { return this.menuItem.listOrder }
+   get img()         { return this.menuItem.img }
+   get promoPrice()  { return this.menuItem.promoPrice }
 
    values() {
       return this.menuItem

@@ -6,7 +6,7 @@ import Model from './Model';
 
 export default class CategoryModel extends Model<Category> {
 
-   constructor(public category: Category) {
+   constructor(private category: Category) {
       super()
    }
    
@@ -17,25 +17,37 @@ export default class CategoryModel extends Model<Category> {
       
       if (!docRef.exists()) return null
 
-      return docRef.data() as Category
+      const categoryModel = new CategoryModel(docRef.data() as Category)
+
+      return categoryModel
    }
 
    static listenToAll(setFunction: Function): Unsubscribe {
       const q = query(collection(db, CategoryModel.PATH))
       
       const unsubscribe = onSnapshot(q, snapshot => {
-         const categories: Category[] = []
-         snapshot.forEach(document => categories.push(document.data() as Category))
+         const categories: CategoryModel[] = []
+         snapshot.forEach(document => {
+            const categoryModel = new CategoryModel(document.data() as Category)
+            categories.push(categoryModel)
+         })
          setFunction(categories)
       })
       
       return unsubscribe
    }
 
+   get id()          { return this.category.id }
+   get name()        { return this.category.name }
+   get listOrder()   { return this.category.listOrder }
+
    static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
       const unsubscribe = onSnapshot(q, snapshot => {
-         const categories: Category[] = []
-         snapshot.forEach(document => categories.push(document.data() as Category))
+         const categories: CategoryModel[] = []
+         snapshot.forEach(document => {
+            const categoryModel = new CategoryModel(document.data() as Category)
+            categories.push(categoryModel)
+         })
          setFunction(categories)
       })
       

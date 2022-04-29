@@ -6,7 +6,7 @@ import { Sauce } from './interfaces';
 
 export default class SauceModel extends Model<Sauce> {
 
-   constructor(public sauce: Sauce) {
+   constructor(private sauce: Sauce) {
       super()
    }
    
@@ -17,15 +17,20 @@ export default class SauceModel extends Model<Sauce> {
       
       if (!docRef.exists()) return null
 
-      return docRef.data() as Sauce
+      const sauceModel = new SauceModel(docRef.data() as Sauce)
+
+      return sauceModel
    }
 
    static listenToAll(setFunction: Function): Unsubscribe {
       const q = query(collection(db, SauceModel.PATH))
       
       const unsubscribe = onSnapshot(q, snapshot => {
-         const sauces: Sauce[] = []
-         snapshot.forEach(document => sauces.push(document.data() as Sauce))
+         const sauces: SauceModel[] = []
+         snapshot.forEach(document => {
+            const sauceModel = new SauceModel(document.data() as Sauce)
+            sauces.push(sauceModel)
+         })
          setFunction(sauces)
       })
       
@@ -34,13 +39,21 @@ export default class SauceModel extends Model<Sauce> {
 
    static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
       const unsubscribe = onSnapshot(q, snapshot => {
-         const sauces: Sauce[] = []
-         snapshot.forEach(document => sauces.push(document.data() as Sauce))
+         const sauces: SauceModel[] = []
+         snapshot.forEach(document => {
+            const sauceModel = new SauceModel(document.data() as Sauce)
+            sauces.push(sauceModel)
+         })
          setFunction(sauces)
       })
       
       return unsubscribe
    }
+
+   get id()          { return this.sauce.id }
+   get name()        { return this.sauce.name }
+   get price()       { return this.sauce.price }
+   get isAvailable() { return this.sauce.isAvailable }
 
    values() {
       return this.sauce

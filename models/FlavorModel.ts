@@ -6,7 +6,7 @@ import { Flavor } from './interfaces';
 
    export default class FlavorModel extends Model<Flavor> {
 
-      constructor(public flavor: Flavor) {
+      constructor(private flavor: Flavor) {
          super()
       }
       
@@ -17,15 +17,20 @@ import { Flavor } from './interfaces';
          
          if (!docRef.exists()) return null
 
-         return docRef.data() as Flavor
+         const flavorModel = new FlavorModel(docRef.data() as Flavor)
+
+         return flavorModel
       }
 
       static listenToAll(setFunction: Function): Unsubscribe {
          const q = query(collection(db, FlavorModel.PATH))
          
          const unsubscribe = onSnapshot(q, snapshot => {
-            const flavors: Flavor[] = []
-            snapshot.forEach(document => flavors.push(document.data() as Flavor))
+            const flavors: FlavorModel[] = []
+            snapshot.forEach(document => {
+               const flavorModel = new FlavorModel(document.data() as Flavor)
+               flavors.push(flavorModel)
+            })
             setFunction(flavors)
          })
          
@@ -34,13 +39,21 @@ import { Flavor } from './interfaces';
 
       static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
          const unsubscribe = onSnapshot(q, snapshot => {
-            const flavors: Flavor[] = []
-            snapshot.forEach(document => flavors.push(document.data() as Flavor))
+            const flavors: FlavorModel[] = []
+            snapshot.forEach(document => {
+               const flavorModel = new FlavorModel(document.data() as Flavor)
+               flavors.push(flavorModel)
+            })
             setFunction(flavors)
          })
          
          return unsubscribe
       }
+
+      get id()          { return this.flavor.id }
+      get name()        { return this.flavor.name }
+      get price()       { return this.flavor.price }
+      get isAvailable() { return this.flavor.isAvailable }
 
       values() {
          return this.flavor

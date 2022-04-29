@@ -6,7 +6,7 @@ import { Topping } from './interfaces';
 
 export default class ToppingModel extends Model<Topping> {
 
-   constructor(public topping: Topping) {
+   constructor(private topping: Topping) {
       super()
    }
    
@@ -17,15 +17,20 @@ export default class ToppingModel extends Model<Topping> {
       
       if (!docRef.exists()) return null
 
-      return docRef.data() as Topping
+      const toppingModel = new ToppingModel(docRef.data() as Topping)
+
+      return toppingModel
    }
 
    static listenToAll(setFunction: Function): Unsubscribe {
       const q = query(collection(db, ToppingModel.PATH))
       
       const unsubscribe = onSnapshot(q, snapshot => {
-         const toppings: Topping[] = []
-         snapshot.forEach(document => toppings.push(document.data() as Topping))
+         const toppings: ToppingModel[] = []
+         snapshot.forEach(document => {
+            const toppingModel = new ToppingModel(document.data() as Topping)
+            toppings.push(toppingModel)
+         })
          setFunction(toppings)
       })
       
@@ -34,13 +39,21 @@ export default class ToppingModel extends Model<Topping> {
 
    static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
       const unsubscribe = onSnapshot(q, snapshot => {
-         const toppings: Topping[] = []
-         snapshot.forEach(document => toppings.push(document.data() as Topping))
+         const toppings: ToppingModel[] = []
+         snapshot.forEach(document => {
+            const toppingModel = new ToppingModel(document.data() as Topping)
+            toppings.push(toppingModel)
+         })
          setFunction(toppings)
       })
       
       return unsubscribe
    }
+
+   get id()          { return this.topping.id }
+   get name()        { return this.topping.name }
+   get price()       { return this.topping.price }
+   get isAvailable() { return this.topping.isAvailable }
 
    values() {
       return this.topping
