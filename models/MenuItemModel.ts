@@ -79,6 +79,21 @@ export default class MenuItemModel extends Model<MenuItem> {
       return unsubscribe
    }
 
+   get id()          { return this.menuItem.id }
+   get name()        { return this.menuItem.name }
+   get price()       { return this.menuItem.price }
+   get isAvailable() { return this.menuItem.isAvailable }
+   get categoryId()  { return this.menuItem.categoryId }
+   get options()     { return this.menuItem.options }
+   get uniqOptions() { return this.menuItem.uniqOptions }
+   get flavorIds()   { return this.menuItem.flavorIds }
+   get toppingIds()  { return this.menuItem.toppingIds }
+   get sauceIds()    { return this.menuItem.sauceIds }
+   get description() { return this.menuItem.description }
+   get listOrder()   { return this.menuItem.listOrder }
+   get img()         { return this.menuItem.img }
+   get promoPrice()  { return this.menuItem.promoPrice }
+
    values() {
       return this.menuItem
    }

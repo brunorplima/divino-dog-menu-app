@@ -50,6 +50,11 @@ import { Flavor } from './interfaces';
          return unsubscribe
       }
 
+      get id()          { return this.flavor.id }
+      get name()        { return this.flavor.name }
+      get price()       { return this.flavor.price }
+      get isAvailable() { return this.flavor.isAvailable }
+
       values() {
          return this.flavor
       }

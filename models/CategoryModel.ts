@@ -37,6 +37,10 @@ export default class CategoryModel extends Model<Category> {
       return unsubscribe
    }
 
+   get id()          { return this.category.id }
+   get name()        { return this.category.name }
+   get listOrder()   { return this.category.listOrder }
+
    static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
       const unsubscribe = onSnapshot(q, snapshot => {
          const categories: CategoryModel[] = []
