@@ -10,3 +10,16 @@ export const generateID = () => {
 
    return id;  
 }
+
+export const generateOrderCodeNumber = (existingCodeNumbers: string[]) => {
+   const possible = '0123456789'
+   let codeNumber = ''
+
+   for (let i = 1; i <= 4; i++) {
+      codeNumber += possible.charAt(Math.floor(Math.random() * possible.length))
+   }
+
+   if (existingCodeNumbers.includes(codeNumber)) generateOrderCodeNumber(existingCodeNumbers)
+
+   return codeNumber
+}
