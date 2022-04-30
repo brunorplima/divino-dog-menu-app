@@ -3,11 +3,21 @@ import * as R from 'ramda'
 import { db } from '../firebase/app'
 import { collection, deleteDoc, doc, getDoc, onSnapshot, query, Query, setDoc, Unsubscribe } from "firebase/firestore";
 import Model from './Model';
+import { generateID } from '../utils/modelHelper';
 
 export default class MenuItemModel extends Model<MenuItem> {
 
-   constructor(private menuItem: MenuItem) {
+   private menuItem: MenuItem
+
+   constructor(item: Omit<MenuItem, 'id'> | MenuItem) {
       super()
+      if (R.propOr(false, 'id', item)) this.menuItem = item as MenuItem
+      else {
+         this.menuItem = {
+            id: generateID(),
+            ...item
+         }
+      }
    }
    
    /**
@@ -67,7 +77,7 @@ export default class MenuItemModel extends Model<MenuItem> {
          const menuItems: MenuItemModel[] = []
          snapshot.forEach(document => {
             const menuItem = document.data()
-            if (menuItem.promoPrice) {
+            if (menuItem.promoPrice && menuItem.promoPrice.dateLimit) {
                menuItem.promoPrice.dateLimit = menuItem.promoPrice.dateLimit.toDate()
             }
             const menuItemModel = new MenuItemModel(menuItem as MenuItem)

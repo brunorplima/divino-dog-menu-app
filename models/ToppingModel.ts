@@ -3,11 +3,21 @@ import { db } from '../firebase/app'
 import { collection, deleteDoc, doc, getDoc, onSnapshot, query, Query, setDoc, Unsubscribe } from "firebase/firestore";
 import Model from './Model';
 import { Topping } from './interfaces';
+import { generateID } from '../utils/modelHelper';
 
 export default class ToppingModel extends Model<Topping> {
 
-   constructor(private topping: Topping) {
+   private topping: Topping
+
+   constructor(topping: Omit<Topping, 'id'> | Topping) {
       super()
+      if (R.propOr(false, 'id', topping)) this.topping = topping as Topping
+      else {
+         this.topping = {
+            id: generateID(),
+            ...topping
+         }
+      }
    }
    
    static get PATH(): string { return 'toppings' }
