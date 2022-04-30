@@ -56,6 +56,7 @@ export interface Order {
    readonly status: 'confirmar' | 'confirmado' | 'preparando' | 'finalizando' | 'finalizado' | 'cancelado'
    readonly items: MenuItemGroup[]
    readonly dateTime?: Date
+   readonly statusUpdatedAt?: Date
 }
 
 
@@ -64,7 +65,6 @@ export interface Order {
 // Menu Items
 export interface MenuItemGroup {
    readonly id: string
-   readonly orderId: string
    readonly menuItemId: string
    readonly subTotal: number
    readonly extraToppingIds?: string[]
