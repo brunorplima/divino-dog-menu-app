@@ -1,0 +1,27 @@
+[
+   {
+      "id": 1,
+      "name": "muçarela",
+      "price": 0
+   },
+   {
+      "id": 2,
+      "name": "milho",
+      "price": 0
+   },
+   {
+      "id": 3,
+      "name": "batata gourmet",
+      "price": 0
+   },
+   {
+      "id": 4,
+      "name": "creme de cheddar",
+      "price": 0
+   },
+   {
+      "id": 5,
+      "name": "farofa de bacon",
+      "price": 0
+   }
+]
