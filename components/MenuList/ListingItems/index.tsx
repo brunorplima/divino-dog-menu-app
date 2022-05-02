@@ -1,18 +1,20 @@
 import menu from "../temp_db/menu.json"
+import { MenuItem } from "../../../models/interfaces"
 import style from "./Listing.module.scss"
+import MenuItemModel from "../../../models/MenuItemModel"
 
-type Props = typeof menu[0]
+interface Props {
+   item: MenuItemModel
+}
 
-export default function Listing(props: Props) {
-   const { name, description, price } = props
-
+export default function Listing({ item }: Props) {
    return (
       <div className={`${style.menuItems} py-5 mb-5 relative`}>
          <div>
-            <h3 className="font-extrabold">{name}</h3>
+            <h3 className="font-extrabold">{item.name}</h3>
          </div>
-         <div>{description}</div>
-         <div className={`${style.neonPrice} absolute bottom-0`}>R$ {price}</div>
+         <div>{item.description}</div>
+         <div className={`${style.neonPrice} absolute bottom-0`}>R$ {item.price}</div>
       </div>
    )
 }
