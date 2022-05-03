@@ -70,6 +70,7 @@ export default class OrderModel extends Model<Order> {
    get codeNumber()  { return this.order.codeNumber }
    get status()      { return this.order.status }
    get items()       { return this.order.items }
+   get isDeliver()   { return this.order.isDeliver }
    get dateTime()    { return this.order.dateTime }
 
    values() {
