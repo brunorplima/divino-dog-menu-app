@@ -1,12 +1,13 @@
-import { Auth, getAuth, onAuthStateChanged, User } from 'firebase/auth'
+import { Auth, getAuth, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
 import { doc, onSnapshot } from 'firebase/firestore'
 import React, { createContext, ReactNode, useEffect, useRef, useState } from 'react'
 import { db } from '../../firebase/app'
 import UserModel from '../../models/UserModel'
+import { User } from '../../models/interfaces'
 
 interface AuthContext {
    readonly user: UserModel | null
-   readonly fbUser: User | null
+   readonly fbUser: FirebaseUser | null
    readonly auth: Auth | null
 }
 
@@ -18,7 +19,7 @@ export const authContext = createContext<AuthContext>({
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
    const [user, setUser] = useState<UserModel | null>(null)
-   const [fbUser, setFbUser] = useState<User | null>(null)
+   const [fbUser, setFbUser] = useState<FirebaseUser | null>(null)
    const auth = getAuth()
 
    let unsubscribe = useRef(() => {})
@@ -34,7 +35,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
    useEffect(() => {
       if (fbUser) {
          unsubscribe.current = onSnapshot(doc(db, 'users', fbUser.uid), doc => {
-            setUser(doc.data() as UserModel)
+            setUser(new UserModel(doc.data() as User))
          })
       }
       else {
