@@ -1,10 +1,12 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react'
+import * as R from 'ramda'
 import CategoryModel from '../../models/CategoryModel'
 import FlavorModel from '../../models/FlavorModel'
 import MenuItemModel from '../../models/MenuItemModel'
 import OrderModel from '../../models/OrderModel'
 import SauceModel from '../../models/SauceModel'
 import ToppingModel from '../../models/ToppingModel'
+import { ORDER_ACTIVE_STATUTES } from '../../constants/modelsConstants'
 
 interface MenuContext {
    readonly menuItems: MenuItemModel[]
@@ -13,6 +15,7 @@ interface MenuContext {
    readonly flavors: FlavorModel[]
    readonly categories: CategoryModel[]
    readonly orders: OrderModel[]
+   readonly existingCodeNumbers: string[]
 }
 
 export const menuContext = createContext<MenuContext>({
@@ -21,7 +24,8 @@ export const menuContext = createContext<MenuContext>({
    sauces: [],
    flavors: [],
    categories: [],
-   orders: []
+   orders: [],
+   existingCodeNumbers: []
 })
 
 const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -31,6 +35,7 @@ const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
    const [flavors, setFlavors] = useState<FlavorModel[]>([])
    const [categories, setCategories] = useState<CategoryModel[]>([])
    const [orders, setOrders] = useState<OrderModel[]>([])
+   const [existingCodeNumbers, setExistingCodeNumbers] = useState<string[]>([])
 
    useEffect(() => {
       const menuItemsUnsubs = MenuItemModel.listenToAll(setMenuItems)
@@ -49,6 +54,12 @@ const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
          ordersUnsubs()
       }
    }, [])
+
+   useEffect(() => {
+      const activeOrders = R.filter(o => ORDER_ACTIVE_STATUTES.includes(o.status), orders)
+      const codeNumbers = R.pluck('codeNumber', activeOrders)
+      if (!R.equals(codeNumbers, existingCodeNumbers)) setExistingCodeNumbers(codeNumbers)
+   }, [orders])
    
    const menuModels: MenuContext = {
       menuItems,
@@ -56,7 +67,8 @@ const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       sauces,
       flavors,
       categories,
-      orders
+      orders,
+      existingCodeNumbers
    }
 
    return (
