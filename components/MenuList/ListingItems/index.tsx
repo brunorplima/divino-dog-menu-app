@@ -1,5 +1,3 @@
-import menu from "../temp_db/menu.json"
-import { MenuItem } from "../../../models/interfaces"
 import style from "./Listing.module.scss"
 import MenuItemModel from "../../../models/MenuItemModel"
 
