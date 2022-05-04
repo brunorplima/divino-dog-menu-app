@@ -1,3 +1,11 @@
+import { 
+   ORDER_STATUS_CANCELADO,
+   ORDER_STATUS_CONFIRMADO,
+   ORDER_STATUS_CONFIRMAR,
+   ORDER_STATUS_FINALIZADO,
+   ORDER_STATUS_FINALIZANDO,
+   ORDER_STATUS_PREPARANDO
+} from "../constants/modelsConstants"
 
 // Menu Items (Firestore path: menuItems)
 export interface MenuItem {
@@ -53,10 +61,16 @@ export interface Order {
    readonly id: string
    readonly totalPrice: number
    readonly codeNumber: string
-   readonly status: 'confirmar' | 'confirmado' | 'preparando' | 'finalizando' | 'finalizado' | 'cancelado'
+   readonly status: typeof ORDER_STATUS_CONFIRMAR
+      | typeof ORDER_STATUS_CONFIRMADO
+      | typeof ORDER_STATUS_PREPARANDO
+      | typeof ORDER_STATUS_FINALIZANDO
+      | typeof ORDER_STATUS_FINALIZADO
+      | typeof ORDER_STATUS_CANCELADO
    readonly items: MenuItemGroup[]
-   readonly isDeliver: boolean
+   readonly isDelivery: boolean
    readonly dateTime?: Date
+   readonly statusUpdatedAt?: Date
 }
 
 // Users (firestore path: users)
@@ -73,11 +87,9 @@ export interface User {
 
 
 
-
 // Menu Items
 export interface MenuItemGroup {
    readonly id: string
-   readonly orderId: string
    readonly menuItemId: string
    readonly subTotal: number
    readonly extraToppingIds?: string[]

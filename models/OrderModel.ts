@@ -14,11 +14,26 @@ import {
 } from "firebase/firestore";
 import Model from './Model';
 import { Order } from './interfaces';
+import { generateID, generateOrderCodeNumber } from '../utils/modelHelper';
 
 export default class OrderModel extends Model<Order> {
 
-   constructor(private order: Order) {
+   private order: Order
+
+   constructor(order: Order | Pick<Order, 'items' | 'isDelivery'>, existingCodeNumbers: string[] = []) {
       super()
+      const { items, isDelivery } = order
+      if (R.propOr(false, 'id', order)) this.order = order as Order
+      else {
+         this.order = {
+            id: generateID(),
+            totalPrice: items.reduce((acc, { subTotal }) => acc += subTotal, 0),
+            codeNumber: generateOrderCodeNumber(existingCodeNumbers),
+            status: 'confirmar',
+            items,
+            isDelivery
+         }
+      }
    }
    
    static get PATH(): string { return 'orders' }
@@ -28,7 +43,14 @@ export default class OrderModel extends Model<Order> {
       
       if (!docRef.exists()) return null
 
-      const orderModel = new OrderModel(docRef.data() as Order)
+      const model: Order = R.mergeRight<Order, Partial<Order>>(
+         docRef.data() as Order,
+         {
+            dateTime: docRef.data().dateTime.toDate(),
+            statusUpdatedAt: docRef.data().statusUpdatedAt.toDate()
+         }
+      )
+      const orderModel = new OrderModel(model)
 
       return orderModel
    }
@@ -37,14 +59,17 @@ export default class OrderModel extends Model<Order> {
       const q = query(collection(db, OrderModel.PATH))
       
       const unsubscribe = onSnapshot(q, snapshot => {
-         const orders: OrderModel[] = []
-         snapshot.forEach(document => {
-            const order = document.data()
-            order.dateTime = order.dateTime.toDate()
-            const orderModel = new OrderModel(order as Order)
-            orders.push(orderModel)
-         })
-         setFunction(orders)
+         if (!snapshot.metadata.hasPendingWrites) {
+            const orders: OrderModel[] = []  
+            snapshot.forEach(document => {
+               const order = document.data()
+               if (order.dateTime) order.dateTime = order.dateTime.toDate()
+               if (order.statusUpdatedAt) order.statusUpdatedAt = order.statusUpdatedAt.toDate()
+               const orderModel = new OrderModel(order as Order)
+               orders.push(orderModel)
+            })
+            setFunction(orders)
+         }
       })
       
       return unsubscribe
@@ -52,41 +77,43 @@ export default class OrderModel extends Model<Order> {
 
    static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
       const unsubscribe = onSnapshot(q, snapshot => {
-         const orders: OrderModel[] = []
-         snapshot.forEach(document => {
-            const order = document.data()
-            order.dateTime = order.dateTime.toDate()
-            const orderModel = new OrderModel(order as Order)
-            orders.push(orderModel)
-         })
-         setFunction(orders)
+         if (!snapshot.metadata.hasPendingWrites) {
+            const orders: OrderModel[] = []
+            snapshot.forEach(document => {
+               const order = document.data()
+               if (order.dateTime) order.dateTime = order.dateTime.toDate()
+               if (order.statusUpdatedAt) order.statusUpdatedAt = order.statusUpdatedAt.toDate()
+               const orderModel = new OrderModel(order as Order)
+               orders.push(orderModel)
+            })
+            setFunction(orders)
+         }
       })
       
       return unsubscribe
    }
 
-   get id()          { return this.order.id }
-   get totalPrice()  { return this.order.totalPrice }
-   get codeNumber()  { return this.order.codeNumber }
-   get status()      { return this.order.status }
-   get items()       { return this.order.items }
-   get isDeliver()   { return this.order.isDeliver }
-   get dateTime()    { return this.order.dateTime }
+   get id()                { return this.order.id }
+   get totalPrice()        { return this.order.totalPrice }
+   get codeNumber()        { return this.order.codeNumber }
+   get status()            { return this.order.status }
+   get items()             { return this.order.items }
+   get isDelivery()        { return this.order.isDelivery }
+   get dateTime()          { return this.order.dateTime }
+   get statusUpdatedAt()   { return this.order.statusUpdatedAt }
 
    values() {
       return this.order
    }
 
    isValid() {
-      const { id, codeNumber, totalPrice, items } = this.values()
+      if (this.id.length !== 13) return false
 
-      if (id.length !== 13) return false
+      if (!this.codeNumber) return false
 
-      if (!codeNumber) return false
+      if (this.totalPrice < 0) return false
 
-      if (totalPrice < 0) return false
-
-      if (!items.length) return false
+      if (!this.items.length) return false
 
       return true
    }
@@ -98,26 +125,38 @@ export default class OrderModel extends Model<Order> {
    async save() {
       if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
       
-      const { id } = this.values()
-      const docRef = doc(db, OrderModel.PATH, id)
-      const modelWithSecureDate = R.mergeRight(
-         this.values(),
-         {
-            ...this.values(),
-            dateTime: serverTimestamp()
-         }
-      )
+      const docRef = doc(db, OrderModel.PATH, this.id)
+      const document = await getDoc(docRef)
       
-      await setDoc(docRef, modelWithSecureDate)
+      if (!document.exists()) {
+         const model = R.mergeRight(
+            this.values(),
+            {
+               dateTime: serverTimestamp(),
+               statusUpdatedAt: serverTimestamp()
+            }
+         )
+         await setDoc(docRef, model)
+      }
+      else {
+         if (document.data().status === this.status) {
+            await setDoc(docRef, this.values())
+         }
+         else {
+            const model = R.mergeRight(
+               this.values(),
+               { statusUpdatedAt: serverTimestamp() }
+            )
+            await setDoc(docRef, model)
+         }
+      }
    }
 
    async delete() {
-      const { id } = this.values()
-
-      return await deleteDoc(doc(db, OrderModel.PATH, id))
+      return await deleteDoc(doc(db, OrderModel.PATH, this.id))
    }
 
    toString() {
-      return `Pedido No ${this.values().codeNumber}: R$ ${this.values().totalPrice.toFixed(2)}`
+      return `Pedido # ${this.codeNumber}: R$ ${this.totalPrice.toFixed(2)}`
    }
 }
