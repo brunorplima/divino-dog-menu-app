@@ -20,9 +20,9 @@ export default class OrderModel extends Model<Order> {
 
    private order: Order
 
-   constructor(order: Order | Pick<Order, 'items'>, existingCodeNumbers: string[] = []) {
+   constructor(order: Order | Pick<Order, 'items' | 'isDelivery'>, existingCodeNumbers: string[] = []) {
       super()
-      const { items } = order
+      const { items, isDelivery } = order
       if (R.propOr(false, 'id', order)) this.order = order as Order
       else {
          this.order = {
@@ -30,7 +30,8 @@ export default class OrderModel extends Model<Order> {
             totalPrice: items.reduce((acc, { subTotal }) => acc += subTotal, 0),
             codeNumber: generateOrderCodeNumber(existingCodeNumbers),
             status: 'confirmar',
-            items
+            items,
+            isDelivery
          }
       }
    }
@@ -97,6 +98,7 @@ export default class OrderModel extends Model<Order> {
    get codeNumber()        { return this.order.codeNumber }
    get status()            { return this.order.status }
    get items()             { return this.order.items }
+   get isDelivery()        { return this.order.isDelivery }
    get dateTime()          { return this.order.dateTime }
    get statusUpdatedAt()   { return this.order.statusUpdatedAt }
 

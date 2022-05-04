@@ -68,10 +68,22 @@ export interface Order {
       | typeof ORDER_STATUS_FINALIZADO
       | typeof ORDER_STATUS_CANCELADO
    readonly items: MenuItemGroup[]
+   readonly isDelivery: boolean
    readonly dateTime?: Date
    readonly statusUpdatedAt?: Date
 }
 
+// Users (firestore path: users)
+export interface User {
+   readonly id: string
+   readonly firstName: string
+   readonly lastName: string
+   readonly emailAddress: string
+   readonly phoneContact1?: string
+   readonly addresses?: UserAddress[]
+   readonly phoneContact2?: string
+   readonly dateOfBirth?: Date
+}
 
 
 
@@ -82,6 +94,12 @@ export interface MenuItemGroup {
    readonly subTotal: number
    readonly extraToppingIds?: string[]
    readonly extraSauceIds?: string[]
+}
+
+export interface UserAddress {
+   readonly description: string
+   readonly zipCode: string
+   readonly isMain: boolean
 }
 
 interface PromoPrice {
