@@ -2,6 +2,7 @@
 
 .menuGeneral {
    font-family: Nunito;
+   background-color: #222327;
 
    .fixedMenu {
       font-size: larger;
@@ -15,8 +16,8 @@
    }
 
    .menuContent {
-      padding-bottom: 30%;
       scroll-behavior: smooth;
+      height: 75vh;
 
       /* Hiding scrollbars */
       -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
