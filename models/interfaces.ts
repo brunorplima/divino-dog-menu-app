@@ -20,7 +20,7 @@ export interface MenuItem {
    readonly toppingIds?: string[]
    readonly sauceIds?: string[]
    readonly description?: string
-   readonly listOrder?: number
+   readonly listOrder: number
    readonly img?: string
    readonly promoPrice?: PromoPrice
 }
@@ -53,7 +53,7 @@ export interface Flavor {
 export interface Category {
    readonly id: string
    readonly name: string
-   readonly listOrder?: number
+   readonly listOrder: number
 }
 
 // Orders (Firestore path: orders)
