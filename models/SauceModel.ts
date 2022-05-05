@@ -3,11 +3,21 @@ import { db } from '../firebase/app'
 import { collection, deleteDoc, doc, getDoc, onSnapshot, query, Query, setDoc, Unsubscribe } from "firebase/firestore";
 import Model from './Model';
 import { Sauce } from './interfaces';
+import { generateID } from '../utils/modelHelper';
 
 export default class SauceModel extends Model<Sauce> {
 
-   constructor(private sauce: Sauce) {
+   private sauce: Sauce
+
+   constructor(sauce: Omit<Sauce, 'id'> | Sauce) {
       super()
+      if (R.propOr(false, 'id', sauce)) this.sauce = sauce as Sauce
+      else {
+         this.sauce= {
+            id: generateID(),
+            ...sauce
+         }
+      }
    }
    
    static get PATH(): string { return 'sauces' }

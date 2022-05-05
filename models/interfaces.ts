@@ -1,3 +1,11 @@
+import { 
+   ORDER_STATUS_CANCELADO,
+   ORDER_STATUS_CONFIRMADO,
+   ORDER_STATUS_CONFIRMAR,
+   ORDER_STATUS_FINALIZADO,
+   ORDER_STATUS_FINALIZANDO,
+   ORDER_STATUS_PREPARANDO
+} from "../constants/modelsConstants"
 
 // Menu Items (Firestore path: menuItems)
 export interface MenuItem {
@@ -12,7 +20,7 @@ export interface MenuItem {
    readonly toppingIds?: string[]
    readonly sauceIds?: string[]
    readonly description?: string
-   readonly listOrder?: number
+   readonly listOrder: number
    readonly img?: string
    readonly promoPrice?: PromoPrice
 }
@@ -45,7 +53,7 @@ export interface Flavor {
 export interface Category {
    readonly id: string
    readonly name: string
-   readonly listOrder?: number
+   readonly listOrder: number
 }
 
 // Orders (Firestore path: orders)
@@ -53,22 +61,45 @@ export interface Order {
    readonly id: string
    readonly totalPrice: number
    readonly codeNumber: string
-   readonly status: 'confirmar' | 'confirmado' | 'preparando' | 'finalizando' | 'finalizado' | 'cancelado'
+   readonly status: typeof ORDER_STATUS_CONFIRMAR
+      | typeof ORDER_STATUS_CONFIRMADO
+      | typeof ORDER_STATUS_PREPARANDO
+      | typeof ORDER_STATUS_FINALIZANDO
+      | typeof ORDER_STATUS_FINALIZADO
+      | typeof ORDER_STATUS_CANCELADO
    readonly items: MenuItemGroup[]
+   readonly isDelivery: boolean
    readonly dateTime?: Date
+   readonly statusUpdatedAt?: Date
 }
 
+// Users (firestore path: users)
+export interface User {
+   readonly id: string
+   readonly firstName: string
+   readonly lastName: string
+   readonly emailAddress: string
+   readonly phoneContact1?: string
+   readonly addresses?: UserAddress[]
+   readonly phoneContact2?: string
+   readonly dateOfBirth?: Date
+}
 
 
 
 // Menu Items
 export interface MenuItemGroup {
    readonly id: string
-   readonly orderId: string
    readonly menuItemId: string
    readonly subTotal: number
    readonly extraToppingIds?: string[]
    readonly extraSauceIds?: string[]
+}
+
+export interface UserAddress {
+   readonly description: string
+   readonly zipCode: string
+   readonly isMain: boolean
 }
 
 interface PromoPrice {

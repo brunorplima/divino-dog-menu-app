@@ -3,11 +3,21 @@ import * as R from 'ramda'
 import { db } from '../firebase/app'
 import { collection, deleteDoc, doc, getDoc, onSnapshot, query, Query, setDoc, Unsubscribe } from "firebase/firestore";
 import Model from './Model';
+import { generateID } from '../utils/modelHelper';
 
 export default class CategoryModel extends Model<Category> {
 
-   constructor(private category: Category) {
+   private category: Category
+
+   constructor(category: Omit<Category, 'id'> | Category) {
       super()
+      if (R.propOr(false, 'id', category)) this.category = category as Category
+      else {
+         this.category = {
+            id: generateID(),
+            ...category
+         }
+      }
    }
    
    static get PATH(): string { return 'categories' }

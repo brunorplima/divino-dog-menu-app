@@ -1,12 +1,13 @@
-import { Fragment } from "react"
+import { Fragment, useContext } from "react"
 import MenuCategories from "./MenuCategories"
 import ListingItems from "./ListingItems"
-import categories from "./temp_db/category.json"
-import menu from "./temp_db/menu.json"
+import { menuContext } from "../contexts/MenuProvider"
 import style from "./MenuList.module.scss"
 import * as R from "ramda"
 
 export default function MenuList() {
+   const { menuItems, categories } = useContext(menuContext)
+
    const capitalizeFirstLetter = (word: string) =>
       word.toLowerCase().charAt(0).toUpperCase() + word.slice(1)
 
@@ -15,7 +16,7 @@ export default function MenuList() {
          (a, b) => a.listOrder - b.listOrder
       )
       const newCategories = sortedCategories.map(
-         (cat) => menu.find((x) => x.category === cat.id) && cat
+         (cat) => menuItems.find((x) => x.categoryId === cat.id) && cat
       )
       return R.reject(R.isNil, newCategories)
    }
@@ -42,12 +43,14 @@ export default function MenuList() {
                   <h2 className={`${style.categories} text-2xl font-extrabold mb-5 text-white`}>
                      {capitalizeFirstLetter(category.name)}
                   </h2>
-                  {menu
+                  {menuItems
                      .sort((a, b) => a.listOrder - b.listOrder)
                      .map(
                         (item) =>
-                           category.id === item.category && (
-                              <ListingItems key={item.id} {...item} />
+                           category.id === item.categoryId && (
+                              <Fragment key={item.id}>
+                                 <ListingItems item={item} />
+                              </Fragment>
                            )
                      )}
                </div>
