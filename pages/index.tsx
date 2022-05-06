@@ -6,7 +6,6 @@ const Home: NextPage = () => {
    return (
       <div className="m-auto lg:w-1/2">
          <MenuList />
-         <NavBottom />
       </div>
    )
 }

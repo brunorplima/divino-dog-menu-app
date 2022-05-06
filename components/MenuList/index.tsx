@@ -22,7 +22,7 @@ export default function MenuList() {
    }
 
    return (
-      <div className={`${style.menuGeneral} px-4 font-medium text-gray-300`}>
+      <div className={`${style.menuGeneral} font-medium text-gray-300`}>
          <div className={`${style.fixedMenu} text-white font-extrabold whitespace-nowrap overflow-x-scroll`}>
             <div className={`${style.listCategories} z-20`}>
                {excludeEmptyCategory().map((category) => (

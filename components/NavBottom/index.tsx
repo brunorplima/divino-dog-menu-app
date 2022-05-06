@@ -1,15 +1,15 @@
 import { Fragment, MouseEvent, useRef, useState } from "react"
 import { BiCart, BiSearchAlt } from "react-icons/bi"
-import { MdOutlineFastfood } from "react-icons/md"
-import { BsPeopleFill } from "react-icons/bs"
+import { MdRestaurantMenu } from "react-icons/md"
+import { BsPersonCircle } from "react-icons/bs"
 import style from "./NavBottom.module.scss"
 
 export default function NavBottom() {
    const buttons = [
-      { name: "Cardápio", icon: <MdOutlineFastfood /> },
+      { name: "Cardápio", icon: <MdRestaurantMenu /> },
       { name: "Pesquisar", icon: <BiSearchAlt /> },
       { name: "Pedidos", icon: <BiCart /> },
-      { name: "Sobre nós", icon: <BsPeopleFill /> },
+      { name: "Perfil", icon: <BsPersonCircle /> },
    ]
 
    const [theStyle, setTheStyle] = useState("none")
