@@ -12,6 +12,7 @@
     "autoprefixer": "^10.4.4",
     "firebase": "^9.6.11",
     "formik": "^2.2.9",
+    "moment": "^2.29.3",
     "next": "12.1.5",
     "postcss": "^8.4.12",
     "ramda": "^0.28.0",
