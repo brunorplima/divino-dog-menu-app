@@ -36,7 +36,7 @@ export default abstract class Model<T> {
    abstract save(): void
 
    /**
-    * Delete the model from the database
+    * Deletes the model from the database
     */
    abstract delete(): void
 

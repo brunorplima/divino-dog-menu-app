@@ -61,12 +61,7 @@ export interface Order {
    readonly id: string
    readonly totalPrice: number
    readonly codeNumber: string
-   readonly status: typeof ORDER_STATUS_CONFIRMAR
-      | typeof ORDER_STATUS_CONFIRMADO
-      | typeof ORDER_STATUS_PREPARANDO
-      | typeof ORDER_STATUS_FINALIZANDO
-      | typeof ORDER_STATUS_FINALIZADO
-      | typeof ORDER_STATUS_CANCELADO
+   readonly status: OrderStatus
    readonly items: MenuItemGroup[]
    readonly isDelivery: boolean
    readonly dateTime?: Date
@@ -83,11 +78,13 @@ export interface User {
    readonly addresses?: UserAddress[]
    readonly phoneContact2?: string
    readonly dateOfBirth?: Date
+   readonly admin?: boolean
+   readonly master?: boolean
 }
 
 
 
-// Menu Items
+
 export interface MenuItemGroup {
    readonly id: string
    readonly menuItemId: string
@@ -106,3 +103,10 @@ interface PromoPrice {
    readonly price: number
    readonly dateLimit: Date
 }
+
+export type OrderStatus = typeof ORDER_STATUS_CONFIRMAR
+| typeof ORDER_STATUS_CONFIRMADO
+| typeof ORDER_STATUS_PREPARANDO
+| typeof ORDER_STATUS_FINALIZANDO
+| typeof ORDER_STATUS_FINALIZADO
+| typeof ORDER_STATUS_CANCELADO
