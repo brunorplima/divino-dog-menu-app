@@ -22,7 +22,7 @@ export default function MenuList() {
    }
 
    return (
-      <div className={`${style.menuGeneral} px-4 font-medium text-gray-300 bg-gray-700`}>
+      <div className={`${style.menuGeneral} font-medium text-gray-300`}>
          <div className={`${style.fixedMenu} text-white font-extrabold whitespace-nowrap overflow-x-scroll`}>
             <div className={`${style.listCategories} z-20`}>
                {excludeEmptyCategory().map((category) => (
@@ -37,7 +37,7 @@ export default function MenuList() {
          </div>
          <hr />
          <br />
-         <div className={`${style.menuContent} max-h-screen overflow-auto inset-y-16 z-10`}>
+         <div className={`${style.menuContent} overflow-auto z-10`}>
             {excludeEmptyCategory().map((category) => (
                <div id={category.name} key={category.id}>
                   <h2 className={`${style.categories} text-2xl font-extrabold mb-5 text-white`}>

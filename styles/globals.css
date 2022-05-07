@@ -13,5 +13,13 @@ a {
 }
 
 * {
+   margin: 0;
+   padding: 0;
    box-sizing: border-box;
+}
+
+body {
+   background-color: #222327;
+   justify-content: center;
+   align-items: center;
 }
