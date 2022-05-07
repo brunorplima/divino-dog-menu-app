@@ -1,6 +1,5 @@
 import type { NextPage } from "next"
 import MenuList from "../components/MenuList"
-import NavBottom from "../components/NavBottom"
 
 const Home: NextPage = () => {
    return (
