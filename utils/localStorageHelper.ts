@@ -1,6 +1,6 @@
 import { compose, filter, not, propEq } from "ramda"
-import { MenuItemGroup } from "../models/interfaces";
-import { generateID } from "./modelHelper";
+import { MenuItemGroup } from "../models/interfaces"
+import { generateID } from "./modelHelper"
 
 const MENU_ITEM_GROUP_KEY = 'menuItemGroups'
 
