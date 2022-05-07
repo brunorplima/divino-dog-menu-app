@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import PuffLoader from "react-spinners/PuffLoader"
 
 const loaderLayout = (loading: boolean) => {

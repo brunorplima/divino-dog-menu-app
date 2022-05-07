@@ -1,5 +1,5 @@
 import NavBottom from "../../NavBottom"
-import LoaderComponent from "../LoaderComponent"
+import LoaderComponent from "../../verse/LoaderComponent"
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
    return (
