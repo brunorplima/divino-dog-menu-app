@@ -1,19 +1,37 @@
-import React from 'react'
+import React, { MouseEventHandler, useMemo } from 'react'
+
+type BgColor = 'gray' | 'green'
 
 interface Props {
-   label: string,
-   disabled: boolean
-   type?: 'button' | 'submit' | 'reset',
-   clickHandler?: Function
-   icon?: any
+   readonly label: string,
+   readonly disabled?: boolean
+   readonly type?: 'button' | 'submit' | 'reset',
+   readonly clickHandler?: Function
+   readonly icon?: any,
+   readonly bgColor?: BgColor
+   readonly className?: string
 }
 
-const PrimaryButton: React.FC<Props> = ({ label, disabled, icon, type = 'button' }) => {
+const PrimaryButton: React.FC<Props> = ({
+   label,
+   disabled,
+   icon,
+   clickHandler,
+   type = 'button',
+   bgColor = 'gray',
+   className = ''
+}) => {
+
+   const bgColorStyle = useMemo(() => {
+      return bgColor === 'gray' ? 'bg-gray-500 hover:bg-gray-400' : 'bg-green-500 hover:bg-green-700'
+   }, [bgColor])
+
    return (
       <button
          type={type}
-         className='py-2 px-10 w-8 bg-gray-500 hover:bg-gray-400 text-white min-w-max flex gap-2 rounded-lg duration-300'
+         className={`${bgColorStyle} py-2 px-10 w-8 text-white min-w-max flex gap-2 rounded-lg duration-300 ${className}`}
          disabled={disabled}
+         onClick={() => clickHandler ? clickHandler() : () => {}}
       >
          <span className='translate-y-1'>
             {icon}

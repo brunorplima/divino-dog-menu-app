@@ -13,8 +13,9 @@ import {
    Unsubscribe
 } from "firebase/firestore";
 import Model from './Model';
-import { Order } from './interfaces';
+import { Order, OrderStatus } from './interfaces';
 import { generateID, generateOrderCodeNumber } from '../utils/modelHelper';
+import { ORDER_ACTIVE_STATUTES, ORDER_STATUSES } from '../constants/modelsConstants';
 
 export default class OrderModel extends Model<Order> {
 
@@ -120,6 +121,29 @@ export default class OrderModel extends Model<Order> {
 
    modify(values: Partial<Omit<Order, 'id'>>) {
       this.order = R.mergeRight(this.values(), values)
+   }
+
+   async next() {
+      if (ORDER_ACTIVE_STATUTES.includes(this.status)) {
+         const index = ORDER_STATUSES.findIndex(status => status === this.status)
+         this.modify({ status: ORDER_STATUSES[index + 1] })
+         try {
+            await this.save()
+         }
+         catch (err: any) {
+            console.log(err)
+         }
+      }
+   }
+
+   async toStatus(status: OrderStatus) {
+      this.modify({ status })
+      try {
+         await this.save()
+      }
+      catch (err: any) {
+         console.log(err)
+      }
    }
 
    async save() {
