@@ -6,8 +6,11 @@ import Model from './Model'
 
 export default class UserModel extends Model<User> {
 
-   constructor(private user: User) {
+   private user: User
+
+   constructor(user: Omit<User, 'admin' | 'master'>) {
       super()
+      this.user = user
    }
    
    static get PATH(): string { return 'users' }
@@ -66,6 +69,8 @@ export default class UserModel extends Model<User> {
    get phoneContact2()  { return this.user.phoneContact2 }
    get addresses()      { return this.user.addresses }
    get dateOfBirth()    { return this.user.dateOfBirth }
+   get admin()          { return this.user.admin }
+   get master()         { return this.user.master }
 
    values() {
       return this.user
@@ -78,7 +83,7 @@ export default class UserModel extends Model<User> {
       return true
    }
 
-   modify(values: Partial<Omit<User, 'id'>>) {
+   modify(values: Partial<Omit<User, 'admin' | 'master'>>) {
       this.user = R.mergeRight(this.values(), values)
    }
 
