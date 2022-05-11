@@ -34,6 +34,7 @@ const AccountNavbar: React.FC<Props> = ({ options }) => {
             {
                options.map(({ Icon, label, clickHandler }) => (
                   <div
+                     key={label}
                      className='border-gray-200 flex justify-center gap-3 w-64 py-1 text-xl'
                      onClick={() => {
                         clickHandler()
