@@ -24,7 +24,7 @@ const OrderManager = () => {
                return (
                   <div
                      key={status}
-                     className='flex flex-col items-center overflow-scroll gap-3 text-gray-300 max-h-full mb-12 border border-gray-200 rounded p-2'
+                     className='flex flex-col items-center gap-3 text-gray-300 overflow-y-scroll mb-12 border border-gray-200 rounded p-2'
                      style={{ minWidth: 280 }}
                   >
                      <h2 className='text-2xl'>{statusTitle[status]}</h2>
@@ -38,7 +38,7 @@ const OrderManager = () => {
             })}
 
          <div
-            className='flex flex-col items-center overflow-scroll gap-3 text-gray-300 max-h-full mb-12 border border-gray-200 rounded p-2'
+            className='flex flex-col items-center gap-3 text-gray-300 overflow-y-scroll mb-12 border border-gray-200 rounded p-2'
             style={{ minWidth: 280 }}
          >
             <h2 className='text-2xl'>Finalizados</h2>

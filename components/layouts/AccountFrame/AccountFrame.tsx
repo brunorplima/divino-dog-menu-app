@@ -30,7 +30,7 @@ const AdminAccountFrame: React.FC<{ children: React.ReactNode }> = ({ children }
                }
             ]}
          />
-         <div className='h-screen overflow-scroll'>
+         <div className='h-screen overflow-x-scroll'>
             {children}
          </div>
       </div>
