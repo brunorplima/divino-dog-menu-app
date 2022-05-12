@@ -1,14 +1,13 @@
 import { signOut } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect } from 'react'
-import AdminUserAccount from '../../components/book/AdminUserAccount/AdminUserAccount'
-import RegularUserAccount from '../../components/book/RegularUserAccount/RegularUserAccount'
-import { adminContext } from '../../components/contexts/AdminProvider'
+import AdminUserAccount from '../../components/book/AdminUserAccount'
+import RegularUserAccount from '../../components/book/RegularUserAccount'
 import { authContext } from '../../components/contexts/AuthProvider'
+import AccountFrame from '../../components/layouts/AccountFrame'
 
 const AccountPage = () => {
    const { user, auth, fbUser } = useContext(authContext)
-   const { activeOrders, latestFinalizedOrders } = useContext(adminContext)
    const router = useRouter()
 
    useEffect(() => {
@@ -32,12 +31,10 @@ const AccountPage = () => {
             !isAdminOrMaster() && <RegularUserAccount {...{ user, logout }} />
          }
 
-         {isAdminOrMaster() && (
-               <AdminUserAccount
-                  orders={activeOrders}
-                  finalizedOrders={latestFinalizedOrders}
-               />
-            )
+         {isAdminOrMaster() &&
+            <AccountFrame>
+               <AdminUserAccount />
+            </AccountFrame>
          }
       </>
    )
