@@ -10,7 +10,7 @@ const AdminAccountFrame: React.FC<{ children: React.ReactNode }> = ({ children }
    const { setCurrenctSection } = useContext(adminContext)
 
    return (
-      <div>
+      <div className='h-screen'>
          <AccountNavbar
             options={[
                {
@@ -30,7 +30,7 @@ const AdminAccountFrame: React.FC<{ children: React.ReactNode }> = ({ children }
                }
             ]}
          />
-         <div className='h-screen overflow-x-scroll'>
+         <div className='overflow-x-scroll'>
             {children}
          </div>
       </div>
