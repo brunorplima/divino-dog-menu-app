@@ -32,7 +32,7 @@ export default function NavBottom() {
 
    return (
       <div
-         className={`${style.navigation} fixed -bottom-10 flex justify-center items-center h-32 rounded-t-3xl bg-white w-full`}
+         className={`${style.navigation} fixed -bottom-12 flex justify-center items-center h-32 rounded-t-3xl bg-white w-full`}
       >
          <div className={`flex`}>
             {buttons.map((button, index) => (
