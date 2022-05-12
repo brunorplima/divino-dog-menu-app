@@ -49,7 +49,7 @@ const LoginPage: NextPage = () => {
    }
 
    return (
-      <div className='text-xl bg-gray-700 h-screen w-screen flex justify-center items-center'>
+      <div className='text-xl flex justify-center items-center'>
          <div className='lg:w-1/2 p-5 w-80'>
             <div className='text-center mb-4'>
                <h1 className='text-4xl text-white'>Login</h1>
