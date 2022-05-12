@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { IoMenu } from 'react-icons/io5'
 import { IoMdClose } from 'react-icons/io'
 import styles from './AccountNavbar.module.scss'
 import { IconType } from 'react-icons'
+import { authContext } from '../../contexts/AuthProvider'
+import { BiLogOut } from 'react-icons/bi'
 
 interface Option {
    readonly label: string
@@ -16,8 +18,14 @@ interface Props {
 
 const AccountNavbar: React.FC<Props> = ({ options }) => {
    const [menuOpen, setMenuOpen] = useState(false)
+   const [isFirstRender, setIsFirstRender] = useState(true)
+   const { auth } = useContext(authContext)
 
-   const animeStyle = menuOpen ? styles.show : styles.hide
+   useEffect(() => {
+      if (menuOpen && isFirstRender) setIsFirstRender(false)
+   }, [menuOpen])
+
+   const animeStyle = menuOpen ? styles.show : isFirstRender ? styles.initial : styles.hide
 
    return (
       <div className='relative text-gray-200'>
@@ -30,12 +38,12 @@ const AccountNavbar: React.FC<Props> = ({ options }) => {
                }
             </div>
          </div>
-         <div className={`${animeStyle} absolute bg-gray-700 h-screen z-10 w-screen p-5 flex flex-col items-center gap-5`}>
+         <div className={`${animeStyle} ${styles.height} absolute bg-gray-700 h-screen z-10 w-screen px-5 py-20 flex flex-col items-center gap-2`}>
             {
                options.map(({ Icon, label, clickHandler }) => (
                   <div
                      key={label}
-                     className='border-gray-200 flex justify-center gap-3 w-64 py-1 text-xl'
+                     className='border-gray-200 flex justify-center gap-3 w-64 text-xl py-4'
                      onClick={() => {
                         clickHandler()
                         setMenuOpen(false)
@@ -46,6 +54,16 @@ const AccountNavbar: React.FC<Props> = ({ options }) => {
                   </div>
                ))
             }
+            <div
+               className='border-gray-200 flex justify-center gap-3 w-64 text-xl py-4'
+               onClick={() => {
+                  auth?.signOut()
+                  setMenuOpen(false)
+               }}
+            >
+               <span className='translate-y-1 w-1/12'><BiLogOut /></span>
+               <span className="flex-1">Logout</span>
+            </div>
          </div>
       </div>
    )

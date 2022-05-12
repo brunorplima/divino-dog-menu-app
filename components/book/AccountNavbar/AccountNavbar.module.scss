@@ -26,3 +26,11 @@
    animation: hide .5s;
    left: 120%;
 }
+
+.initial {
+   left: 120%;
+}
+
+.height {
+   height: calc(100vh - 44px);
+}
