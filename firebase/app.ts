@@ -20,7 +20,7 @@ if (typeof window !== 'undefined') {
    analytics = getAnalytics(app);
    auth = getAuth(app)
    db = getFirestore(app)
-   enableIndexedDbPersistence(db)
+   // enableIndexedDbPersistence(db)
 }
 
 export { analytics, db }
