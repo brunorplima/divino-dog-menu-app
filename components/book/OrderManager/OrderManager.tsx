@@ -3,6 +3,7 @@ import React, { useContext } from 'react'
 import { ORDER_ACTIVE_STATUTES } from '../../../constants/modelsConstants'
 import OrderManagerItem from '../../chapter/OrderManagerItem/OrderManagerItem'
 import { adminContext } from '../../contexts/AdminProvider'
+import styles from './OrderManager.module.scss'
 
 const statusTitle = {
    confirmar: 'Não Confirmados',
@@ -18,13 +19,13 @@ const OrderManager = () => {
    const ordersByStatus = groupBy(prop('status'), activeOrders)
 
    return (
-      <div className='w-max h-screen px-5 flex gap-8 pt-3'>
+      <div className={`${styles.container} w-max px-5 flex gap-8 pt-3`}>
          {!isEmpty(ordersByStatus) &&
             ORDER_ACTIVE_STATUTES.map((status) => {
                return (
                   <div
                      key={status}
-                     className='flex flex-col items-center gap-3 text-gray-300 overflow-y-scroll mb-12 border border-gray-200 rounded p-2'
+                     className='flex flex-col items-center gap-3 text-gray-300 overflow-y-scroll mb-4 border border-gray-200 rounded p-2'
                      style={{ minWidth: 280 }}
                   >
                      <h2 className='text-2xl'>{statusTitle[status]}</h2>
@@ -38,7 +39,7 @@ const OrderManager = () => {
             })}
 
          <div
-            className='flex flex-col items-center gap-3 text-gray-300 overflow-y-scroll mb-12 border border-gray-200 rounded p-2'
+            className='flex flex-col items-center gap-3 text-gray-300 overflow-y-scroll mb-4 border border-gray-200 rounded p-2'
             style={{ minWidth: 280 }}
          >
             <h2 className='text-2xl'>Finalizados</h2>
