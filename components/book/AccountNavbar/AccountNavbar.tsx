@@ -5,6 +5,8 @@ import styles from './AccountNavbar.module.scss'
 import { IconType } from 'react-icons'
 import { authContext } from '../../contexts/AuthProvider'
 import { BiLogOut } from 'react-icons/bi'
+import { MdRestaurantMenu } from "react-icons/md"
+import Link from 'next/link'
 
 interface Option {
    readonly label: string
@@ -54,6 +56,15 @@ const AccountNavbar: React.FC<Props> = ({ options }) => {
                   </div>
                ))
             }
+            <Link href={'/'}>
+               <a
+                  className='border-gray-200 flex justify-center gap-3 w-64 text-xl py-4'
+                  onClick={() => setMenuOpen(false)}
+               >
+                  <span className='translate-y-1 w-1/12'><MdRestaurantMenu /></span>
+                  <span className="flex-1">Cardápio</span>
+               </a>
+            </Link>
             <div
                className='border-gray-200 flex justify-center gap-3 w-64 text-xl py-4'
                onClick={() => {
