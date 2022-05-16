@@ -5,9 +5,9 @@ import { authContext } from '../../contexts/AuthProvider'
 
 const WithSecureAdminAccess = (Component: React.ComponentType) => {
    const router = useRouter()
-   
+   const { user, fbUser } = useContext(authContext)
+
    return function () {
-      const { user, fbUser } = useContext(authContext)
 
       useEffect(() => {
          if (!fbUser) router.push('/login')
