@@ -1,11 +1,15 @@
-import { useRouter } from 'next/router'
 import React, { useContext, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { isAdminUser } from '../../../utils/modelHelper'
 import { authContext } from '../../contexts/AuthProvider'
 
-const WithSecureAdminAccess = (Component: React.ComponentType) => {
-   const router = useRouter()
+interface Props {
+   readonly children: React.ReactNode
+}
+
+const WithSecureAdminAccess: React.FC<Props> = ({ children }) => {
    const { user, fbUser } = useContext(authContext)
+   const router = useRouter()
 
    useEffect(() => {
       if (!fbUser) router.push('/login')
@@ -13,7 +17,7 @@ const WithSecureAdminAccess = (Component: React.ComponentType) => {
    }, [fbUser])
 
    if (fbUser && user && isAdminUser(user)) {
-      return <Component />
+      return <>{children}</>
    }
 
    return null

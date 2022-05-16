@@ -10,12 +10,14 @@ const AdminPage = () => {
    const [section, setSection] = useState<AdminSection>('orders')
 
    return (
-      <AccountFrame setSection={setSection}>
-         {section === 'orders' && <OrderManager />}
-         {section === 'products' && <AdminProductsSection />}
-         {section === 'settings' && <></>}
-      </AccountFrame>
+      <WithSecureAdminAccess>
+         <AccountFrame setSection={setSection}>
+            {section === 'orders' && <OrderManager />}
+            {section === 'products' && <AdminProductsSection />}
+            {section === 'settings' && <></>}
+         </AccountFrame>
+      </WithSecureAdminAccess>
    )
 }
 
-export default WithSecureAdminAccess(AdminPage)
+export default AdminPage
