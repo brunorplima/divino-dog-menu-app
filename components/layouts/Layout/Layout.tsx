@@ -10,7 +10,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
    if (excludedPages.includes(router.pathname)) return <>{children}</>
 
    return (
-      <div className="overflow-scroll">
+      <div className="m-auto lg:w-1/2 overflow-scroll">
          <LoaderComponent />
          <div className="px-4">{children}</div>
          <NavBottom />
