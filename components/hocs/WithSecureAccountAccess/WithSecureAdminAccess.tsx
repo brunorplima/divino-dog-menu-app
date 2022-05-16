@@ -7,19 +7,16 @@ const WithSecureAdminAccess = (Component: React.ComponentType) => {
    const router = useRouter()
    const { user, fbUser } = useContext(authContext)
 
-   return function () {
+   useEffect(() => {
+      if (!fbUser) router.push('/login')
+      if (fbUser && user && !isAdminUser(user)) router.push('/account')
+   }, [fbUser])
 
-      useEffect(() => {
-         if (!fbUser) router.push('/login')
-         if (fbUser && user && !isAdminUser(user)) router.push('/account')
-      }, [fbUser])
-
-      if (fbUser && user && isAdminUser(user)) {
-         return <Component />
-      }
-
-      return null
+   if (fbUser && user && isAdminUser(user)) {
+      return <Component />
    }
+
+   return null
 }
 
 export default WithSecureAdminAccess
