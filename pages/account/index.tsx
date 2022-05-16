@@ -1,46 +1,30 @@
 import { signOut } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect } from 'react'
-import AdminUserAccount from '../../components/book/AdminUserAccount/AdminUserAccount'
-import RegularUserAccount from '../../components/book/RegularUserAccount/RegularUserAccount'
-import { adminContext } from '../../components/contexts/AdminProvider'
+import RegularUserAccount from '../../components/book/RegularUserAccount'
 import { authContext } from '../../components/contexts/AuthProvider'
+import { isAdminUser } from '../../utils/modelHelper'
 
 const AccountPage = () => {
    const { user, auth, fbUser } = useContext(authContext)
-   const { activeOrders, latestFinalizedOrders } = useContext(adminContext)
    const router = useRouter()
 
    useEffect(() => {
       if (!fbUser) router.push('login')
+      if (fbUser && user && isAdminUser(user)) router.push('admin')
    }, [fbUser])
 
    function logout() {
       if (auth) signOut(auth)
    }
 
-   function isAdminOrMaster() {
-      if (user) return Boolean(user.admin || user.master)
-      return false
+   if (fbUser && user && !isAdminUser(user)) {
+      return (
+         <RegularUserAccount {...{ user, logout }} />
+      )
    }
 
-   if (!fbUser || !user) return null
-
-   return (
-      <>
-         {
-            !isAdminOrMaster() && <RegularUserAccount {...{ user, logout }} />
-         }
-
-         {isAdminOrMaster() && (
-               <AdminUserAccount
-                  orders={activeOrders}
-                  finalizedOrders={latestFinalizedOrders}
-               />
-            )
-         }
-      </>
-   )
+   return null
 }
 
 export default AccountPage

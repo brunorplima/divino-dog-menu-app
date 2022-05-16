@@ -1,13 +1,19 @@
-import NavBottom from '../../NavBottom'
-import LoaderComponent from '../../verse/LoaderComponent'
-import style from './Layout.module.scss'
+import { useRouter } from "next/router"
+import NavBottom from "../../NavBottom"
+import LoaderComponent from "../../verse/LoaderComponent"
+
+const excludedPages = ['/account']
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+   const router = useRouter()
+
+   if (excludedPages.includes(router.pathname)) return <>{children}</>
+
    return (
-      <div className={`${style.outsideLayout} overflow-hidden`}>
+      <div className="m-auto lg:w-1/2 overflow-scroll">
          <LoaderComponent />
-         <div className={`${style.insideLayout} px-4 overflow-y-scroll py-10`}>{children}</div>
-         {/* <NavBottom /> */}
+         <div className="px-4">{children}</div>
+         <NavBottom />
       </div>
    )
 }

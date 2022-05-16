@@ -5,7 +5,7 @@ const loaderLayout = (loading: boolean) => {
    return (
       <>
          <div
-            className="text-2xl font-bold text-white flex justify-center items-center h-screen h-screen"
+            className="text-2xl font-bold text-white flex justify-center items-center h-screen"
             style={{
                background: "#222327",
                zIndex: 2,

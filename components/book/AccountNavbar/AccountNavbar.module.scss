@@ -1,0 +1,36 @@
+
+@keyframes show {
+   from {
+      left: 120%;
+   }
+   to {
+      left: 0;
+   }
+}
+
+@keyframes hide {
+   from {
+      left: 0;
+   }
+   to {
+      left: 120%;
+   }
+}
+
+.show {
+   animation: show .5s;
+   left: 0;
+}
+
+.hide {
+   animation: hide .5s;
+   left: 120%;
+}
+
+.initial {
+   left: 120%;
+}
+
+.height {
+   height: calc(100vh - 44px);
+}

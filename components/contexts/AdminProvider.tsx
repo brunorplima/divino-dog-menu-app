@@ -15,7 +15,7 @@ interface AdminContext {
 export const adminContext = createContext<AdminContext>({
    activeOrders: [],
    latestFinalizedOrders: [],
-   existingCodeNumbers: []
+   existingCodeNumbers: [],
 })
 
 const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -56,7 +56,11 @@ const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>
    if (!user.admin && !user.master) return <>{children}</>
 
    return (
-      <adminContext.Provider value={{ activeOrders, latestFinalizedOrders, existingCodeNumbers }}>
+      <adminContext.Provider value={{
+         activeOrders,
+         latestFinalizedOrders,
+         existingCodeNumbers
+      }}>
          {children}
       </adminContext.Provider>
    )

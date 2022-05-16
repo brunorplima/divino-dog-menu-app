@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 import Model from './Model';
 import { Order, OrderStatus } from './interfaces';
-import { generateID, generateOrderCodeNumber } from '../utils/modelHelper';
+import { generateID } from '../utils/modelHelper';
 import { ORDER_ACTIVE_STATUTES, ORDER_STATUSES } from '../constants/modelsConstants';
 
 export default class OrderModel extends Model<Order> {
@@ -29,7 +29,7 @@ export default class OrderModel extends Model<Order> {
          this.order = {
             id: generateID(),
             totalPrice: items.reduce((acc, { subTotal }) => acc += subTotal, 0),
-            codeNumber: generateOrderCodeNumber(existingCodeNumbers),
+            codeNumber: this.generateOrderCodeNumber(existingCodeNumbers),
             status: 'confirmar',
             items,
             isDelivery
@@ -182,5 +182,18 @@ export default class OrderModel extends Model<Order> {
 
    toString() {
       return `Pedido # ${this.codeNumber}: R$ ${this.totalPrice.toFixed(2)}`
+   }
+
+   private generateOrderCodeNumber = (existingCodeNumbers: string[]) => {
+      const possible = '0123456789'
+      let codeNumber = ''
+   
+      for (let i = 1; i <= 4; i++) {
+         codeNumber += possible.charAt(Math.floor(Math.random() * possible.length))
+      }
+   
+      if (existingCodeNumbers.includes(codeNumber)) this.generateOrderCodeNumber(existingCodeNumbers)
+   
+      return codeNumber
    }
 }

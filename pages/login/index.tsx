@@ -1,4 +1,3 @@
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { Form, Formik } from 'formik'
 import { NextPage } from 'next'
 import Link from 'next/link'
@@ -10,6 +9,7 @@ import FormField from '../../components/verse/FormField'
 import PrimaryButton from '../../components/verse/PrimaryButton'
 import { loginSchema } from '../../schemas/authSchemas'
 import { getAuthErrorMessage } from '../../utils/firebaseAuthHelper'
+import { isAdminUser } from '../../utils/modelHelper'
 
 interface LoginForm {
    emailAddress: string
@@ -22,37 +22,39 @@ const initialLoginValues: LoginForm = {
 
 const LoginPage: NextPage = () => {
    const [loginError, setLoginError] = useState('')
-   const [loading, setLoading] = useState(false)
-   const { fbUser } = useContext(authContext)
+   const [disableButton, setDisableButton] = useState(false)
+   const { user, fbUser, login } = useContext(authContext)
    const router = useRouter()
 
    useEffect(() => {
-      if (fbUser) router.push('/account')
+      if (fbUser && user && fbUser.uid === user.id) {
+         if (isAdminUser(user)) router.push('/admin')
+         else router.push('/account')
+      } 
    }, [fbUser])
 
    if (fbUser) return null
 
    async function onLoginSubmit(values: LoginForm) {
-      setLoading(true)
+      setLoginError('')
+      setDisableButton(true)
       const { password, emailAddress } = values
-      const auth = getAuth()
       try {
-         signInWithEmailAndPassword(auth, emailAddress, password)
-         setLoading(false)
-         setLoginError('')
+         const isAdmin = await login(emailAddress, password)
+         if (isAdmin) router.push('/admin')
          router.push('/account')
       }
       catch (e: any) {
          setLoginError(getAuthErrorMessage(e.message))
-         setLoading(false)
+         setDisableButton(false)
       }
    }
 
    return (
-      <div className='text-xl bg-gray-700 h-screen w-screen flex justify-center items-center'>
+      <div className='text-xl flex justify-center items-center'>
          <div className='lg:w-1/2 p-5 w-80'>
             <div className='text-center mb-4'>
-               <h1 className='text-4xl text-white'>Login</h1>
+               <h1 className='text-2xl text-white'>Login</h1>
             </div>
 
             {loginError &&
@@ -87,7 +89,7 @@ const LoginPage: NextPage = () => {
                         <div className='flex justify-center mt-8'>
                            <PrimaryButton
                               type='submit'
-                              disabled={loading}
+                              disabled={disableButton}
                               icon={<RiLoginBoxLine />}
                               label='Entrar'
                            />
