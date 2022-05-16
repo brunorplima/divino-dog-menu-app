@@ -1,8 +1,8 @@
 import React from 'react'
-import { BiEditAlt } from 'react-icons/bi'
 import { BsCheck } from 'react-icons/bs'
-import { CgDetailsMore, CgUnavailable } from 'react-icons/cg'
+import { CgUnavailable } from 'react-icons/cg'
 import { priceToString } from '../../../utils/dataHelper'
+import ListItemDetailsEdit from '../../verse/ListItemDetailsEdit/ListItemDetailsEdit'
 
 interface Props {
    readonly name: string
@@ -53,18 +53,7 @@ interface Props {
             </div>
          </div>
          <div className='flex-1'></div>
-         <div className='flex flex-col justify-evenly gap-2'>
-            <div className='grid place-content-center rounded-full bg-green-700 p-1 cursor-pointer hover:bg-green-600'>
-               <span>
-                  <CgDetailsMore size={20} />
-               </span>
-            </div>
-            <div className='grid place-content-center rounded-full bg-green-700 p-1 cursor-pointer hover:bg-green-600'>
-               <span>
-                  <BiEditAlt size={20} />
-               </span>
-            </div>
-         </div>
+         <ListItemDetailsEdit />
       </div>
    )
 }
