@@ -32,8 +32,12 @@ const AccountNavbar: React.FC<Props> = ({ options }) => {
    return (
       <div className='relative text-gray-200'>
          <div className='bg-gray-700 py-2 px-3 flex justify-between'>
-            <h2>Divino Dog</h2>
-            <div onClick={() => setMenuOpen(!menuOpen)}>
+            <Link href={'/'}>
+               <a className='cursor-pointer'>
+                  <h2>Divino Dog</h2>
+               </a>
+            </Link>
+            <div className='cursor-pointer' onClick={() => setMenuOpen(!menuOpen)}>
                {menuOpen
                   ? <IoMdClose fontSize={28} />
                   : <IoMenu fontSize={28} />
@@ -45,7 +49,7 @@ const AccountNavbar: React.FC<Props> = ({ options }) => {
                options.map(({ Icon, label, clickHandler }) => (
                   <div
                      key={label}
-                     className='border-gray-200 flex justify-center gap-3 w-64 text-xl py-4'
+                     className='border-gray-200 flex justify-center gap-3 w-64 text-xl py-4 cursor-pointer'
                      onClick={() => {
                         clickHandler()
                         setMenuOpen(false)
@@ -58,7 +62,7 @@ const AccountNavbar: React.FC<Props> = ({ options }) => {
             }
             <Link href={'/'}>
                <a
-                  className='border-gray-200 flex justify-center gap-3 w-64 text-xl py-4'
+                  className='border-gray-200 flex justify-center gap-3 w-64 text-xl py-4 cursor-pointer'
                   onClick={() => setMenuOpen(false)}
                >
                   <span className='translate-y-1 w-1/12'><MdRestaurantMenu /></span>
@@ -66,7 +70,7 @@ const AccountNavbar: React.FC<Props> = ({ options }) => {
                </a>
             </Link>
             <div
-               className='border-gray-200 flex justify-center gap-3 w-64 text-xl py-4'
+               className='border-gray-200 flex justify-center gap-3 w-64 text-xl py-4 cursor-pointer'
                onClick={() => {
                   auth?.signOut()
                   setMenuOpen(false)
