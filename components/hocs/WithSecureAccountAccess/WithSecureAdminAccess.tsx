@@ -3,10 +3,11 @@ import React, { useContext, useEffect } from 'react'
 import { isAdminUser } from '../../../utils/modelHelper'
 import { authContext } from '../../contexts/AuthProvider'
 
-const WithSecureAdminAccess = (Component: React.ComponentType) =>
-   function () {
+const WithSecureAdminAccess = (Component: React.ComponentType) => {
+   const router = useRouter()
+   
+   return function () {
       const { user, fbUser } = useContext(authContext)
-      const router = useRouter()
 
       useEffect(() => {
          if (!fbUser) router.push('/login')
@@ -19,5 +20,6 @@ const WithSecureAdminAccess = (Component: React.ComponentType) =>
 
       return null
    }
+}
 
 export default WithSecureAdminAccess
