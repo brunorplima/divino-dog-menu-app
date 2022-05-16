@@ -33,7 +33,7 @@ const AdminAccountFrame: React.FC<Props> = ({ children, setSection }) => {
                }
             ]}
          />
-         <div className='overflow-x-scroll flex-1'>
+         <div className='overflow-x-scroll flex-1 fit-for-mobile'>
             {children}
          </div>
       </div>
