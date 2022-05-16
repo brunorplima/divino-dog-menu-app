@@ -23,7 +23,3 @@ body {
    justify-content: center;
    align-items: center;
 }
-
-.fit-for-mobile {
-   height: calc(100vh - 100px) !important;
-}
