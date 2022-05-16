@@ -15,7 +15,7 @@ const AdminProductsSection = () => {
 
    return (
       <div className='text-gray-200'>
-         <h1 className='grid place-content-center my-4 text-lg'>Produtos</h1>
+         <h1 className='grid place-content-center my-4 text-xl'>Produtos</h1>
          <div className='flex gap-1 px-2 overflow-x-scroll'>
             <div
                className={`max-w-max cursor-pointer px-3 py-2 ${getActive(
