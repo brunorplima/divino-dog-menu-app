@@ -1,3 +1,4 @@
+import { UserOrNull } from "../components/contexts/AuthProvider"
 
 export const generateID = () => {	  
    const size = 13
@@ -11,15 +12,4 @@ export const generateID = () => {
    return id;  
 }
 
-export const generateOrderCodeNumber = (existingCodeNumbers: string[]) => {
-   const possible = '0123456789'
-   let codeNumber = ''
-
-   for (let i = 1; i <= 4; i++) {
-      codeNumber += possible.charAt(Math.floor(Math.random() * possible.length))
-   }
-
-   if (existingCodeNumbers.includes(codeNumber)) generateOrderCodeNumber(existingCodeNumbers)
-
-   return codeNumber
-}
+export const isAdminUser = (user: UserOrNull) => (user?.admin as boolean) || (user?.master as boolean)

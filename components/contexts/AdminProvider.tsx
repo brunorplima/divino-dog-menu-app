@@ -6,29 +6,22 @@ import { ORDER_ACTIVE_STATUTES, ORDER_STATUS_FINALIZADO } from '../../constants/
 import { collection, limit, orderBy, query, where } from 'firebase/firestore'
 import { db } from '../../firebase/app'
 
-type Sections = 'orders' | 'products' | 'settings'
-
 interface AdminContext {
    readonly activeOrders: OrderModel[]
    readonly latestFinalizedOrders: OrderModel[]
    readonly existingCodeNumbers: string[]
-   readonly currentSection: Sections
-   readonly setCurrenctSection: React.Dispatch<React.SetStateAction<Sections>>
 }
 
 export const adminContext = createContext<AdminContext>({
    activeOrders: [],
    latestFinalizedOrders: [],
    existingCodeNumbers: [],
-   currentSection: 'orders',
-   setCurrenctSection: () => {}
 })
 
 const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
    const [activeOrders, setActiveOrders] = useState<OrderModel[]>([])
    const [latestFinalizedOrders, setLatestFinalizedOrders] = useState<OrderModel[]>([])
    const [existingCodeNumbers, setExistingCodeNumbers] = useState<string[]>([])
-   const [currentSection, setCurrenctSection] = useState<Sections>('orders')
    const { user } = useContext(authContext)
 
    useEffect(() => {
@@ -66,9 +59,7 @@ const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       <adminContext.Provider value={{
          activeOrders,
          latestFinalizedOrders,
-         existingCodeNumbers,
-         currentSection,
-         setCurrenctSection
+         existingCodeNumbers
       }}>
          {children}
       </adminContext.Provider>
