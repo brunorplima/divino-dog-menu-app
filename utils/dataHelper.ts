@@ -1,3 +1,3 @@
-export const priceToString = (price: number, addDeciaml = true) => {
-   return `$ ${addDeciaml ? price.toFixed(2) : price.toFixed(0)}`
+export const priceToString = (price: number, withDecimal = true) => {
+   return `$ ${withDecimal ? price.toFixed(2) : price.toFixed(0)}`
 }
