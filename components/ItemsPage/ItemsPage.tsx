@@ -6,6 +6,7 @@ import { MenuItemGroup } from '../../models/interfaces'
 import * as R from 'ramda'
 import { addMenuItemGroup } from '../../utils/localStorageHelper'
 import { fotmatPrice } from '../../utils/dataHelper'
+import Link from 'next/link'
 
 interface Props {
    itemId: string | string[] | undefined
@@ -60,7 +61,9 @@ const ItemsPage = (props: Props) => {
    }
 
    return (
-      <div className={`${styles.content} text-white relative text-xl overflow-y-scroll overflow-x-hidden px-4 -pb-64`}>
+      <div
+         className={`${styles.content} text-white relative text-xl overflow-y-scroll overflow-x-hidden px-4 -pb-64`}
+      >
          {theItem && (
             <>
                {theItem.categoryId === catId && (
@@ -76,8 +79,24 @@ const ItemsPage = (props: Props) => {
                      <div className={`${styles.itemDescription} relative flex flex-col gap-6`}>
                         <div className='text-4xl font-bold'>{theItem.name}</div>
                         <div>{theItem.description}</div>
+                        <div className='pb-4'>
+                           {catId === 'ZFCS8AI56J192' &&
+                              sections.map((section) => (
+                                 <Fragment key={section.title}>
+                                    <AddOns
+                                       addOnValues={section.sect}
+                                       title={section.title}
+                                       addOns={addOns}
+                                       setAddOns={setAddOns}
+                                       price={price}
+                                       setPrice={setPrice}
+                                       minimumPrice={minimumPrice}
+                                    />
+                                 </Fragment>
+                              ))}
+                        </div>
                         <div
-                           className={`${styles.itemQuantity} relative justify-center items-center text-base p-4 inset-x-0 items-center justify-center text-center`}
+                           className={`${styles.itemQuantity} relative justify-center items-center text-base p-4 inset-x-0 items-center justify-center text-center mb-24`}
                         >
                            <div className={`mb-3`}>Quantidade</div>
                            <div className={`${styles.innerItemQuantity} grid font-semibold`}>
@@ -104,33 +123,20 @@ const ItemsPage = (props: Props) => {
                               </div>
                            </div>
                         </div>
-                        <div className='pb-28'>
-                           {catId === 'ZFCS8AI56J192' && sections.map((section) => (
-                              <Fragment key={section.title}>
-                                 <AddOns
-                                    addOnValues={section.sect}
-                                    title={section.title}
-                                    addOns={addOns}
-                                    setAddOns={setAddOns}
-                                    price={price}
-                                    setPrice={setPrice}
-                                    minimumPrice={minimumPrice}
-                                 />
-                              </Fragment>
-                           ))}
-                        </div>
                      </div>
                   </>
                )}
-               <div
-                  className={`${styles.priceOrder} fixed flex flex-row font-semibold inset-x-0 bottom-0 py-6 px-8 cursor-pointer`}
-                  onClick={() => {
-                     saveInLocalStorage()
-                  }}
-               >
-                  <div className='block w-full text-left'>Adicionar</div>
-                  <div className='block w-full text-right'>{fotmatPrice(quant * price)}</div>
-               </div>
+               <Link href={'/'}>
+                  <div
+                     className={`${styles.priceOrder} fixed flex flex-row font-semibold inset-x-0 bottom-0 py-6 px-8 cursor-pointer`}
+                     onClick={() => {
+                        saveInLocalStorage()
+                     }}
+                  >
+                     <div className='block w-full text-left'>Adicionar</div>
+                     <div className='block w-full text-right'>{fotmatPrice(quant * price)}</div>
+                  </div>
+               </Link>
             </>
          )}
       </div>

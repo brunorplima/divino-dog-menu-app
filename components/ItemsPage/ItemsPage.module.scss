@@ -19,6 +19,13 @@
       top: 32.5vh;
 
       .itemQuantity {
+         background-color: #333438;
+         border-top: 2px solid lightgray;
+         border-bottom: 2px solid lightgray;
+         left: -1rem;
+         right: -1rem;
+         width: 100vw;
+
          .innerItemQuantity {
             grid-template-columns: 1fr 2fr 1fr;
 
@@ -32,7 +39,8 @@
                }
 
                span {
-                  background-color: #333438;
+                  background-color: #f3f3f3;
+                  color: #222327;
                   border: 2px solid lightgray;
                   border-radius: 0.25rem;
                   margin: 0 1rem;
@@ -44,6 +52,7 @@
                   border-radius: 0.25rem;
                   color: #222327;
                   cursor: pointer;
+                  font-size: 1.75rem;
                }
             }
          }
