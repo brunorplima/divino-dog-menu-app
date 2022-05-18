@@ -22,7 +22,7 @@
          width: 1.33rem;
          height: 0.6rem;
          transform: scale(2.5);
-         transition: 0.6s;
+         transition: 0.3s;
       }
       input:checked[type='checkbox'] {
          background: #29fd53;
@@ -38,7 +38,7 @@
          background: white;
          box-shadow: 0 0.125rem 0.313rem rgba(0, 0, 0, 0.2);
          transform: scale(1.1);
-         transition: 0.6s;
+         transition: 0.3s;
       }
       input:checked[type='checkbox']::before {
          left: .8rem;

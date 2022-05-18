@@ -3,6 +3,7 @@ import SauceModel from '../../../models/SauceModel'
 import FlavorModel from '../../../models/FlavorModel'
 import { BaseSyntheticEvent, Dispatch, SetStateAction, useEffect, useRef } from 'react'
 import styles from './AddOns.module.scss'
+import { fotmatPrice } from '../../../utils/dataHelper'
 
 interface Props {
    addOnValues: ToppingModel[] | SauceModel[] | FlavorModel[]
@@ -12,7 +13,6 @@ interface Props {
    price: number
    setPrice: Dispatch<SetStateAction<number>>
    minimumPrice: number
-   fotmatPrice: (unformattedPrice: number | undefined) => string | undefined
 }
 
 const AddOns = ({
@@ -23,7 +23,6 @@ const AddOns = ({
    price,
    setPrice,
    minimumPrice,
-   fotmatPrice,
 }: Props) => {
    const checkBoxes = useRef<any[]>([])
    checkBoxes.current = []

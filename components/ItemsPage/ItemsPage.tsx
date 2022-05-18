@@ -5,6 +5,7 @@ import styles from './ItemsPage.module.scss'
 import { MenuItemGroup } from '../../models/interfaces'
 import * as R from 'ramda'
 import { addMenuItemGroup } from '../../utils/localStorageHelper'
+import { fotmatPrice } from '../../utils/dataHelper'
 
 interface Props {
    itemId: string | string[] | undefined
@@ -29,16 +30,6 @@ const ItemsPage = (props: Props) => {
    useEffect(() => {
       theItem && setPrice(theItem.price)
    }, [theItem])
-
-   const fotmatPrice = (unformatted: number | undefined) => {
-      if (unformatted !== undefined) {
-         if (String(unformatted).includes('.'))
-            return `R$ ${String(unformatted).replace('.', ',')}${
-               String(unformatted).split('.')[1].length === 1 ? 0 : ''
-            }`
-         else return `R$ ${unformatted},00`
-      }
-   }
 
    const interfacingMenuItemGroup = (quantity: number): Omit<MenuItemGroup, 'id'>[] | undefined => {
       if (theItem !== undefined) {
@@ -124,7 +115,6 @@ const ItemsPage = (props: Props) => {
                                     price={price}
                                     setPrice={setPrice}
                                     minimumPrice={minimumPrice}
-                                    fotmatPrice={fotmatPrice}
                                  />
                               </Fragment>
                            ))}
