@@ -6,17 +6,19 @@ import { MenuItemGroup } from '../../models/interfaces'
 import * as R from 'ramda'
 import { addMenuItemGroup } from '../../utils/localStorageHelper'
 
-const ItemsPage = () => {
-   const { menuItems, toppings, sauces, flavors } = useContext(menuContext)
+interface Props {
+   itemId: string | string[] | undefined
+   catId: string | string[] | undefined
+}
+
+const ItemsPage = (props: Props) => {
+   const { itemId, catId } = props
+   const { menuItems, toppings, sauces } = useContext(menuContext)
 
    const sections = [
       { sect: toppings, title: 'Escolha seus Adicionais' },
       { sect: sauces, title: 'Escolha seus Molhos' },
-      /* { sect: flavors, title: 'Escolha seu Suco', items: [] }, */
    ]
-
-   const catId = 'ZFCS8AI56J192'
-   const itemId = 'WZOAJEVT0ZKO8'
 
    const [quant, setQuant] = useState(1)
 
@@ -67,7 +69,7 @@ const ItemsPage = () => {
    }
 
    return (
-      <div className='text-white relative text-xl'>
+      <div className={`${styles.content} text-white relative text-xl overflow-y-scroll overflow-x-hidden px-4 -pb-64`}>
          {theItem && (
             <>
                {theItem.categoryId === catId && (
@@ -111,8 +113,8 @@ const ItemsPage = () => {
                               </div>
                            </div>
                         </div>
-                        <div className='pb-16'>
-                           {sections.map((section) => (
+                        <div className='pb-28'>
+                           {catId === 'ZFCS8AI56J192' && sections.map((section) => (
                               <Fragment key={section.title}>
                                  <AddOns
                                     addOnValues={section.sect}

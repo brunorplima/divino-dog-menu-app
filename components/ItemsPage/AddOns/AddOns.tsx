@@ -31,8 +31,11 @@ const AddOns = ({
       if (el && !checkBoxes.current.includes(el)) checkBoxes.current.push(el)
    }
 
+   const unmutableClasses = 'grid my-2 p-4 rounded-xl font-medium w-full'
    const changeCheckBoxClass = (element: any, change: boolean) => {
-      const classes = change ? `${styles.itemInfo} ${styles.checkedItemInfo}` : `${styles.itemInfo}`
+      const classes = change
+         ? `${styles.itemInfo} ${styles.checkedItemInfo} ${unmutableClasses}`
+         : `${styles.itemInfo} ${unmutableClasses}`
       element.className = classes
    }
 
@@ -62,7 +65,10 @@ const AddOns = ({
          {addOnValues.map(
             (item) =>
                item.isAvailable && (
-                  <div key={item.id} className={`${styles.itemInfo} grid my-2 p-4 rounded-xl font-medium w-full`}>
+                  <div
+                     key={item.id}
+                     className={`${styles.itemInfo} grid my-2 p-4 rounded-xl font-medium w-full`}
+                  >
                      <div className='text-base'>
                         <label>{item.name}</label>
                      </div>
