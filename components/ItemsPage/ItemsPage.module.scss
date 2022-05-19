@@ -1,0 +1,67 @@
+.content {
+   /* Hiding scrollbars */
+   -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+   scrollbar-width: none; /* Hide scrollbar for Firefox */
+   &::-webkit-scrollbar {
+      display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+   }
+
+   height: 100vh;
+
+   .foodImage {
+      top: -2.5rem;
+      left: -1rem;
+      right: -1rem;
+      height: 35vh;
+   }
+
+   .itemDescription {
+      top: 32.5vh;
+
+      .itemQuantity {
+         background-color: #333438;
+         border-top: 2px solid lightgray;
+         border-bottom: 2px solid lightgray;
+         left: -1rem;
+         right: -1rem;
+         width: 100vw;
+
+         .innerItemQuantity {
+            grid-template-columns: 1fr 2fr 1fr;
+
+            div {
+               span,
+               a {
+                  display: flex;
+                  height: 2rem;
+                  align-items: center;
+                  justify-content: center;
+               }
+
+               span {
+                  background-color: #f3f3f3;
+                  color: #222327;
+                  border: 2px solid lightgray;
+                  border-radius: 0.25rem;
+                  margin: 0 1rem;
+                  height: 2.3rem;
+               }
+
+               a {
+                  background-color: #f3f3f3;
+                  border-radius: 0.25rem;
+                  color: #222327;
+                  cursor: pointer;
+                  font-size: 1.75rem;
+               }
+            }
+         }
+      }
+   }
+
+   .priceOrder {
+      background: #29fd53;
+      color: #222327;
+      font-size: 1.375rem;
+   }
+}
