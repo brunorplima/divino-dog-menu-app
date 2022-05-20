@@ -51,9 +51,8 @@ const AddOns = ({ addOnIds, title, addOns, setAddOns, price, setPrice, minimumPr
       }
    }
 
+   const { toppings, sauces } = useContext(menuContext)
    const findAddOn = (id: string): ToppingModel[] | SauceModel[] => {
-      const { toppings, sauces } = useContext(menuContext)
-
       if (toppings.find((i) => i.id === id)) return toppings
       else return sauces
    }
