@@ -1,15 +1,16 @@
 import { Fragment, MouseEvent, useRef, useState } from "react"
-import { BiCart, BiSearchAlt } from "react-icons/bi"
+import { BiCart, BiSearchAlt, BiStore } from "react-icons/bi"
 import { MdRestaurantMenu } from "react-icons/md"
 import { BsPersonCircle } from "react-icons/bs"
 import style from "./NavBottom.module.scss"
+import Link from "next/link"
 
 export default function NavBottom() {
    const buttons = [
-      { name: "Cardápio", icon: <MdRestaurantMenu /> },
-      { name: "Pesquisar", icon: <BiSearchAlt /> },
-      { name: "Pedidos", icon: <BiCart /> },
-      { name: "Perfil", icon: <BsPersonCircle /> },
+      { name: "Cardápio", icon: <MdRestaurantMenu />, link: '/' },
+      { name: "Pedidos", icon: <BiCart />, link: '/checkout' },
+      { name: "Sobre nós", icon: <BiStore />, link: '/aboutus' },
+      { name: "Perfil", icon: <BsPersonCircle />, link: '/login' },
    ]
 
    const [theStyle, setTheStyle] = useState("none")
@@ -38,10 +39,12 @@ export default function NavBottom() {
             {buttons.map((button, index) => (
                <Fragment key={button.name}>
                   <div id={String(index)} className={`${style.button} relative ${index === 0 && style.active}`} ref={appendTester} onClick={activeClass}>
-                     <a href="#" className="relative flex justify-center items-center flex-col w-full text-center font-light">
-                        <span className={`${style.icon} relative block text-center`}>{button.icon}</span>
-                        <span className={`${style.text} absolute font-bold tracking-wider opacity-0`}>{button.name}</span>
-                     </a>
+                     <Link href={button.link}>
+                        <a className="relative flex justify-center items-center flex-col w-full text-center font-light">
+                           <span className={`${style.icon} relative block text-center`}>{button.icon}</span>
+                           <span className={`${style.text} absolute font-bold tracking-wider opacity-0`}>{button.name}</span>
+                        </a>
+                     </Link>
                   </div>
                </Fragment>
             ))}
