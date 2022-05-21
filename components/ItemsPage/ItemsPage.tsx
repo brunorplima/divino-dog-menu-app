@@ -7,6 +7,7 @@ import * as R from 'ramda'
 import { addMenuItemGroup } from '../../utils/localStorageHelper'
 import { fotmatPrice } from '../../utils/dataHelper'
 import Link from 'next/link'
+import { IoIosArrowDropleftCircle } from "react-icons/io"
 
 interface Props {
    itemId: string | string[] | undefined
@@ -82,6 +83,11 @@ const ItemsPage = (props: Props) => {
                            }) no-repeat center`,
                         }}
                      ></div>
+                     <Link href={'/'}>
+                        <div className='fixed z-20 top-4 left-4 text-5xl' style={{ color: '#29fd53' }}>
+                           <IoIosArrowDropleftCircle />
+                        </div>
+                     </Link>
                      <div className={`${styles.itemDescription} relative flex flex-col gap-6`}>
                         <div className='text-4xl font-bold'>{theItem.name}</div>
                         <div>{theItem.description}</div>
