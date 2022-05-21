@@ -28,16 +28,8 @@ const ItemsPage = (props: Props) => {
    }, [theItem])
 
    const sections = [
-      {
-         sect: theItem?.toppingIds,
-         title: 'Escolha seus Adicionais',
-         addonExist: `${theItem?.toppingIds !== undefined ? true : false}`,
-      },
-      {
-         sect: theItem?.sauceIds,
-         title: 'Escolha seus Molhos',
-         addonExist: `${theItem?.sauceIds ? true : false}`,
-      },
+      { sect: theItem?.toppingIds, title: 'Escolha seus Adicionais', addonList: toppings },
+      { sect: theItem?.sauceIds, title: 'Escolha seus Molhos', addonList: sauces },
    ]
 
    const interfacingMenuItemGroup = (quantity: number): Omit<MenuItemGroup, 'id'>[] | undefined => {
@@ -100,6 +92,7 @@ const ItemsPage = (props: Props) => {
                                     <AddOns
                                        addOnIds={section.sect}
                                        title={section.title}
+                                       addonList={section.addonList}
                                        addOns={addOns}
                                        setAddOns={setAddOns}
                                        price={price}
