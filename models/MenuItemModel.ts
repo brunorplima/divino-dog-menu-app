@@ -94,7 +94,6 @@ export default class MenuItemModel extends Model<MenuItem> {
    get price()       { return this.menuItem.price }
    get isAvailable() { return this.menuItem.isAvailable }
    get categoryId()  { return this.menuItem.categoryId }
-   get options()     { return this.menuItem.options }
    get uniqOptions() { return this.menuItem.uniqOptions }
    get flavorIds()   { return this.menuItem.flavorIds }
    get toppingIds()  { return this.menuItem.toppingIds }

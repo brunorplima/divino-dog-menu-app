@@ -14,7 +14,6 @@ export interface MenuItem {
    readonly price: number
    readonly isAvailable: boolean
    readonly categoryId: string
-   readonly options?: string[]
    readonly uniqOptions?: string[]
    readonly flavorIds?: string[]
    readonly toppingIds?: string[]
