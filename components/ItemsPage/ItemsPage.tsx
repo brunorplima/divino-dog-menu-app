@@ -17,11 +17,6 @@ const ItemsPage = (props: Props) => {
    const { itemId, catId } = props
    const { menuItems, toppings, sauces } = useContext(menuContext)
 
-   const sections = [
-      { sect: toppings, title: 'Escolha seus Adicionais' },
-      { sect: sauces, title: 'Escolha seus Molhos' },
-   ]
-
    const [quant, setQuant] = useState(1)
 
    const theItem = menuItems.find((item) => item.id === itemId)
@@ -31,6 +26,11 @@ const ItemsPage = (props: Props) => {
    useEffect(() => {
       theItem && setPrice(theItem.price)
    }, [theItem])
+
+   const sections = [
+      { sect: theItem?.toppingIds, title: 'Escolha seus Adicionais', addonList: toppings },
+      { sect: theItem?.sauceIds, title: 'Escolha seus Molhos', addonList: sauces },
+   ]
 
    const interfacingMenuItemGroup = (quantity: number): Omit<MenuItemGroup, 'id'>[] | undefined => {
       if (theItem !== undefined) {
@@ -60,6 +60,12 @@ const ItemsPage = (props: Props) => {
       itemsGroupObject !== undefined && itemsGroupObject.forEach((item) => addMenuItemGroup(item))
    }
 
+   const addonAvailability = (addonArray: string[] | undefined) => {
+      if (addonArray === undefined) return false
+      if (addonArray.length === 0) return false
+      else return true
+   }
+
    return (
       <div
          className={`${styles.content} text-white relative text-xl overflow-y-scroll overflow-x-hidden px-4 -pb-64`}
@@ -80,23 +86,25 @@ const ItemsPage = (props: Props) => {
                         <div className='text-4xl font-bold'>{theItem.name}</div>
                         <div>{theItem.description}</div>
                         <div className='pb-4'>
-                           {catId === 'ZFCS8AI56J192' &&
-                              sections.map((section) => (
-                                 <Fragment key={section.title}>
+                           {sections.map((section) => (
+                              <Fragment key={section.title}>
+                                 {addonAvailability(section.sect) && section.sect !== undefined && (
                                     <AddOns
-                                       addOnValues={section.sect}
+                                       addOnIds={section.sect}
                                        title={section.title}
+                                       addonList={section.addonList}
                                        addOns={addOns}
                                        setAddOns={setAddOns}
                                        price={price}
                                        setPrice={setPrice}
                                        minimumPrice={minimumPrice}
                                     />
-                                 </Fragment>
-                              ))}
+                                 )}
+                              </Fragment>
+                           ))}
                         </div>
                         <div
-                           className={`${styles.itemQuantity} relative justify-center items-center text-base p-4 inset-x-0 items-center justify-center text-center mb-24`}
+                           className={`${styles.itemQuantity} relative text-base p-4 inset-x-0 items-center justify-center text-center mb-40`}
                         >
                            <div className={`mb-3`}>Quantidade</div>
                            <div className={`${styles.innerItemQuantity} grid font-semibold`}>
@@ -128,7 +136,7 @@ const ItemsPage = (props: Props) => {
                )}
                <Link href={'/'}>
                   <div
-                     className={`${styles.priceOrder} fixed flex flex-row font-semibold inset-x-0 bottom-0 py-6 px-8 cursor-pointer`}
+                     className={`${styles.priceOrder} fixed flex flex-row font-semibold inset-x-0 bottom-0 py-4 px-8 cursor-pointer`}
                      onClick={() => {
                         saveInLocalStorage()
                      }}
