@@ -1,6 +1,5 @@
-import { useRouter } from "next/router"
-import NavBottom from "../../NavBottom"
-import LoaderComponent from "../../verse/LoaderComponent"
+import { useRouter } from 'next/router'
+import LoaderComponent from '../../verse/LoaderComponent'
 
 const excludedPages = ['/account']
 
@@ -10,10 +9,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
    if (excludedPages.includes(router.pathname)) return <>{children}</>
 
    return (
-      <div className="m-auto lg:w-1/2 overflow-scroll">
+      <div className='m-auto lg:w-1/2 overflow-scroll'>
          <LoaderComponent />
-         <div className="px-4">{children}</div>
-         <NavBottom />
+         <div className='px-4'>{children}</div>
       </div>
    )
 }
