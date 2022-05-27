@@ -1,7 +1,7 @@
 import { Field } from 'formik'
 import React from 'react'
 import { RiErrorWarningFill } from 'react-icons/ri'
-import { FIELD_CLASS_NAME } from '../../../constants/formConstants'
+import { FIELD_CLASS_NAME } from '../../../../constants/formConstants'
 
 interface Props {
    readonly name: string
