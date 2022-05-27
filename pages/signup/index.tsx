@@ -1,4 +1,4 @@
-import FormField from '../../components/verse/FormField'
+import FormField from '../../components/forms/fields/FormField'
 import PrimaryButton from '../../components/verse/PrimaryButton'
 import {
    createUserWithEmailAndPassword,

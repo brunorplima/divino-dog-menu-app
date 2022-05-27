@@ -36,6 +36,8 @@ const FileFormField: React.FC<Props> = ({
       }
    }, [values])
 
+   const errorStyle = error && touched ? 'border-2 border-red-400' : ''
+
    return (
       <div className={`${containerClassName} flex flex-col`}>
          <label className='text-white' htmlFor={id}>
@@ -47,7 +49,9 @@ const FileFormField: React.FC<Props> = ({
             {
                ({ form }: any) => (
                   <>
-                     <label className={`${FIELD_CLASS_NAME} ${className} rounded bg-white w-44 flex gap-4 cursor-pointer`}>
+                     <label className={`
+                        ${FIELD_CLASS_NAME} ${className} ${errorStyle} rounded bg-white w-44 flex gap-3 cursor-pointer
+                     `}>
                         <input
                            ref={inputRef}
                            type='file'
@@ -61,10 +65,11 @@ const FileFormField: React.FC<Props> = ({
                         {!file && <><ImCloudUpload size={22} /> Escolha Imagem</>}
                         {file && <><ImCloudUpload size={22} /> Feito</>}
                      </label>
-                     {file && 
+                     {file &&
                         <div 
                            className="text-gray-300 py-2 cursor-pointer w-fit"
                            onClick={() => {
+                              if (inputRef.current) inputRef.current.value = ''
                               setFile(undefined)
                               form.setFieldValue(name, undefined)
                            }}
@@ -81,6 +86,7 @@ const FileFormField: React.FC<Props> = ({
                            <span
                               className='absolute -top-2 -right-3 text-gray-200 rounded-full bg-black cursor-pointer'
                               onClick={() => {
+                                 if (inputRef.current) inputRef.current.value = ''
                                  setFile(undefined)
                                  setFileUrl(undefined)
                                  form.setFieldValue(name, undefined)

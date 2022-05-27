@@ -3,7 +3,7 @@ import React from 'react'
 import CategoryModel from '../../../models/CategoryModel'
 import { Category } from '../../../models/interfaces'
 import { categoryFormSchema } from '../../../schemas/generalFormSchemas'
-import FormField from '../../verse/FormField'
+import FormField from '../../forms/fields/FormField'
 import PrimaryButton from '../../verse/PrimaryButton'
 
 type CategoryFormType = Partial<Omit<Category, 'id'>>
