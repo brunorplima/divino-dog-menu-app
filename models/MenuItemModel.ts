@@ -102,6 +102,10 @@ export default class MenuItemModel extends Model<MenuItem> {
    get img()         { return this.menuItem.img }
    get promoPrice()  { return this.menuItem.promoPrice }
 
+   hasPromo() {
+      return this.hasValidPromo() && this.promoPrice
+   }
+
    hasValidPromo() {
       if (this.promoPrice && this.promoPrice.dateLimit && this.promoPrice.price) return true
       else if (!this.promoPrice) return true
@@ -113,13 +117,14 @@ export default class MenuItemModel extends Model<MenuItem> {
    }
 
    isValid() {
-      const { id, name, price, categoryId } = this.values()
 
-      if (!id || !name || !categoryId) return false
+      if (!this.id || !this.name || !this.categoryId) return false
 
-      if (id.length !== 13) return false
+      if (this.id.length !== 13) return false
 
-      if (price < 0) return false
+      if (this.price < 0) return false
+
+      if (this.img && typeof this.img !== 'string') return false
 
       return true
    }
@@ -128,22 +133,22 @@ export default class MenuItemModel extends Model<MenuItem> {
       this.menuItem = R.mergeRight(this.values(), values)
    }
 
+   removeProp(prop: 'optionIds' | 'toppingIds' | 'sauceIds' | 'description' | 'img' | 'promoPrice') {
+      this.menuItem = R.dissoc(prop, this.values())
+   }
+
    async save() {
       if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
-
-      const { id } = this.values()
-      const docRef = doc(db, MenuItemModel.PATH, id)
+      const docRef = doc(db, MenuItemModel.PATH, this.id)
       
       await setDoc(docRef, this.values())
    }
 
    async delete() {
-      const { id } = this.values()
-
-      return await deleteDoc(doc(db, MenuItemModel.PATH, id))
+      return await deleteDoc(doc(db, MenuItemModel.PATH, this.id))
    }
 
    toString() {
-      return this.values().name
+      return this.name
    }
 }

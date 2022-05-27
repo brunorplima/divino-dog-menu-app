@@ -13,12 +13,12 @@ export interface MenuItem {
    readonly name: string
    readonly price: number
    readonly isAvailable: boolean
+   readonly listOrder: number
    readonly categoryId: string
    readonly optionIds?: string[]
    readonly toppingIds?: string[]
    readonly sauceIds?: string[]
    readonly description?: string
-   readonly listOrder: number
    readonly img?: string
    readonly promoPrice?: PromoPrice
 }

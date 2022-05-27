@@ -32,10 +32,12 @@ const MenuItemForm: React.FC<Props> = ({ onClose, item }) => {
          if (item) {
             if (values.img) {
                const imageUrl = await storeFile(values.img as File, MenuItemModel.PATH)
-               item.modify({ ...values, img: imageUrl })
+               item.modify({ img: imageUrl })
             } else {
-               item.modify(values)
+               if (has('img', item.values())) item.removeProp('img')
             }
+            if (item.hasPromo() && !has('promoPrice', values)) item.removeProp('promoPrice')
+            item.modify(omit(['img'], values))
             item.save()
             return true
          }
@@ -76,7 +78,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, item }) => {
                onClose()
             }}
             validationSchema={menuItemFormSchema}
-            render={({ handleSubmit, handleChange, errors, touched, values }) => {
+            render={({ handleSubmit, handleChange, errors, touched, values, setFieldValue }) => {
                return (
                   <>
                      <Form onSubmit={handleSubmit}>
@@ -184,6 +186,15 @@ const MenuItemForm: React.FC<Props> = ({ onClose, item }) => {
                         <div className="p-3 mb-3 bg-gray-700 rounded">
                            <div className={`text-gray-100 mb-2 text-sm`}>
                               {item?.promoPrice ? 'Promoção em vigor' : 'Não há promoção atualmente'}
+                           </div>
+                           <div className="my-2">
+                              <PrimaryButton
+                                 label='Cancelar Promoção'
+                                 clickHandler={() => {
+                                    setFieldValue('promoPrice.price', '')
+                                    setFieldValue('promoPrice.dateLimit', '')
+                                 }}
+                              />
                            </div>
                            <FormField
                               label='Preço promocional'

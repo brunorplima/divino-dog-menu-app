@@ -11,7 +11,7 @@ const menuItemFormSchema =  Yup.object({
    sauceIds: Yup.array(Yup.string()),
    description: Yup.string(),
    listOrder: Yup.number(),
-   img: Yup.object().nullable(),
+   img: Yup.object(),
    promoPrice: Yup.object({
       price: Yup.number(),
       dateLimit: Yup.date()

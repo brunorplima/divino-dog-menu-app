@@ -103,7 +103,7 @@ const AdminMenuItemView: React.FC<Props> = ({ item }) => {
                   info={(
                      <div className='py-2'>
                         <div className="border-l-4 border-gray-400 px-4 py-1">
-                           Validade: {moment(item.promoPrice.dateLimit).format('L')}
+                           Validade: {moment(item.promoPrice.dateLimit).format('DD/MM/YYYY')}
                         </div>
                         {!isNil(item.promoPrice.price) &&
                            <div className='border-l-4 border-gray-400 px-4 py-1'>

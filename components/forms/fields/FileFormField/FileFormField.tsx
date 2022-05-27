@@ -54,7 +54,6 @@ const FileFormField: React.FC<Props> = ({
                            className='hidden'
                            onChange={ev => {
                               const value = ev.target.files && ev.target.files[0]
-                              console.log(value)
                               setFile(value as File)
                               form.setFieldValue(name, value)
                            }}
@@ -67,7 +66,7 @@ const FileFormField: React.FC<Props> = ({
                            className="text-gray-300 py-2 cursor-pointer w-fit"
                            onClick={() => {
                               setFile(undefined)
-                              form.setFieldValue(name, null)
+                              form.setFieldValue(name, undefined)
                            }}
                         >
                            <div className='flex gap-2'>
@@ -84,7 +83,7 @@ const FileFormField: React.FC<Props> = ({
                               onClick={() => {
                                  setFile(undefined)
                                  setFileUrl(undefined)
-                                 form.setFieldValue(name, null)
+                                 form.setFieldValue(name, undefined)
                               }}
                            >
                               <IoMdCloseCircle size={20} />

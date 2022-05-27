@@ -309,9 +309,11 @@ const AdminProductsSection = () => {
                            <Fragment key={item.id}>
                               <div
                                  className='flex rounded bg-gray-600 py-1 px-3 gap-3'
-                                 onClick={() => setCurrentCategory({ item, action: 'view' })}
                               >
-                                 <div className='flex justify-between flex-1 cursor-pointer'>
+                                 <div
+                                    className='flex justify-between flex-1 cursor-pointer'
+                                    onClick={() => setCurrentCategory({ item, action: 'view' })}
+                                 >
                                     <div className='text-base font-bold text-green-600'>
                                        {item.name} ({relatedMenuItems.length})
                                     </div>
