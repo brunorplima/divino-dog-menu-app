@@ -28,6 +28,7 @@ const PrimaryModal: React.FC<Props> = ({ id, title, isOpen, onClose, children, t
             <ReactModal
                isOpen={isOpen}
                appElement={document.getElementById(id) as HTMLElement}
+               ariaHideApp={false}
                className='bg-gray-600 h-screen max-w-2xl mr-auto ml-auto overflow-scroll'
             >
                <div className='p-5 flex justify-between border-b border-gray-400 text-gray-100'>

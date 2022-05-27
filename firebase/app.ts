@@ -1,7 +1,8 @@
-import { initializeApp } from "firebase/app";
-import { Analytics, getAnalytics } from "firebase/analytics";
-import { Firestore, getFirestore, enableIndexedDbPersistence,  } from "firebase/firestore";
+import { initializeApp } from 'firebase/app'
+import { Analytics, getAnalytics } from 'firebase/analytics'
+import { Firestore, getFirestore  } from 'firebase/firestore'
 import { Auth, getAuth } from 'firebase/auth'
+import { FirebaseStorage, getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
    apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -15,12 +16,12 @@ const firebaseConfig = {
 
 
 const app = initializeApp(firebaseConfig);
-let analytics: Analytics, db: Firestore, auth: Auth
+let analytics: Analytics, db: Firestore, auth: Auth, storage: FirebaseStorage
 if (typeof window !== 'undefined') {
    analytics = getAnalytics(app);
    auth = getAuth(app)
    db = getFirestore(app)
-   // enableIndexedDbPersistence(db)
+   storage = getStorage(app)
 }
 
-export { analytics, db }
+export { analytics, db, storage }

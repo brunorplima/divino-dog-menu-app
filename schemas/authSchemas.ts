@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
+import { REQUIRED } from './schemaUtils'
 
-const REQUIRED = 'Campo obrigatório'
 const EMAIL_INVALID = 'Email inválido'
 
 export const loginSchema = Yup.object({

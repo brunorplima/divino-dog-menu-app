@@ -69,11 +69,9 @@ export default class CategoryModel extends Model<Category> {
    }
 
    isValid() {
-      const { id, name } = this.values()
+      if (!this.id || !this.name) return false
 
-      if (!id || !name) return false
-
-      if (id.length !== 13) return false
+      if (this.id.length !== 13) return false
 
       return true
    }
@@ -85,20 +83,16 @@ export default class CategoryModel extends Model<Category> {
    async save() {
       if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
 
-      const { id } = this.values()
-      
-      const docRef = doc(db, CategoryModel.PATH, id)
+      const docRef = doc(db, CategoryModel.PATH, this.id)
       
       await setDoc(docRef, this.values())
    }
 
    async delete() {
-      const { id } = this.values()
-
-      return await deleteDoc(doc(db, CategoryModel.PATH, id))
+      return await deleteDoc(doc(db, CategoryModel.PATH, this.id))
    }
 
    toString() {
-      return this.values().name
+      return this.name
    }
 }
