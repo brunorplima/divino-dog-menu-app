@@ -16,7 +16,7 @@ const PrimaryButton: React.FC<Props> = ({
    label,
    disabled,
    icon,
-   clickHandler,
+   clickHandler = () => {},
    type = 'button',
    bgColor = 'gray',
    className = ''
@@ -31,7 +31,7 @@ const PrimaryButton: React.FC<Props> = ({
          type={type}
          className={`${bgColorStyle} py-2 px-10 w-8 text-white min-w-max flex gap-2 rounded-lg duration-300 ${className}`}
          disabled={disabled}
-         onClick={() => clickHandler ? clickHandler() : () => {}}
+         onClick={() => clickHandler()}
       >
          <span className='translate-y-1'>
             {icon}
