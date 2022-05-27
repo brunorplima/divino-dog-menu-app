@@ -4,7 +4,7 @@ import MenuItemOptionModel from '../../../models/MenuItemOptionModel'
 import SauceModel from '../../../models/SauceModel'
 import ToppingModel from '../../../models/ToppingModel'
 import { generalProductFormSchema } from '../../../schemas/generalFormSchemas'
-import FormField from '../../verse/FormField'
+import FormField from '../../forms/fields/FormField'
 import PrimaryButton from '../../verse/PrimaryButton'
 
 interface GeneralProduct {
