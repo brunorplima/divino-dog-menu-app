@@ -54,7 +54,7 @@ export default class MenuItemModel extends Model<MenuItem> {
          const menuItems: MenuItemModel[] = []
          snapshot.forEach(document => {
             const menuItem = document.data()
-            if (menuItem.promoPrice) {
+            if (menuItem.promoPrice && menuItem.promoPrice.dateLimit) {
                menuItem.promoPrice.dateLimit = menuItem.promoPrice.dateLimit.toDate()
             }
             const menuItemModel = new MenuItemModel(menuItem as MenuItem)
@@ -94,14 +94,19 @@ export default class MenuItemModel extends Model<MenuItem> {
    get price()       { return this.menuItem.price }
    get isAvailable() { return this.menuItem.isAvailable }
    get categoryId()  { return this.menuItem.categoryId }
-   get uniqOptions() { return this.menuItem.uniqOptions }
-   get flavorIds()   { return this.menuItem.flavorIds }
+   get optionIds()   { return this.menuItem.optionIds }
    get toppingIds()  { return this.menuItem.toppingIds }
    get sauceIds()    { return this.menuItem.sauceIds }
    get description() { return this.menuItem.description }
    get listOrder()   { return this.menuItem.listOrder }
    get img()         { return this.menuItem.img }
    get promoPrice()  { return this.menuItem.promoPrice }
+
+   hasValidPromo() {
+      if (this.promoPrice && this.promoPrice.dateLimit && this.promoPrice.price) return true
+      else if (!this.promoPrice) return true
+      else return false
+   }
 
    values() {
       return this.menuItem

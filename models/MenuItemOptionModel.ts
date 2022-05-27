@@ -2,46 +2,46 @@ import * as R from 'ramda'
 import { db } from '../firebase/app'
 import { collection, deleteDoc, doc, getDoc, onSnapshot, query, Query, setDoc, Unsubscribe } from "firebase/firestore";
 import Model from './Model';
-import { Flavor } from './interfaces';
+import { MenuItemOption } from './interfaces';
 import { generateID } from '../utils/modelHelper';
 
-   export default class FlavorModel extends Model<Flavor> {
+   export default class MenuItemOptionModel extends Model<MenuItemOption> {
 
-      private flavor: Flavor
+      private menuItemOption: MenuItemOption
 
-      constructor(flavor: Omit<Flavor, 'id'> | Flavor) {
+      constructor(option: Omit<MenuItemOption, 'id'> | MenuItemOption) {
          super()
-         if (R.propOr(false, 'id', flavor)) this.flavor = flavor as Flavor
+         if (R.propOr(false, 'id', option)) this.menuItemOption = option as MenuItemOption
          else {
-            this.flavor = {
+            this.menuItemOption = {
                id: generateID(),
-               ...flavor
+               ...option
             }
          }
       }
       
-      static get PATH(): string { return 'flavors' }
+      static get PATH(): string { return 'menuItemOptions' }
 
       static async find(id: string) {
-         const docRef = await getDoc(doc(db, FlavorModel.PATH, id))
+         const docRef = await getDoc(doc(db, MenuItemOptionModel.PATH, id))
          
          if (!docRef.exists()) return null
 
-         const flavorModel = new FlavorModel(docRef.data() as Flavor)
+         const menuItemOptionModel = new MenuItemOptionModel(docRef.data() as MenuItemOption)
 
-         return flavorModel
+         return menuItemOptionModel
       }
 
       static listenToAll(setFunction: Function): Unsubscribe {
-         const q = query(collection(db, FlavorModel.PATH))
+         const q = query(collection(db, MenuItemOptionModel.PATH))
          
          const unsubscribe = onSnapshot(q, snapshot => {
-            const flavors: FlavorModel[] = []
+            const options: MenuItemOptionModel[] = []
             snapshot.forEach(document => {
-               const flavorModel = new FlavorModel(document.data() as Flavor)
-               flavors.push(flavorModel)
+               const menuItemOptionModel = new MenuItemOptionModel(document.data() as MenuItemOption)
+               options.push(menuItemOptionModel)
             })
-            setFunction(flavors)
+            setFunction(options)
          })
          
          return unsubscribe
@@ -49,60 +49,54 @@ import { generateID } from '../utils/modelHelper';
 
       static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
          const unsubscribe = onSnapshot(q, snapshot => {
-            const flavors: FlavorModel[] = []
+            const options: MenuItemOptionModel[] = []
             snapshot.forEach(document => {
-               const flavorModel = new FlavorModel(document.data() as Flavor)
-               flavors.push(flavorModel)
+               const menuItemOptionModel = new MenuItemOptionModel(document.data() as MenuItemOption)
+               options.push(menuItemOptionModel)
             })
-            setFunction(flavors)
+            setFunction(options)
          })
          
          return unsubscribe
       }
 
-      get id()          { return this.flavor.id }
-      get name()        { return this.flavor.name }
-      get price()       { return this.flavor.price }
-      get isAvailable() { return this.flavor.isAvailable }
+      get id()          { return this.menuItemOption.id }
+      get name()        { return this.menuItemOption.name }
+      get price()       { return this.menuItemOption.price }
+      get isAvailable() { return this.menuItemOption.isAvailable }
 
       values() {
-         return this.flavor
+         return this.menuItemOption
       }
 
       isValid() {
-         const { id, name, price } = this.values()
+         if (this.id.length !== 13) return false
 
-         if (id.length !== 13) return false
+         if (!this.name) return false
 
-         if (!name) return false
-
-         if (price && price < 0) return false
+         if (this.price && this.price < 0) return false
 
          return true
       }
 
-      modify(values: Partial<Omit<Flavor, 'id'>>) {
-         this.flavor = R.mergeRight(this.values(), values)
+      modify(values: Partial<Omit<MenuItemOption, 'id'>>) {
+         this.menuItemOption = R.mergeRight(this.values(), values)
       }
 
       async save() {
          if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
-
-         const { id } = this.values()
          
-         const docRef = doc(db, FlavorModel.PATH, id)
+         const docRef = doc(db, MenuItemOptionModel.PATH, this.id)
          
          await setDoc(docRef, this.values())
       }
 
       async delete() {
-         const { id } = this.values()
-
-         return await deleteDoc(doc(db, FlavorModel.PATH, id))
+         return await deleteDoc(doc(db, MenuItemOptionModel.PATH, this.id))
       }
 
       toString() {
-         return this.values().name
+         return this.name
       }
    }
    

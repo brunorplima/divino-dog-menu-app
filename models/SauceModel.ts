@@ -70,13 +70,11 @@ export default class SauceModel extends Model<Sauce> {
    }
 
    isValid() {
-      const { id, name, price } = this.values()
+      if (this.id.length !== 13) return false
 
-      if (id.length !== 13) return false
+      if (!this.name) return false
 
-      if (!name) return false
-
-      if (price && price < 0) return false
+      if (this.price && this.price < 0) return false
 
       return true
    }
@@ -87,21 +85,17 @@ export default class SauceModel extends Model<Sauce> {
 
    async save() {
       if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
-
-      const { id } = this.values()
       
-      const docRef = doc(db, SauceModel.PATH, id)
+      const docRef = doc(db, SauceModel.PATH, this.id)
       
       await setDoc(docRef, this.values())
    }
 
    async delete() {
-      const { id } = this.values()
-
-      return await deleteDoc(doc(db, SauceModel.PATH, id))
+      return await deleteDoc(doc(db, SauceModel.PATH, this.id))
    }
 
    toString() {
-      return this.values().name
+      return this.name
    }
 }

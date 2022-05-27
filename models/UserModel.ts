@@ -77,8 +77,7 @@ export default class UserModel extends Model<User> {
    }
 
    isValid() {
-      const {id, firstName, lastName: secondName, emailAddress} = this.values()
-      if (!id ||!firstName ||!secondName || !emailAddress) return false
+      if (!this.id ||!this.firstName ||!this.lastName || !this.emailAddress) return false
 
       return true
    }
@@ -90,16 +89,13 @@ export default class UserModel extends Model<User> {
    async save() {
       if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
 
-      const { id } = this.values()
-      const docRef = doc(db, UserModel.PATH, id)
+      const docRef = doc(db, UserModel.PATH, this.id)
       
       await setDoc(docRef, this.values())
    }
 
    async delete() {
-      const { id } = this.values()
-
-      return await deleteDoc(doc(db, UserModel.PATH, id))
+      return await deleteDoc(doc(db, UserModel.PATH, this.id))
    }
 
    toString() {
