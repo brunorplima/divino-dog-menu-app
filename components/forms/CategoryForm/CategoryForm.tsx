@@ -2,7 +2,7 @@ import { Form, Formik } from 'formik'
 import React from 'react'
 import CategoryModel from '../../../models/CategoryModel'
 import { Category } from '../../../models/interfaces'
-import { categoryFormSchema } from '../../../schemas/generalFormSchema'
+import { categoryFormSchema } from '../../../schemas/generalFormSchemas'
 import FormField from '../../verse/FormField'
 import PrimaryButton from '../../verse/PrimaryButton'
 
