@@ -4,7 +4,7 @@ import { generateID } from "./modelHelper"
 
 const MENU_ITEM_GROUP_KEY = 'menuItemGroups'
 
-const setItem = <T = {}>(key: string, value: T) => {
+export const setLocalStorageItem = <T = {}>(key: string, value: T) => {
    localStorage.setItem(key, JSON.stringify(value))
 }
 
@@ -21,7 +21,7 @@ export const addMenuItemGroup = (menuItemGroup: Omit<MenuItemGroup, 'id'>) => {
       ...menuItemGroup
    }
    list.push(newGroup)
-   setItem(MENU_ITEM_GROUP_KEY, list)
+   setLocalStorageItem(MENU_ITEM_GROUP_KEY, list)
 }
 
 
@@ -30,6 +30,6 @@ export const deleteMenuItemGroup = (id: string) => {
    const item = filter(propEq('id', id), list)
    if (!item) return false
    const newList = filter(compose(not, propEq('id', id)), list)
-   setItem(MENU_ITEM_GROUP_KEY, newList)
+   setLocalStorageItem(MENU_ITEM_GROUP_KEY, newList)
    return true
 }
