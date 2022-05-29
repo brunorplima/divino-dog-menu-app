@@ -1,4 +1,4 @@
-import { filter, pluck, propEq } from 'ramda'
+import { defaultTo, filter, join, pluck, propEq } from 'ramda'
 import React, { Fragment, useContext, useMemo, useState } from 'react'
 import ProductItem from '../../chapter/ProductItem'
 import { menuContext } from '../../contexts/MenuProvider'
@@ -9,26 +9,35 @@ import AdminMenuItemView from '../../chapter/AdminMenuItemView'
 import PrimaryModal from '../PrimaryModal'
 import ToppingModel from '../../../models/ToppingModel'
 import SauceModel from '../../../models/SauceModel'
-import FlavorModel from '../../../models/FlavorModel'
+import MenuItemOptionModel from '../../../models/MenuItemOptionModel'
 import AdminGeneralProductsView from '../../chapter/AdminGeneralProductsView'
 import CategoryModel from '../../../models/CategoryModel'
 import AdminCategoriesView from '../AdminCategoriesView'
+import ModelEditDeleteController from '../../verse/ModelEditDeleteController'
+import MenuItemForm from '../../forms/MenuItemForm'
+import GeneralProductsForm from '../../forms/GeneralProductsForm'
+import CategoryForm from '../../forms/CategoryForm'
 
-type Tab = 'menu items' | 'toppings' | 'sauces' | 'flavors' | 'categories'
+type Tab = 'menu items' | 'toppings' | 'sauces' | 'menuItemOptions' | 'categories'
+
+type GeneralProducts = 'toppings' | 'sauces' | 'menuItemOptions'
+
+type ViewEdit = 'view' | 'edit'
 
 export type CurrentMenuItem = {
    item: MenuItemModel
-   action: 'view' | 'edit'
+   action: ViewEdit
 } | null
 
 export type CurrentProduct = {
-   item: ToppingModel | SauceModel | FlavorModel
-   action: 'view' | 'edit'
+   item: ToppingModel | SauceModel | MenuItemOptionModel
+   action: ViewEdit
+   type: GeneralProducts
 } | null
 
 export type CurrentCategory = {
    item: CategoryModel
-   action: 'view' | 'edit'
+   action: ViewEdit
 } | null
 
 const AdminProductsSection = () => {
@@ -36,7 +45,23 @@ const AdminProductsSection = () => {
    const [currentProduct, setCurrentProduct] = useState<CurrentProduct>(null)
    const [currentCategory, setCurrentCategory] = useState<CurrentCategory>(null)
    const [tab, setTab] = useState<Tab>('menu items')
-   const { menuItems, toppings, sauces, flavors, categories } = useContext(menuContext)
+   const { menuItems, toppings, sauces, menuItemOptions, categories } = useContext(menuContext)
+
+   const getRelatedMenuItemsString = (type: GeneralProducts) => {
+      const listName = type === 'toppings' ? 'toppingIds' : type === 'sauces' ? 'sauceIds' : 'optionIds'
+      const items = filter(
+         menuItem => Boolean((defaultTo<string[], string[]>([], menuItem[listName])).includes(currentProduct?.item.id || '')),
+         menuItems
+      )
+      return join(', ', pluck('name', items))
+   }
+   
+   const tsfRelatedMenuItems = useMemo(() => {
+      if (currentProduct
+         && currentProduct.item
+         && menuItems) return getRelatedMenuItemsString(currentProduct.type)
+      return ''
+   }, [currentProduct])
    const categoryRelatedMenuItems = useMemo<string>(() => {
       if (currentCategory && currentCategory.item) {
          const associatedMenuItems = filter(propEq('categoryId', currentCategory.item.id), menuItems)
@@ -46,7 +71,7 @@ const AdminProductsSection = () => {
       return ''
    }, [currentCategory])
    
-   const setMenuItemEditMode = (isEdit: boolean) =>
+   const setMenuItemEditMode = (isEdit: boolean ) =>
       setCurrentMenuItem({ ...currentMenuItem, action: isEdit ? 'edit' : 'view' } as CurrentMenuItem)
 
    const setProductEditMode = (isEdit: boolean) =>
@@ -87,11 +112,11 @@ const AdminProductsSection = () => {
             </div>
             <div
                className={`max-w-max cursor-pointer px-3 py-2 ${getActive(
-                  'flavors'
+                  'menuItemOptions'
                )} hover:bg-gray-700 rounded rounded-br-none rounded-bl-none`}
-               onClick={() => setTab('flavors')}
+               onClick={() => setTab('menuItemOptions')}
             >
-               Sabores
+               Opções
             </div>
             <div
                className={`max-w-max cursor-pointer px-3 py-2 ${getActive(
@@ -106,16 +131,22 @@ const AdminProductsSection = () => {
          <PrimaryModal
             id='itemMenuViewEditModal'
             isOpen={!!currentMenuItem}
-            title={currentMenuItem?.item.name || ''}
+            title={currentMenuItem?.item?.name || ''}
             onClose={() => setCurrentMenuItem(null)}
          >
+            <ModelEditDeleteController
+               isEditMode={Boolean(currentMenuItem && currentMenuItem.action === 'edit')}
+               setEditMode={setMenuItemEditMode}
+            />
             {currentMenuItem && currentMenuItem.action === 'view' && (
-               <AdminMenuItemView
+               <AdminMenuItemView item={currentMenuItem.item} />
+            )}
+            {currentMenuItem && currentMenuItem.action === 'edit' && (
+               <MenuItemForm
                   item={currentMenuItem.item}
-                  setEditMode={setMenuItemEditMode}
+                  onClose={() => setCurrentMenuItem({ ...currentMenuItem, action: 'view' })}
                />
             )}
-            {currentMenuItem && currentMenuItem.action === 'edit' && <></>}
          </PrimaryModal>
          
          <PrimaryModal
@@ -124,13 +155,22 @@ const AdminProductsSection = () => {
             title={currentProduct?.item.name || ''}
             onClose={() => setCurrentProduct(null)}
          >
+            <ModelEditDeleteController
+               isEditMode={Boolean(currentProduct && currentProduct.action === 'edit')}
+               setEditMode={setProductEditMode}
+            />
             {currentProduct && currentProduct.action === 'view' && (
                <AdminGeneralProductsView
                   item={currentProduct.item}
-                  setEditMode={setProductEditMode}
+                  associatedMenuItems={tsfRelatedMenuItems}
                />
             )}
-            {currentMenuItem && currentMenuItem.action === 'edit' && <></>}
+            {currentProduct && currentProduct.action === 'edit' && (
+               <GeneralProductsForm
+                  item={currentProduct.item}
+                  onClose={() => setCurrentProduct({ ...currentProduct, action: 'view' })}
+               />
+            )}
          </PrimaryModal>
          
          <PrimaryModal
@@ -139,14 +179,24 @@ const AdminProductsSection = () => {
             title={currentCategory?.item.name || ''}
             onClose={() => setCurrentCategory(null)}
          >
+            <ModelEditDeleteController
+               isEditMode={Boolean(currentCategory && currentCategory.action === 'edit')}
+               setEditMode={setCategoryEditMode}
+            />
             {currentCategory && currentCategory.action === 'view' && (
                <AdminCategoriesView
                   item={currentCategory.item}
-                  setEditMode={setCategoryEditMode}
                   associatedMenuItems={categoryRelatedMenuItems}
                />
             )}
-            {currentMenuItem && currentMenuItem.action === 'edit' && <></>}
+            {currentCategory && currentCategory.action === 'edit' && (
+               <>
+                  <CategoryForm
+                     item={currentCategory.item}
+                     onClose={() => setCurrentCategory({ ...currentCategory, action: 'view' })}
+                  />
+               </>
+            )}
          </PrimaryModal>
 
          {tab === 'menu items' && (
@@ -158,6 +208,12 @@ const AdminProductsSection = () => {
                            <ProductItem
                               name={item.name}
                               isAvailable={item.isAvailable}
+                              onEdit={() => {
+                                 setCurrentMenuItem({
+                                    item,
+                                    action: 'edit'
+                                 })
+                              }}
                               price={item.price}
                               description={item.description}
                               img={item.img ? item.img : ''}
@@ -179,8 +235,13 @@ const AdminProductsSection = () => {
                            <ProductItem
                               name={item.name}
                               isAvailable={item.isAvailable}
+                              onEdit={() => setCurrentProduct({
+                                 item,
+                                 action: 'edit',
+                                 type: 'toppings'
+                              })}
                               price={item.price}
-                              onView={() => setCurrentProduct({ item, action: 'view' })}
+                              onView={() => setCurrentProduct({ item, action: 'view', type: 'toppings' })}
                            />
                         </Fragment>
                      )
@@ -198,8 +259,13 @@ const AdminProductsSection = () => {
                            <ProductItem
                               name={item.name}
                               isAvailable={item.isAvailable}
+                              onEdit={() => setCurrentProduct({
+                                 item,
+                                 action: 'edit',
+                                 type: 'sauces'
+                              })}
                               price={item.price}
-                              onView={() => setCurrentProduct({ item, action: 'view' })}
+                              onView={() => setCurrentProduct({ item, action: 'view', type: 'sauces' })}
                            />
                         </Fragment>
                      )
@@ -208,22 +274,27 @@ const AdminProductsSection = () => {
             </div>
          )}
 
-         {tab === 'flavors' && (
+         {tab === 'menuItemOptions' && (
             <div className='rounded border-2 border-gray-700 p-3 rounded-tl-none border-t-8 text-sm flex flex-col gap-2'>
-               {!!flavors.length &&
-                  flavors.map((item) => {
+               {!!menuItemOptions.length &&
+                  menuItemOptions.map((item) => {
                      return (
                         <Fragment key={item.id}>
                            <ProductItem
                               name={item.name}
                               isAvailable={item.isAvailable}
+                              onEdit={() => setCurrentProduct({
+                                 item,
+                                 action: 'edit',
+                                 type: 'menuItemOptions'
+                              })}
                               price={item.price}
-                              onView={() => setCurrentProduct({ item, action: 'view' })}
+                              onView={() => setCurrentProduct({ item, action: 'view', type: 'menuItemOptions' })}
                            />
                         </Fragment>
                      )
                   })}
-               {!flavors.length && <EmptyListMessage />}
+               {!menuItemOptions.length && <EmptyListMessage />}
             </div>
          )}
 
@@ -238,15 +309,23 @@ const AdminProductsSection = () => {
                            <Fragment key={item.id}>
                               <div
                                  className='flex rounded bg-gray-600 py-1 px-3 gap-3'
-                                 onClick={() => setCurrentCategory({ item, action: 'view' })}
                               >
-                                 <div className='flex justify-between flex-1'>
+                                 <div
+                                    className='flex justify-between flex-1 cursor-pointer'
+                                    onClick={() => setCurrentCategory({ item, action: 'view' })}
+                                 >
                                     <div className='text-base font-bold text-green-600'>
                                        {item.name} ({relatedMenuItems.length})
                                     </div>
                                     <div>Ordem: {item.listOrder}</div>
                                  </div>
-                                 <ListItemDetailsEdit horizontal />
+                                 <ListItemDetailsEdit
+                                    onEdit={() => setCurrentCategory({
+                                       item,
+                                       action: 'edit'
+                                    })}
+                                    horizontal
+                                 />
                               </div>
                            </Fragment>
                         )

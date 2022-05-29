@@ -1,4 +1,4 @@
-import FormField from '../../components/verse/FormField'
+import FormField from '../../components/forms/fields/FormField'
 import PrimaryButton from '../../components/verse/PrimaryButton'
 import {
    createUserWithEmailAndPassword,
@@ -13,7 +13,7 @@ import UserModel from '../../models/UserModel'
 import { signupSchema } from '../../schemas/authSchemas'
 import { RiErrorWarningFill, RiLoginBoxLine } from 'react-icons/ri'
 import { useRouter } from 'next/router'
-import { getAuthErrorMessage } from '../../utils/firebaseAuthHelper'
+import { getAuthErrorMessage } from '../../utils/firebaseHelper'
 
 export type SignupForm = {
    firstName: string

@@ -5,10 +5,10 @@ import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
 import { RiLoginBoxLine, RiErrorWarningFill } from 'react-icons/ri'
 import { authContext } from '../../components/contexts/AuthProvider'
-import FormField from '../../components/verse/FormField'
+import FormField from '../../components/forms/fields/FormField'
 import PrimaryButton from '../../components/verse/PrimaryButton'
 import { loginSchema } from '../../schemas/authSchemas'
-import { getAuthErrorMessage } from '../../utils/firebaseAuthHelper'
+import { getAuthErrorMessage } from '../../utils/firebaseHelper'
 import { isAdminUser } from '../../utils/modelHelper'
 
 interface LoginForm {

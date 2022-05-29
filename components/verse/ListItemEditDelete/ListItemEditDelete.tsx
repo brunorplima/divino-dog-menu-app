@@ -3,12 +3,12 @@ import { BiEditAlt } from 'react-icons/bi'
 import { RiDeleteBin5Line } from 'react-icons/ri'
 
 interface Props {
-   readonly onEdit?: Function
+   readonly onEdit: Function
    readonly onDelete?: Function
    readonly horizontal?: boolean
 }
 
-const ListItemEditDelete: React.FC<Props> = ({ onEdit = () => {}, onDelete = () => {}, horizontal = false }) => {
+const ListItemEditDelete: React.FC<Props> = ({ onEdit, onDelete = () => {}, horizontal = false }) => {
    return (
       <div className={`flex ${horizontal ? '' : 'flex-col'} justify-evenly gap-2`}>
          <div

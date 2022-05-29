@@ -13,13 +13,12 @@ export interface MenuItem {
    readonly name: string
    readonly price: number
    readonly isAvailable: boolean
+   readonly listOrder: number
    readonly categoryId: string
-   readonly uniqOptions?: string[]
-   readonly flavorIds?: string[]
+   readonly optionIds?: string[]
    readonly toppingIds?: string[]
    readonly sauceIds?: string[]
    readonly description?: string
-   readonly listOrder: number
    readonly img?: string
    readonly promoPrice?: PromoPrice
 }
@@ -40,8 +39,8 @@ export interface Sauce {
    readonly price?: number
 }
 
-// Flavors (Firestore path: flavors)
-export interface Flavor {
+// Menu Item Options (Firestore path: menuItemOptions)
+export interface MenuItemOption {
    readonly id: string
    readonly name: string
    readonly isAvailable: boolean
@@ -98,7 +97,7 @@ export interface UserAddress {
    readonly isMain: boolean
 }
 
-interface PromoPrice {
+export interface PromoPrice {
    readonly price: number
    readonly dateLimit: Date
 }
