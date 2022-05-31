@@ -1,26 +1,22 @@
 import ToppingModel from '../../../models/ToppingModel'
 import SauceModel from '../../../models/SauceModel'
-import { BaseSyntheticEvent, Dispatch, SetStateAction, useRef } from 'react'
 import styles from './AddOns.module.scss'
 import { fotmatPrice } from '../../../utils/dataHelper'
+import ElementRefList from '../../../hooks/ElementRefList'
 
 interface Props {
    addOnIds: string[]
    title: string
    addonList: ToppingModel[] | SauceModel[]
    addOns: string[]
-   setAddOns: Dispatch<SetStateAction<string[]>>
+   setAddOns: React.Dispatch<React.SetStateAction<string[]>>
    price: number
-   setPrice: Dispatch<SetStateAction<number>>
+   setPrice: React.Dispatch<React.SetStateAction<number>>
    minimumPrice: number
 }
 
 const AddOns = ({ addOnIds, title, addonList, addOns, setAddOns, price, setPrice, minimumPrice }: Props) => {
-   const checkBoxes = useRef<any[]>([])
-   checkBoxes.current = []
-   const appendInput = (el: any) => {
-      if (el && !checkBoxes.current.includes(el)) checkBoxes.current.push(el)
-   }
+   const { ElementReffed, ElementReffer } = ElementRefList()
 
    const unmutableClasses = 'grid my-2 p-4 rounded-xl font-medium w-full'
    const changeCheckBoxClass = (element: any, change: boolean) => {
@@ -30,7 +26,7 @@ const AddOns = ({ addOnIds, title, addonList, addOns, setAddOns, price, setPrice
       element.className = classes
    }
 
-   const changePrice = (event: BaseSyntheticEvent, value: any) => {
+   const changePrice = (event: React.BaseSyntheticEvent, value: any) => {
       const checkerValue = event.currentTarget.name
       const checker = event.currentTarget.checked
       const currElId = event.currentTarget.id
@@ -38,14 +34,14 @@ const AddOns = ({ addOnIds, title, addonList, addOns, setAddOns, price, setPrice
       if (checker) {
          setPrice(price + value)
          setAddOns([...addOns, checkerValue])
-         checkBoxes.current.forEach((ch) => {
-            ch.id === currElId && changeCheckBoxClass(ch.parentNode.parentNode.parentNode, true)
+         ElementReffed.current.forEach((el) => {
+            el.id === currElId && changeCheckBoxClass(el.parentNode.parentNode.parentNode, true)
          })
       } else {
          setPrice(price - value < minimumPrice ? minimumPrice : price - value)
          setAddOns(addOns.filter((a) => a !== checkerValue))
-         checkBoxes.current.forEach((ch) => {
-            ch.id === currElId && changeCheckBoxClass(ch.parentNode.parentNode.parentNode, false)
+         ElementReffed.current.forEach((el) => {
+            el.id === currElId && changeCheckBoxClass(el.parentNode.parentNode.parentNode, false)
          })
       }
    }
@@ -77,7 +73,7 @@ const AddOns = ({ addOnIds, title, addonList, addOns, setAddOns, price, setPrice
                               id={item.id}
                               name={item.id}
                               value={item.price}
-                              ref={appendInput}
+                              ref={(el) => ElementReffer(el, ElementReffed)}
                            />
                         </div>
                      </div>

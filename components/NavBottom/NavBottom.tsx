@@ -1,10 +1,11 @@
-import { Fragment, MouseEvent, useRef, useState } from 'react'
+import { Fragment, MouseEvent, useState } from 'react'
 import { BiCart, BiStore } from 'react-icons/bi'
 import { MdRestaurantMenu } from 'react-icons/md'
 import { BsPersonCircle } from 'react-icons/bs'
 import style from './NavBottom.module.scss'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import ElementRefList from '../../hooks/ElementRefList'
 
 export default function NavBottom() {
    const buttons = [
@@ -19,14 +20,11 @@ export default function NavBottom() {
 
    const [theStyle, setTheStyle] = useState(`translateX(calc(4.4rem * ${position}))`)
 
-   const buttonTags = useRef<any[]>([])
-   const appendTester = (el: any) => {
-      if (el && !buttonTags.current.includes(el)) buttonTags.current.push(el)
-   }
+   const { ElementReffed, ElementReffer } = ElementRefList()
 
    const activeClass = (event: MouseEvent) => {
       const currElId = event.currentTarget.id
-      buttonTags.current.forEach((el) => {
+      ElementReffed.current.forEach((el) => {
          el.id === currElId
             ? (el.className = `${style.button} ${style.active}`)
             : (el.className = style.button)
@@ -47,7 +45,7 @@ export default function NavBottom() {
                      className={`${style.button} relative ${
                         button.link === router.pathname && style.active
                      }`}
-                     ref={appendTester}
+                     ref={(el) => ElementReffer(el, ElementReffed)}
                      onClick={activeClass}
                   >
                      <Link href={button.link}>

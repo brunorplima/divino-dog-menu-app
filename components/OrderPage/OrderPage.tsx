@@ -1,99 +1,51 @@
-import React, { useContext } from 'react'
-import { menuItemGroups } from '../../utils/localStorageHelper'
+import React, { useContext, useState } from 'react'
+import { menuItemGroups, deleteMenuItemGroup } from '../../utils/localStorageHelper'
 import { fotmatPrice } from '../../utils/dataHelper'
 import { menuContext } from '../contexts/MenuProvider'
-import AddOnsOrderPage from './AddOnsOrderPage'
 import style from './OrderPage.module.scss'
 import { MenuItemGroup } from '../../models/interfaces'
-import MenuItemModel from '../../models/MenuItemModel'
-import ToppingModel from '../../models/ToppingModel'
-import SauceModel from '../../models/SauceModel'
 import { FaWindowClose } from 'react-icons/fa'
 import Link from 'next/link'
-
-interface Temp {
-   id: string
-   menuItemId: string
-   subTotal: number
-   extraToppingIds: string[]
-   extraSauceIds: string[]
-}
+import { equals, omit, uniq } from 'ramda'
 
 export default function OrderPage() {
-   const { menuItems, toppings, sauces } = useContext(menuContext)
-
-   const order = menuItemGroups()
-
-   /* const order: Temp[] = [
-      {
-         id: '6D9ENE36LDHZN',
-         menuItemId: 'IQGMYX5H9COSH',
-         subTotal: 14,
-         extraToppingIds: ['ATD9AJM3XDN6J', 'KYB0OO8L5WIJ2'],
-         extraSauceIds: ['N5QCTGETAJDQR'],
-      },
-      {
-         id: 'C265ERF2NUPEG',
-         menuItemId: 'ZXWVEUURJ0NHQ',
-         subTotal: 19,
-         extraToppingIds: ['4JSOWF6TEIYZ2', '9XBQAI7WDP4CM', 'V3SORZUJXRLU3'],
-         extraSauceIds: [],
-      },
-      {
-         id: 'EMDOIP1N3URT7',
-         menuItemId: 'ZXWVEUURJ0NHQ',
-         subTotal: 19,
-         extraToppingIds: ['4JSOWF6TEIYZ2', '9XBQAI7WDP4CM', 'V3SORZUJXRLU3'],
-         extraSauceIds: [],
-      },
-   ] */
-
-   const findItemName = (
-      objArray: Temp[] | MenuItemModel[] | ToppingModel[] | SauceModel[],
-      elem: MenuItemGroup | string
-   ) => {
-      const comparator = typeof elem === 'string' ? elem : elem.menuItemId
-      // @ts-ignore
-      const res = objArray.find((a) => a.id === comparator)
-      return res !== undefined ? res.name : `Absent Item: ${comparator}`
-   }
-
-   const uniqueStringOrder = () => {
-      const unique: string[] = []
-      order.forEach((o) => {
-         const { id, ...u } = o
-         unique.push(JSON.stringify(u))
-      })
-      return unique.filter((value, index, self) => self.indexOf(value) === index)
-   }
-
-   const formattingOrder = () => {
-      const uniqueItems = uniqueStringOrder()
-      const positions: number[] = []
-      order.forEach((value) => {
-         const { id, ...obj } = value
-         positions.push(uniqueItems.indexOf(JSON.stringify(obj)))
-      })
-      console.log(positions)
-      return [uniqueItems.map((e) => JSON.parse(e)), positions]
-   }
-
-   const [Order, amount] = formattingOrder()
-
-   const countItemQuantity = (num: number) => {
-      let counter = 0
-      amount.forEach((n) => {
-         n === num && counter++
-      })
-      return counter
-   }
-
    let totalBill = 0
 
-   const excludeItem = (elem: React.MouseEvent) => {
-      // @ts-ignore
-      const targetId = elem.currentTarget.parentNode.parentNode.parentNode.id
-      console.log(targetId)
+   const { menuItems, toppings, sauces } = useContext(menuContext)
+
+   const [orders, setOrders] = useState(menuItemGroups())
+
+   const idlessOrders = orders.map((order) => omit(['id'], order)) // removing id property to group equal orders together
+   const ids = orders.map((order) => order.id)
+   const uniqueOrders = uniq(idlessOrders) // unique equal orders
+   // counting amount of each unique equal order
+   const indexes = idlessOrders.map((idless) =>
+      uniqueOrders.findIndex((unique) => equals(unique, idless))
+   )
+   const counter = uniq(indexes).map((u) => indexes.filter((ind) => ind === u).length)
+
+   const findItemName = <T extends { id: string; name: string }>(
+      objArray: T[],
+      elem: MenuItemGroup | string
+   ): string => {
+      const comparator = typeof elem === 'string' ? elem : elem.menuItemId
+      const res = objArray.find((a) => a.id === comparator)
+      return res !== undefined ? res.name : `Absent Model: ${comparator}`
+   }
+
+   const deleteOrder = (o: Omit<MenuItemGroup, 'id'>) => {
+      let newOrder: MenuItemGroup[] = []
+      let deleteIds: string[] = []
+      orders.forEach((order) => {
+         const tester = equals(o, omit(['id'], order))
+         !tester && newOrder.push(order)
+         tester && deleteIds.push(order.id)
+      })
+      //console.log('ids', ids)
+      //console.log('newOrders', newOrder)
+
+      deleteIds.forEach((id) => deleteMenuItemGroup(id))
+      setOrders(newOrder)
    }
 
    return (
@@ -110,8 +62,8 @@ export default function OrderPage() {
          >
             <div className={`${style.hideScroller} text-left`}>Seu Pedido</div>
          </div>
-         {Order.map((e, idx) => (
-            <div key={e.menuItemId + String(idx)} id={`o-${String(idx)}`}>
+         {uniqueOrders.map((e, idx) => (
+            <div key={e.menuItemId + String(idx)} id={String(idx)}>
                <div
                   className='relative grid gap-3 my-1'
                   style={{
@@ -122,38 +74,39 @@ export default function OrderPage() {
                      gridTemplateColumns: '1fr 3fr 2fr 1fr',
                   }}
                >
-                  <div>{countItemQuantity(idx)}x</div>
+                  <div>{counter[idx]}x</div>
                   <div>
-                     <div className='font-semibold'>{findItemName(menuItems, e)}</div>
+                     <div className='font-semibold'>{findItemName(menuItems, e.menuItemId)}</div>
                      <div style={{ color: 'lightgray', fontSize: '0.85rem' }}>
-                        {e.extraSauceIds !== undefined && e.extraSauceIds.length !== 0 && (
-                           <AddOnsOrderPage
-                              addOnsNameGroup={'Molhos'}
-                              allAddOns={sauces}
-                              orderedAddOns={e.extraSauceIds}
-                              findItemName={findItemName}
-                           />
+                        {!!e.extraSauceIds && e.extraSauceIds.length !== 0 && (
+                           <>
+                              <div className='font-semibold text-base'>Molhos</div>
+                              {e.extraSauceIds.map((id) => (
+                                 <div key={id}>{findItemName(sauces, id)}</div>
+                              ))}
+                           </>
                         )}
-                        {e.extraToppingIds !== undefined && e.extraToppingIds.length !== 0 && (
-                           <AddOnsOrderPage
-                              addOnsNameGroup={'Adicionais'}
-                              allAddOns={toppings}
-                              orderedAddOns={e.extraToppingIds}
-                              findItemName={findItemName}
-                           />
+                        {!!e.extraToppingIds && e.extraToppingIds.length !== 0 && (
+                           <>
+                              <div className='font-semibold text-base'>Adicionais</div>
+                              {e.extraToppingIds.map((id) => (
+                                 <div key={id}>{findItemName(toppings, id)}</div>
+                              ))}
+                           </>
                         )}
                      </div>
                   </div>
-                  <div className='text-right'>
-                     {fotmatPrice(e.subTotal * countItemQuantity(idx))}
-                  </div>
-                  <div className='relative right-0'>
-                     <div id={String(idx)} className='right-0' onClick={excludeItem}>
-                        <FaWindowClose size={20} />
-                     </div>
+                  <div className='text-right'>{fotmatPrice(e.subTotal * counter[idx])}</div>
+                  <div
+                     id={`o-${String(idx)}`}
+                     className={`relative`}
+                     onClick={() => deleteOrder(e)}
+                     data-deleter={ids.map((id) => `${id} `)}
+                  >
+                     <FaWindowClose size={20} />
                   </div>
                </div>
-               <span className='hidden'>{(totalBill += e.subTotal * countItemQuantity(idx))}</span>
+               <span className='hidden'>{(totalBill += e.subTotal * counter[idx])}</span>
             </div>
          ))}
          <br />
@@ -174,10 +127,14 @@ export default function OrderPage() {
             }}
          >
             <div className='text-left'>
-               <Link href={'/'}>
+               <Link href={`${orders.length !== 0 ? '/' : ''}`}>
                   <a
                      className='rounded-lg'
-                     style={{ background: '#29fd53', color: 'black', padding: '0.70rem' }}
+                     style={
+                        orders.length !== 0
+                           ? { background: '#29fd53', color: 'black', padding: '0.70rem' }
+                           : { background: 'lightgray', color: 'gray', padding: '0.70rem' }
+                     }
                   >
                      Confirmar Pedido
                   </a>
