@@ -1,9 +1,13 @@
 import moment from 'moment'
+import { flatten, omit, without } from 'ramda'
 import React, { useState } from 'react'
 import { FaAngleDown } from 'react-icons/fa'
 import { MdDeliveryDining } from 'react-icons/md'
+import { ORDER_STATUSES } from '../../../constants/modelsConstants'
 import OrderModel from '../../../models/OrderModel'
+import { capitalizeFirstLetter } from '../../../utils/dataHelper'
 import PrimaryButton from '../../verse/PrimaryButton'
+import DropdownMenuButton from '../DropdownMenuButton'
 
 interface Props {
    readonly order: OrderModel
@@ -39,7 +43,7 @@ const OrderManagerItem: React.FC<Props> = ({ order, buttonLabel }) => {
             </div>
          </div>
 
-         <div className="flex justify-center items-center py-2">
+         <div className="flex justify-evenly items-center py-2">
             {buttonLabel &&
                <PrimaryButton
                   label={buttonLabel}
@@ -50,6 +54,13 @@ const OrderManagerItem: React.FC<Props> = ({ order, buttonLabel }) => {
             {!buttonLabel &&
                <>{moment(order.statusUpdatedAt).format('DD/MM/YYYY - HH:mm:ss')}</>
             }
+            <DropdownMenuButton
+               buttonClassName='w-10 h-10 bg-green-500'
+               options={without([order.status], flatten(ORDER_STATUSES)).map(status => ({
+                  label: capitalizeFirstLetter(status),
+                  onClick: async () => await order.toStatus(status)
+               }))}
+            />
          </div>
       </div>
    )

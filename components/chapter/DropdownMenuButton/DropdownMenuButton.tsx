@@ -48,7 +48,7 @@ const DropdownMenuButton: React.FC<Props> = ({
 
             {isOpen && (
                <div
-                  className={`rounded-lg overflow-hidden ${optionsClassName} absolute top-full translate-y-1 right-0 animate-fadeIn`}
+                  className={`rounded-lg overflow-hidden ${optionsClassName} absolute top-full translate-y-1 z-10 right-0 animate-fadeIn`}
                   style={{ minWidth: 130 }}
                >
                   {options.map((option, idx) => (
