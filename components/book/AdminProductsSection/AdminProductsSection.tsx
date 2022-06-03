@@ -75,8 +75,8 @@ const AdminProductsSection = () => {
          if (menuItemNames.length) {
             return (
                <>
-                  {menuItemNames.map(item => (
-                     <div>- {item}</div>
+                  {menuItemNames.map((item, idx) => (
+                     <div key={item + idx}>- {item}</div>
                   ))}
                </>
             )
