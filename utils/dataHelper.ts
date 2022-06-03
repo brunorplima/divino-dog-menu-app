@@ -11,3 +11,6 @@ export const fotmatPrice = (unformatted: number | undefined) => {
       else return `R$ ${unformatted},00`
    }
 }
+
+export const capitalizeFirstLetter = (word: string) =>
+      word.toLowerCase().charAt(0).toUpperCase() + word.slice(1)

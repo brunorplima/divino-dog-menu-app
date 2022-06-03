@@ -4,12 +4,10 @@ import ListingItems from "./ListingItems"
 import { menuContext } from "../contexts/MenuProvider"
 import style from "./MenuList.module.scss"
 import * as R from "ramda"
+import { capitalizeFirstLetter } from "../../utils/dataHelper"
 
 export default function MenuList() {
    const { menuItems, categories } = useContext(menuContext)
-
-   const capitalizeFirstLetter = (word: string) =>
-      word.toLowerCase().charAt(0).toUpperCase() + word.slice(1)
 
    const excludeEmptyCategory = () => {
       const sortedCategories = categories.sort(
@@ -29,7 +27,6 @@ export default function MenuList() {
                   <Fragment key={category.id}>
                      <MenuCategories
                         name={category.name}
-                        capitalizeFirstLetter={capitalizeFirstLetter}
                      />
                   </Fragment>
                ))}
