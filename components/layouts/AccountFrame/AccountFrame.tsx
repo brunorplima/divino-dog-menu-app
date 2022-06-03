@@ -4,6 +4,7 @@ import { FaColumns } from 'react-icons/fa'
 import { GiHotDog } from 'react-icons/gi'
 import { IoSettingsSharp } from 'react-icons/io5'
 import { AdminSection } from '../../../pages/admin'
+import { MdOutlineCreditCardOff } from 'react-icons/md'
 
 interface Props {
    readonly children: React.ReactNode
@@ -30,6 +31,11 @@ const AdminAccountFrame: React.FC<Props> = ({ children, setSection }) => {
                   label: 'Configurações',
                   Icon: IoSettingsSharp,
                   clickHandler: () => setSection('settings')
+               },
+               {
+                  label: 'Pedidos Cancelados',
+                  Icon: MdOutlineCreditCardOff,
+                  clickHandler: () => setSection('canceledOrders')
                }
             ]}
          />
