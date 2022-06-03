@@ -8,6 +8,7 @@ interface Props {
    readonly name: string
    readonly isAvailable: boolean
    readonly onEdit: () => void
+   readonly onDelete?: () => void
    readonly onView?: Function
    readonly price?: number
    readonly img?: string
@@ -18,6 +19,7 @@ const ProductItem: React.FC<Props> = ({
    img,
    name,
    onEdit,
+   onDelete,
    description,
    price,
    isAvailable,
@@ -63,7 +65,7 @@ const ProductItem: React.FC<Props> = ({
             </div>
          </div>
       </div>
-      <ListItemEditDelete onEdit={onEdit} />
+      <ListItemEditDelete onEdit={onEdit} onDelete={onDelete} />
    </div>
 )
 

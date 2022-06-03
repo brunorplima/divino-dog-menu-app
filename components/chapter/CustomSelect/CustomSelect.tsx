@@ -16,10 +16,10 @@ interface CustomSelectProps extends FieldProps {
 
 export const CustomSelect = ({
   className,
-  placeholder,
   field,
   form,
   options,
+  placeholder = '',
   isMulti = false
 }: CustomSelectProps) => {
   const onChange = (option: Option | Option[]) => {

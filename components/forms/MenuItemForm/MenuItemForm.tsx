@@ -1,5 +1,5 @@
 import { Field, Form, Formik, getIn } from 'formik'
-import { has, omit } from 'ramda'
+import { has, isEmpty, isNil, mergeLeft, omit, reject } from 'ramda'
 import React, { useContext } from 'react'
 import { MenuItem } from '../../../models/interfaces'
 import MenuItemModel from '../../../models/MenuItemModel'
@@ -13,38 +13,65 @@ import DatePickerField from '../fields/DatePickerField'
 import FileFormField from '../fields/FileFormField'
 import SelectFormField from '../fields/SelectFormField'
 
-export type MenuItemFormSchema = Partial<Omit<MenuItem, 'id'>> & {
+export type MenuItemFormSchema = Partial<Omit<MenuItem, 'id' | 'price'>> & {
    img?: File | string
+   price: number | ''
 }
 
 interface Props {
-   onClose: () => void
+   onClose?: () => void
+   onCloseWithItem?: (item: MenuItemModel) => void
    item?: MenuItemModel
 }
 
-const MenuItemForm: React.FC<Props> = ({ onClose, item }) => {
+const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
    const { categories, toppings, sauces, menuItemOptions } = useContext(menuContext)
 
-   const initialValues: MenuItemFormSchema = item ? item.values() : { name: '' }
+   const initialValues: MenuItemFormSchema = item
+      ? item.values()
+      : {
+         name: '',
+         price: '',
+         isAvailable: true,
+         categoryId: '',
+         optionIds: [],
+         toppingIds: [],
+         sauceIds: [],
+         description: '',
+         img: ''
+      }
 
-   const process = async (values: MenuItemFormSchema) => {
+   const process = async (values: MenuItemFormSchema): Promise<MenuItemModel | undefined> => {
       try {
+         let imageUrl
+         if (values.img) imageUrl = await storeFile(values.img as File, MenuItemModel.PATH) 
+         const nonEmptyValues = reject(
+            val => isNil(val) || isEmpty(val),
+            mergeLeft({ img: imageUrl }, values)
+         )
+
          if (item) {
             if (values.img) {
-               const imageUrl = await storeFile(values.img as File, MenuItemModel.PATH)
                item.modify({ img: imageUrl })
             } else {
                if (has('img', item.values())) item.removeProp('img')
             }
             if (item.hasPromo() && !has('promoPrice', values)) item.removeProp('promoPrice')
-            item.modify(omit(['img'], values))
+            item.modify(omit(['img'], { ...nonEmptyValues, price: nonEmptyValues.price as number }))
             item.save()
-            return true
          }
          else {
-            // ADD NEW ITEM LOGIC GOES HERE
+            const menuItem = new MenuItemModel({
+               ...omit(['id'], {
+                  ...nonEmptyValues,
+                  listOrder: nonEmptyValues.listOrder ? nonEmptyValues : 999
+               }) as MenuItem,
+            })
+            if (values.img) menuItem.modify({ img: imageUrl })
+            await menuItem.save()
+
+            return menuItem
          }
-         return false
       }
       catch (err: any) {
          console.log(err)
@@ -71,11 +98,13 @@ const MenuItemForm: React.FC<Props> = ({ onClose, item }) => {
             initialValues={initialValues}
             validate={(values) => validatePromoPrice(values)}
             onSubmit={async (values) => {
+               let menuItem
                if (values.promoPrice && (!values.promoPrice.price || !values.promoPrice.dateLimit)) {
-                  await process(omit(['promoPrice'], values))
+                  menuItem = await process(omit(['promoPrice'], values))
                }
-               else await process(values)
-               onClose()
+               else menuItem = await process(values)
+               if (menuItem && onCloseWithItem) onCloseWithItem(menuItem)
+               else if (onClose) onClose()
             }}
             validationSchema={menuItemFormSchema}
             render={({ handleSubmit, handleChange, errors, touched, values, setFieldValue }) => {
@@ -121,7 +150,6 @@ const MenuItemForm: React.FC<Props> = ({ onClose, item }) => {
                         <Field>
                            {() => (
                               <div className="flex gap-3 my-4 text-gray-200 items-center">
-
                                  <input
                                     type='checkbox'
                                     name='isAvailable'
@@ -189,10 +217,13 @@ const MenuItemForm: React.FC<Props> = ({ onClose, item }) => {
                            </div>
                            <div className="my-2">
                               <PrimaryButton
-                                 label='Cancelar Promoção'
-                                 clickHandler={() => {
+                                 label='Apagar Campos'
+                                 clickHandler={(e: React.SyntheticEvent) => {
                                     setFieldValue('promoPrice.price', '')
                                     setFieldValue('promoPrice.dateLimit', '')
+                                    setTimeout(() => {
+                                       setFieldValue('promoPrice', undefined)
+                                    }, 30);
                                  }}
                               />
                            </div>

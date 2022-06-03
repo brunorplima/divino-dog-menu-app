@@ -18,7 +18,7 @@ const AdminMenuItemView: React.FC<Props> = ({ item }) => {
    const { categories, toppings, sauces, menuItemOptions } = useContext(menuContext)
 
    const category = useMemo(() => {
-      return find<CategoryModel>(propEq('id', item.categoryId), categories)
+      return find<CategoryModel>(propEq('id', item?.categoryId), categories)
    }, [item])
 
    function getListString<T extends { name: string, id: string }>(list: T[], whitelist: string[]) {

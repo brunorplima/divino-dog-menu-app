@@ -17,27 +17,28 @@ import ModelEditDeleteController from '../../verse/ModelEditDeleteController'
 import MenuItemForm from '../../forms/MenuItemForm'
 import GeneralProductsForm from '../../forms/GeneralProductsForm'
 import CategoryForm from '../../forms/CategoryForm'
+import DropdownMenuButton from '../../chapter/DropdownMenuButton'
 
 type Tab = 'menu items' | 'toppings' | 'sauces' | 'menuItemOptions' | 'categories'
 
-type GeneralProducts = 'toppings' | 'sauces' | 'menuItemOptions'
+export type GeneralProducts = 'toppings' | 'sauces' | 'menuItemOptions'
 
-type ViewEdit = 'view' | 'edit'
+export type ViewEditCreate = 'view' | 'edit' | 'create'
 
 export type CurrentMenuItem = {
    item: MenuItemModel
-   action: ViewEdit
+   action: ViewEditCreate
 } | null
 
 export type CurrentProduct = {
    item: ToppingModel | SauceModel | MenuItemOptionModel
-   action: ViewEdit
+   action: ViewEditCreate
    type: GeneralProducts
 } | null
 
 export type CurrentCategory = {
    item: CategoryModel
-   action: ViewEdit
+   action: ViewEditCreate
 } | null
 
 const AdminProductsSection = () => {
@@ -46,6 +47,11 @@ const AdminProductsSection = () => {
    const [currentCategory, setCurrentCategory] = useState<CurrentCategory>(null)
    const [tab, setTab] = useState<Tab>('menu items')
    const { menuItems, toppings, sauces, menuItemOptions, categories } = useContext(menuContext)
+   const createProductTitle = useMemo(() => {
+      if (currentProduct?.type === 'toppings') return 'Criar Ingrediente'
+      if (currentProduct?.type === 'sauces') return 'Criar Molho'
+      return 'Criar Opção'
+   }, [currentProduct?.type])
 
    const getRelatedMenuItemsString = (type: GeneralProducts) => {
       const listName = type === 'toppings' ? 'toppingIds' : type === 'sauces' ? 'sauceIds' : 'optionIds'
@@ -62,29 +68,70 @@ const AdminProductsSection = () => {
          && menuItems) return getRelatedMenuItemsString(currentProduct.type)
       return ''
    }, [currentProduct])
-   const categoryRelatedMenuItems = useMemo<string>(() => {
+   const categoryRelatedMenuItems = useMemo<JSX.Element>(() => {
       if (currentCategory && currentCategory.item) {
          const associatedMenuItems = filter(propEq('categoryId', currentCategory.item.id), menuItems)
          const menuItemNames = pluck('name', associatedMenuItems)
-         return menuItemNames.join(', ')
+         if (menuItemNames.length) {
+            return (
+               <>
+                  {menuItemNames.map((item, idx) => (
+                     <div key={item + idx}>- {item}</div>
+                  ))}
+               </>
+            )
+         }
       }
-      return ''
+      return <div>&nbsp;</div>
    }, [currentCategory])
    
-   const setMenuItemEditMode = (isEdit: boolean ) =>
-      setCurrentMenuItem({ ...currentMenuItem, action: isEdit ? 'edit' : 'view' } as CurrentMenuItem)
+   const setMenuItemEditMode = (action?: ViewEditCreate) =>
+      setCurrentMenuItem(action ? { ...currentMenuItem, action } as CurrentMenuItem : null)
 
-   const setProductEditMode = (isEdit: boolean) =>
-      setCurrentProduct({ ...currentProduct, action: isEdit ? 'edit' : 'view' } as CurrentProduct)
+   const setProductEditMode = (action?: ViewEditCreate, type?: GeneralProducts) => {
+      const current: Partial<CurrentProduct> = { ...currentProduct }
+      if (type) current.type = type
+      setCurrentProduct(action ? { ...current, action } as CurrentProduct : null)
+   }
 
-      const setCategoryEditMode = (isEdit: boolean) =>
-      setCurrentCategory({ ...currentCategory, action: isEdit ? 'edit' : 'view' } as CurrentCategory)
+   const setCategoryEditMode = (action?: ViewEditCreate) =>
+      setCurrentCategory(action ? { ...currentCategory, action } as CurrentCategory : null)
 
    const getActive = (value: Tab) => (tab === value ? 'bg-gray-700' : 'active:bg-gray-500')
 
    return (
       <div className='text-gray-200'>
-         <h1 className='grid place-content-center my-4 text-xl'>Produtos</h1>
+         <div className="grid place-content-center my-4 relative">
+            <h1 className='text-xl'>Produtos</h1>
+            <div className=''>
+               <DropdownMenuButton
+                  options={[
+                     {
+                        label: 'Principal',
+                        onClick: () => setMenuItemEditMode('create')
+                     },
+                     {
+                        label: 'Ingrediente',
+                        onClick: () => setProductEditMode('create', 'toppings')
+                     },
+                     {
+                        label: 'Molho',
+                        onClick: () => setProductEditMode('create', 'sauces')
+                     },
+                     {
+                        label: 'Opção',
+                        onClick: () => setProductEditMode('create', 'menuItemOptions')
+                     },
+                     {
+                        label: 'Categoria',
+                        onClick: () => setCategoryEditMode('create')
+                     }
+                  ]}
+                  className='absolute right-5 top-1/2 -translate-y-4'
+                  buttonClassName='h-8 w-8'
+               />
+            </div>
+         </div>
          <div className='flex gap-1 px-2 overflow-x-scroll'>
             <div
                className={`max-w-max cursor-pointer px-3 py-2 ${getActive(
@@ -131,12 +178,16 @@ const AdminProductsSection = () => {
          <PrimaryModal
             id='itemMenuViewEditModal'
             isOpen={!!currentMenuItem}
-            title={currentMenuItem?.item?.name || ''}
+            title={currentMenuItem?.item?.name || 'Criar Item Principal'}
             onClose={() => setCurrentMenuItem(null)}
          >
             <ModelEditDeleteController
-               isEditMode={Boolean(currentMenuItem && currentMenuItem.action === 'edit')}
-               setEditMode={setMenuItemEditMode}
+               action={currentMenuItem?.action}
+               setMode={setMenuItemEditMode}
+               onDelete={currentMenuItem?.item ? async () => {
+                  await currentMenuItem.item.delete()
+                  setCurrentMenuItem(null)
+               } : undefined}
             />
             {currentMenuItem && currentMenuItem.action === 'view' && (
                <AdminMenuItemView item={currentMenuItem.item} />
@@ -147,17 +198,26 @@ const AdminProductsSection = () => {
                   onClose={() => setCurrentMenuItem({ ...currentMenuItem, action: 'view' })}
                />
             )}
+            {currentMenuItem && currentMenuItem.action === 'create' && (
+               <MenuItemForm
+                  onCloseWithItem={(item: MenuItemModel) => setCurrentMenuItem({ item, action: 'view' })}
+               />
+            )}
          </PrimaryModal>
          
          <PrimaryModal
             id='generalProductsViewEditModal'
             isOpen={!!currentProduct}
-            title={currentProduct?.item.name || ''}
+            title={currentProduct?.item?.name || createProductTitle}
             onClose={() => setCurrentProduct(null)}
          >
             <ModelEditDeleteController
-               isEditMode={Boolean(currentProduct && currentProduct.action === 'edit')}
-               setEditMode={setProductEditMode}
+               action={currentProduct?.action}
+               setMode={setProductEditMode}
+               onDelete={currentProduct?.item ? async () => {
+                  await currentProduct.item.delete()
+                  setCurrentProduct(null)
+               } : undefined}
             />
             {currentProduct && currentProduct.action === 'view' && (
                <AdminGeneralProductsView
@@ -171,17 +231,26 @@ const AdminProductsSection = () => {
                   onClose={() => setCurrentProduct({ ...currentProduct, action: 'view' })}
                />
             )}
+            {currentProduct && currentProduct.action === 'create' && (
+               <GeneralProductsForm
+                  onCloseWithItem={{
+                     type: currentProduct.type,
+                     close: (item: ToppingModel | SauceModel | MenuItemOptionModel) =>
+                        setCurrentProduct({ item, action: 'view', type: currentProduct.type })
+                  }}
+               />
+            )}
          </PrimaryModal>
          
          <PrimaryModal
             id='categoriesViewEditModal'
             isOpen={!!currentCategory}
-            title={currentCategory?.item.name || ''}
+            title={currentCategory?.item?.name || 'Criar Categoria'}
             onClose={() => setCurrentCategory(null)}
          >
             <ModelEditDeleteController
-               isEditMode={Boolean(currentCategory && currentCategory.action === 'edit')}
-               setEditMode={setCategoryEditMode}
+               action={currentCategory?.action}
+               setMode={setCategoryEditMode}
             />
             {currentCategory && currentCategory.action === 'view' && (
                <AdminCategoriesView
@@ -194,6 +263,13 @@ const AdminProductsSection = () => {
                   <CategoryForm
                      item={currentCategory.item}
                      onClose={() => setCurrentCategory({ ...currentCategory, action: 'view' })}
+                  />
+               </>
+            )}
+            {currentCategory && currentCategory.action === 'create' && (
+               <>
+                  <CategoryForm
+                     onCloseWithItem={(item: CategoryModel) => setCurrentCategory({ item, action: 'view' })}
                   />
                </>
             )}
@@ -214,6 +290,7 @@ const AdminProductsSection = () => {
                                     action: 'edit'
                                  })
                               }}
+                              onDelete={async () => await item.delete()}
                               price={item.price}
                               description={item.description}
                               img={item.img ? item.img : ''}
@@ -240,6 +317,7 @@ const AdminProductsSection = () => {
                                  action: 'edit',
                                  type: 'toppings'
                               })}
+                              onDelete={async () => await item.delete()}
                               price={item.price}
                               onView={() => setCurrentProduct({ item, action: 'view', type: 'toppings' })}
                            />
@@ -264,6 +342,7 @@ const AdminProductsSection = () => {
                                  action: 'edit',
                                  type: 'sauces'
                               })}
+                              onDelete={async () => await item.delete()}
                               price={item.price}
                               onView={() => setCurrentProduct({ item, action: 'view', type: 'sauces' })}
                            />
@@ -288,6 +367,7 @@ const AdminProductsSection = () => {
                                  action: 'edit',
                                  type: 'menuItemOptions'
                               })}
+                              onDelete={async () => await item.delete()}
                               price={item.price}
                               onView={() => setCurrentProduct({ item, action: 'view', type: 'menuItemOptions' })}
                            />
@@ -324,6 +404,7 @@ const AdminProductsSection = () => {
                                        item,
                                        action: 'edit'
                                     })}
+                                    onDelete={async () => await item.delete()}
                                     horizontal
                                  />
                               </div>
