@@ -62,7 +62,10 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
          }
          else {
             const menuItem = new MenuItemModel({
-               ...omit(['id'], nonEmptyValues) as MenuItem,
+               ...omit(['id'], {
+                  ...nonEmptyValues,
+                  listOrder: nonEmptyValues.listOrder ? nonEmptyValues : 999
+               }) as MenuItem,
             })
             if (values.img) menuItem.modify({ img: imageUrl })
             await menuItem.save()
