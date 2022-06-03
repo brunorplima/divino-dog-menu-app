@@ -1,4 +1,5 @@
 import { Form, Formik } from 'formik'
+import { dissoc } from 'ramda'
 import React from 'react'
 import CategoryModel from '../../../models/CategoryModel'
 import { Category } from '../../../models/interfaces'
@@ -6,29 +7,36 @@ import { categoryFormSchema } from '../../../schemas/generalFormSchemas'
 import FormField from '../../forms/fields/FormField'
 import PrimaryButton from '../../verse/PrimaryButton'
 
-type CategoryFormType = Partial<Omit<Category, 'id'>>
+type CategoryFormType = {
+   name: string,
+   listOrder?: number | ''
+} 
 
 const initialFormValues: CategoryFormType = {
    name: '',
-   listOrder: 0
+   listOrder: ''
 }
 
 interface Props {
    item?: CategoryModel
-   readonly onClose: () => void
+   readonly onClose?: () => void
+   readonly onCloseWithItem?: (item: CategoryModel) => void
 }
 
-const CategoryForm: React.FC<Props> = ({ item, onClose }) => {
+const CategoryForm: React.FC<Props> = ({ item, onClose, onCloseWithItem }) => {
 
    const process = async (values: CategoryFormType) => {
       try {
          if (item) {
-            item.modify(values)
+            if (!values.listOrder) values = dissoc('listOrder')
+            item.modify(values as Category)
             await item.save()
-            onClose()
+            if (onClose) onClose()
          }
          else {
-            // ADD NEW ITEM LOGIC GOES HERE
+            const category = new CategoryModel(values as Omit<Category, "id">)
+            await category.save()
+            if (onCloseWithItem) onCloseWithItem(category)
          }
       }
       catch (err: any) {

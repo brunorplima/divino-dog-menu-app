@@ -4,36 +4,58 @@ import MenuItemOptionModel from '../../../models/MenuItemOptionModel'
 import SauceModel from '../../../models/SauceModel'
 import ToppingModel from '../../../models/ToppingModel'
 import { generalProductFormSchema } from '../../../schemas/generalFormSchemas'
+import { GeneralProducts } from '../../book/AdminProductsSection/AdminProductsSection'
 import FormField from '../../forms/fields/FormField'
 import PrimaryButton from '../../verse/PrimaryButton'
 
 interface GeneralProduct {
    name: string
    isAvailable: boolean
-   price?: number
+   price?: number | ''
 }
 
 const initialGeneralProductValues: GeneralProduct = {
    name: '',
-   isAvailable: true
+   isAvailable: true,
+   price: ''
 }
 
 interface Props {
    item?: ToppingModel | SauceModel | MenuItemOptionModel
-   readonly onClose: () => void
+   readonly onClose?: () => void
+   readonly onCloseWithItem?: {
+      type: GeneralProducts
+      close: (item: ToppingModel | SauceModel | MenuItemOptionModel) => void
+   }
 }
 
-const GeneralProductsForm: React.FC<Props> = ({ item, onClose }) => {
+const GeneralProductsForm: React.FC<Props> = ({ item, onClose, onCloseWithItem }) => {
 
-   const process = async (values: GeneralProduct) => {
+   const process = async (values: GeneralProduct): Promise<ToppingModel | SauceModel | MenuItemOptionModel | undefined> => {
+      const nonEmptyValues = { ...values, price: values.price as number }
       try {
          if (item) {
-            item.modify(values)
+            item.modify(nonEmptyValues)
             await item.save()
-            onClose()
          }
          else {
-            // ADD-NEW-ITEM LOGIC GOES HERE
+            let model: ToppingModel | SauceModel | MenuItemOptionModel | undefined
+            switch (onCloseWithItem?.type) {
+               case 'toppings':
+                  model = new ToppingModel(nonEmptyValues)
+                  break
+               case 'sauces':
+                  model = new SauceModel(nonEmptyValues)
+                  break
+               case 'menuItemOptions':
+                  model = new MenuItemOptionModel(nonEmptyValues)
+                  break
+               default:
+                  model = undefined
+                  break
+            }
+            if (model) await model.save()
+            return model
          }
       }
       catch (err: any) {
@@ -48,7 +70,9 @@ const GeneralProductsForm: React.FC<Props> = ({ item, onClose }) => {
          <Formik
             initialValues={initialValues}
             onSubmit={async values => {
-               await process(values)
+               const item = await process(values)
+               if (item && onCloseWithItem?.close) onCloseWithItem.close(item)
+               else if (onClose) onClose()
             }}
             validationSchema={generalProductFormSchema}
          >
