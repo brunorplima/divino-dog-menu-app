@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ReactModal from 'react-modal'
 import { IoClose } from 'react-icons/io5'
+import styles from './PrimaryModal.module.scss'
 
 interface Props {
    readonly id: string
@@ -29,7 +30,9 @@ const PrimaryModal: React.FC<Props> = ({ id, title, isOpen, onClose, children, t
                isOpen={isOpen}
                appElement={document.getElementById(id) as HTMLElement}
                ariaHideApp={false}
-               className='bg-gray-600 h-screen max-w-2xl mr-auto ml-auto overflow-scroll'
+               className={`${styles.slideIn} bg-gray-600 h-screen max-w-2xl mr-auto ml-auto overflow-scroll`}
+               onRequestClose={onClose}
+               shouldCloseOnOverlayClick
             >
                <div className='p-5 flex justify-between border-b border-gray-400 text-gray-100'>
                   <h2 className={titleSize}>{title}</h2>
