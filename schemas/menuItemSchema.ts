@@ -3,7 +3,7 @@ import { REQUIRED } from './schemaUtils'
 
 const menuItemFormSchema =  Yup.object({
    name: Yup.string().required(REQUIRED),
-   price: Yup.number().required(REQUIRED),
+   price: Yup.string().required(REQUIRED),
    isAvailable: Yup.boolean().required(REQUIRED),
    categoryId: Yup.string().required(REQUIRED),
    optionIds: Yup.array(Yup.string()),
