@@ -111,11 +111,11 @@ const AdminProductsSection = () => {
                         onClick: () => setMenuItemEditMode('create')
                      },
                      {
-                        label: 'Ingredientes',
+                        label: 'Ingrediente',
                         onClick: () => setProductEditMode('create', 'toppings')
                      },
                      {
-                        label: 'Molhos',
+                        label: 'Molho',
                         onClick: () => setProductEditMode('create', 'sauces')
                      },
                      {
