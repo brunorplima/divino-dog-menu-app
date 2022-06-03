@@ -404,6 +404,7 @@ const AdminProductsSection = () => {
                                        item,
                                        action: 'edit'
                                     })}
+                                    onDelete={async () => await item.delete()}
                                     horizontal
                                  />
                               </div>
