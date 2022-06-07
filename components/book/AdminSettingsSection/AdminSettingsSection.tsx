@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { settingsContext } from '../../contexts/SettingsProvider'
 import { FIELD_CLASS_NAME } from '../../../constants/formConstants'
 
-const expiryTimes: (string | number)[][] = [
+const expiryTimes = [
    ['15 minutos', 900],
    ['30 minutos', 1800],
    ['1 hora', 3600],
@@ -19,7 +19,7 @@ const AdminSettingsSection = () => {
 
    if (!settingsModel) return null
    return (
-      <div className='text-gray-200'>
+      <div className='text-gray-200 mb-14'>
          <div className='grid place-content-center my-4'>
             <h1 className='text-xl'>Configurações</h1>
          </div>
@@ -81,6 +81,36 @@ const AdminSettingsSection = () => {
                />
             </div>
 
+            <div className='flex flex-col gap-3 my-4 text-gray-200 items-center'>
+               <label htmlFor='maxAmountOfAddons' className='flex-1'>
+                  <div className='text-lg'>Adicionais permitidos</div>
+                  <div className='text-gray-400'>
+                     A quantidade máxima de ingredientes adicionais que o usuário pode escolher para cada item.
+                  </div>
+               </label>
+               <select
+                  className={`${FIELD_CLASS_NAME} w-full`}
+                  disabled={!settingsModel?.allowUserToAddToppings}
+                  value={settingsModel?.maxAmountOfAddons || 3}
+                  onChange={ev => {
+                     const maxAmountOfAddons = parseInt(ev.target.value)
+                     try {
+                        settingsModel?.modify({ maxAmountOfAddons })
+                        settingsModel?.save()
+                     }
+                     catch (err: any) {
+                        console.log(err.message)
+                     }
+                  }}
+               >
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={5}>5</option>
+               </select>
+            </div>
+
             <div className='flex justify-between gap-3 my-4 text-gray-200 items-center'>
                <label htmlFor='allowUserToRemoveToppings' className='flex-1'>
                   <div className='text-lg'>Permitir usuário remover ingredientes</div>
@@ -106,6 +136,36 @@ const AdminSettingsSection = () => {
                   }}
                   checked={settingsModel?.allowUserToRemoveToppings || false}
                />
+            </div>
+
+            <div className='flex flex-col gap-3 my-4 text-gray-200 items-center'>
+               <label htmlFor='maxAmountOfAddons' className='flex-1'>
+                  <div className='text-lg'>Remoções permitidas</div>
+                  <div className='text-gray-400'>
+                     A quantidade máxima de remoções de ingredientes que o usuário pode escolher para cada item.
+                  </div>
+               </label>
+               <select
+                  className={`${FIELD_CLASS_NAME} w-full`}
+                  disabled={!settingsModel?.allowUserToRemoveToppings}
+                  value={settingsModel?.maxAmountOfRemoves || 3}
+                  onChange={ev => {
+                     const maxAmountOfRemoves = parseInt(ev.target.value)
+                     try {
+                        settingsModel?.modify({ maxAmountOfRemoves })
+                        settingsModel?.save()
+                     }
+                     catch (err: any) {
+                        console.log(err.message)
+                     }
+                  }}
+               >
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={5}>5</option>
+               </select>
             </div>
 
             <div className='flex justify-between gap-3 my-4 text-gray-200 items-center'>
@@ -164,35 +224,6 @@ const AdminSettingsSection = () => {
                         {head(opt)}
                      </option>
                   ))}
-               </select>
-            </div>
-
-            <div className='flex flex-col gap-3 my-4 text-gray-200 items-center'>
-               <label htmlFor='maxAmountOfAddons' className='flex-1'>
-                  <div className='text-lg'>Adicionais permitidos</div>
-                  <div className='text-gray-400'>
-                     A quantidade máxima de adicionais que o usuário pode escolher para cada item.
-                  </div>
-               </label>
-               <select
-                  className={`${FIELD_CLASS_NAME} w-full`}
-                  value={settingsModel?.maxAmountOfAddons || 3}
-                  onChange={ev => {
-                     const maxAmountOfAddons = parseInt(ev.target.value)
-                     try {
-                        settingsModel?.modify({ maxAmountOfAddons })
-                        settingsModel?.save()
-                     }
-                     catch (err: any) {
-                        console.log(err.message)
-                     }
-                  }}
-               >
-                  <option value={1}>1</option>
-                  <option value={2}>2</option>
-                  <option value={3}>3</option>
-                  <option value={4}>4</option>
-                  <option value={5}>5</option>
                </select>
             </div>
 

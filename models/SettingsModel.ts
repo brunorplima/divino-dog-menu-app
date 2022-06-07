@@ -15,7 +15,7 @@ export default class SettingsModel extends Model<Settings> {
    }
    
    static get PATH(): string              { return 'settings' }
-   static get Instance(): SettingsModel   { return SettingsModel.instance || new SettingsModel(initialValues) }
+   static get Instance(): SettingsModel   { return this.instance }
 
    static async fetch() {
       const docRef = await getDoc(doc(db, SettingsModel.PATH, SettingsModel.PATH))
@@ -32,19 +32,23 @@ export default class SettingsModel extends Model<Settings> {
    
       const unsubscribe = onSnapshot(docRef, async snapshot => {
          const settings = snapshot.data() as Settings
-         if (!snapshot.exists()) {
-            const settingsModel = new this(initialValues)
-            setFunction(settingsModel)
-            await settingsModel.save()
-            return
-         }
-         else {
-            const settingsModel = this.instance ? this.instance : new this(settings)
-            if (R.equals(settings, settingsModel.values())) setFunction(settingsModel)
-            else {
-               settingsModel.modify(R.omit(['id'], settings))
-               setFunction(settingsModel)
+         try {
+            if (snapshot.exists()) {
+               const model = new SettingsModel(settings)
+               model.modify(R.omit(['id'], settings))
+               this.instance = model
+               setFunction(model)
+               model.save()
             }
+            else {
+               const model = new SettingsModel(initialValues)
+               this.instance = model
+               setFunction(model)
+               model.save()
+            }
+         }
+         catch (err: any) {
+            console.log(err.message)
          }
       })
       
@@ -59,6 +63,7 @@ export default class SettingsModel extends Model<Settings> {
    get aboutUsContent()                      { return this.settings.aboutUsContent }
    get unconfirmedOrderExpiryTime()          { return this.settings.unconfirmedOrderExpiryTime }
    get maxAmountOfAddons()                   { return this.settings.maxAmountOfAddons }
+   get maxAmountOfRemoves()                   { return this.settings.maxAmountOfRemoves }
 
    values() {
       return this.settings
@@ -102,6 +107,7 @@ const initialValues: Settings = {
    allowUserToGiveSpecialInstructions: false,
    allowUserToRemoveToppings: false,
    maxAmountOfAddons: 1,
+   maxAmountOfRemoves: 1,
    orderDetailsOpenByDefault: true,
    unconfirmedOrderExpiryTime: 3600
 }

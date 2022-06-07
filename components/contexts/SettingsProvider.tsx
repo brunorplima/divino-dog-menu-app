@@ -15,15 +15,13 @@ export const settingsContext = createContext<SettingsContext>({
 })
 
 const SettingsProvider: React.FC<Props> = ({ children }) => {
-   const [settingsModel, setSettingsModel] = useState<SettingsModel>(SettingsModel.Instance)
-   const unsubscribeRef = useRef<Unsubscribe>()
-
+   const [settingsModel, setSettingsModel] = useState<SettingsModel | null>(null)
 
    useEffect(() => {
-      if (!unsubscribeRef.current) unsubscribeRef.current = SettingsModel.listen(setSettingsModel)
+      const unsubscribe = SettingsModel.listen(setSettingsModel)
 
-      return unsubscribeRef.current
-   }, [settingsModel])
+      return unsubscribe
+   }, [])
 
    return (
       <settingsContext.Provider value={{ settingsModel }}>

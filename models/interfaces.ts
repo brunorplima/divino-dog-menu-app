@@ -102,8 +102,11 @@ export interface Settings {
    // how long unconfirmed orders should take to become a canceled order in seconds
    readonly unconfirmedOrderExpiryTime: number
 
-   // the max allowed number of addons users may add to a menuItemGroup
+   // the max allowed number of toppings users may add to a menuItemGroup
    readonly maxAmountOfAddons: number
+
+   // the max allowed number of toppings users may remove to a menuItemGroup
+   readonly maxAmountOfRemoves: number
 }
 
 
