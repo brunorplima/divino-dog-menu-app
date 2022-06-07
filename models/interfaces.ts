@@ -117,7 +117,8 @@ export interface MenuItemGroup {
    readonly menuItemId: string
    readonly subTotal: number
    readonly extraToppingIds?: string[]
-   readonly extraSauceIds?: string[]
+   readonly extraSauceIds?: string[],
+   readonly optionId?: string
 }
 
 export interface UserAddress {
