@@ -3,6 +3,8 @@ import SauceModel from '../../../models/SauceModel'
 import styles from './AddOns.module.scss'
 import { fotmatPrice } from '../../../utils/dataHelper'
 import ElementRefList from '../../../hooks/ElementRefList'
+import { useState } from 'react'
+import stringToArray from '../stringToArray'
 
 interface Props {
    addOnIds: string[]
@@ -13,49 +15,112 @@ interface Props {
    price: number
    setPrice: React.Dispatch<React.SetStateAction<number>>
    minimumPrice: number
+   boxes: string | string[] | undefined
 }
 
-const AddOns = ({ addOnIds, title, addonList, addOns, setAddOns, price, setPrice, minimumPrice }: Props) => {
-   const { ElementReffed, ElementReffer } = ElementRefList()
+interface MultipleStates {
+   id: string
+   subTotal: number
+   state: boolean
+   setState: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-   const unmutableClasses = 'grid my-2 p-4 rounded-xl font-medium w-full'
-   const changeCheckBoxClass = (element: any, change: boolean) => {
-      const classes = change
-         ? `${styles.itemInfo} ${styles.checkedItemInfo} ${unmutableClasses}`
-         : `${styles.itemInfo} ${unmutableClasses}`
-      element.className = classes
+const AddOns = ({
+   addOnIds,
+   title,
+   addonList,
+   addOns,
+   setAddOns,
+   price,
+   setPrice,
+   minimumPrice,
+   boxes,
+}: Props) => {
+   const MultipleStatesManager = <T extends { id: string; price: number | undefined }>(
+      modelList: T[]
+   ) => {
+      const lightBoxes: MultipleStates[] = []
+      const appendedLightBoxes = (id: string, price: number, value: boolean) => {
+         const [lightBox, setLightBox] = useState(value)
+         const theStates: MultipleStates = {
+            id: id,
+            subTotal: price,
+            state: lightBox,
+            setState: setLightBox,
+         }
+         lightBoxes.push(theStates)
+      }
+      modelList.forEach((add) => {
+         appendedLightBoxes(
+            add.id,
+            add.price ? add.price : 0,
+            stringToArray(boxes).includes(add.id)
+         )
+      })
+      const runLightBoxesState = (index: number) => {
+         const currentState = lightBoxes[index]
+         !currentState.state ? currentState.setState(true) : currentState.setState(false)
+      }
+
+      return {
+         lightBoxes,
+         runLightBoxesState,
+      }
    }
 
-   const changePrice = (event: React.BaseSyntheticEvent, value: any) => {
-      const checkerValue = event.currentTarget.name
-      const checker = event.currentTarget.checked
-      const currElId = event.currentTarget.id
+   const { lightBoxes, runLightBoxesState } = MultipleStatesManager<ToppingModel | SauceModel>(
+      addonList
+   )
 
-      if (checker) {
-         setPrice(price + value)
-         setAddOns([...addOns, checkerValue])
+   const { ElementReffed, ElementReffer } = ElementRefList()
+
+   const changeCheckBoxClass = (element: HTMLElement | null | undefined, change: boolean) => {
+      if (element) {
+         const unmutableClasses = 'grid my-2 p-4 rounded-xl font-medium w-full'
+         const classes = change
+            ? `${styles.itemInfo} ${styles.checkedItemInfo} ${unmutableClasses}`
+            : `${styles.itemInfo} ${unmutableClasses}`
+         element.className = classes
+      }
+   }
+
+   const setAllValues = (priceParsed: number, evaluator: boolean, idEvaluator: string) => {
+      if (evaluator) {
+         setPrice(price + priceParsed)
+         setAddOns([...addOns, idEvaluator])
          ElementReffed.current.forEach((el) => {
-            el.id === currElId && changeCheckBoxClass(el.parentNode.parentNode.parentNode, true)
+            el.id === idEvaluator &&
+               changeCheckBoxClass(el.parentElement?.parentElement?.parentElement, true)
          })
       } else {
-         setPrice(price - value < minimumPrice ? minimumPrice : price - value)
-         setAddOns(addOns.filter((a) => a !== checkerValue))
+         setPrice(price - priceParsed < minimumPrice ? minimumPrice : price - priceParsed)
+         setAddOns(addOns.filter((a) => a !== idEvaluator))
          ElementReffed.current.forEach((el) => {
-            el.id === currElId && changeCheckBoxClass(el.parentNode.parentNode.parentNode, false)
+            el.id === idEvaluator &&
+               changeCheckBoxClass(el.parentElement?.parentElement?.parentElement, false)
          })
       }
+   }
+
+   const changePrice = (event: React.MouseEvent<HTMLInputElement, MouseEvent>, value: number) => {
+      const checker = event.currentTarget.checked
+      const currElId = event.currentTarget.id
+      setAllValues(value, checker, currElId)
    }
 
    return (
       <div className={`${styles.topAddons} static`}>
          <div className='my-5 font-semibold'>{title}</div>
          {addonList.map(
-            (item) =>
+            (item, idx) =>
                addOnIds.includes(item.id) &&
                item.isAvailable && (
                   <div
                      key={item.id}
-                     className={`${styles.itemInfo} grid my-2 p-4 rounded-xl font-medium w-full`}
+                     className={`${styles.itemInfo} ${
+                        stringToArray(boxes).includes(item.id) && styles.checkedItemInfo
+                     } grid my-2 p-4 rounded-xl font-medium w-full`}
+                     onClick={(e) => e.target}
                   >
                      <div className='text-base'>
                         <label>{item.name}</label>
@@ -66,14 +131,17 @@ const AddOns = ({ addOnIds, title, addonList, addOns, setAddOns, price, setPrice
                         >
                            <input
                               onClick={(event) => {
+                                 runLightBoxesState(idx)
                                  changePrice(event, item.price ? item.price : 0)
                               }}
+                              onChange={(e) => {}}
                               className='relative block'
                               type='checkbox'
                               id={item.id}
                               name={item.id}
                               value={item.price}
                               ref={(el) => ElementReffer(el, ElementReffed)}
+                              checked={lightBoxes[idx].state}
                            />
                         </div>
                      </div>

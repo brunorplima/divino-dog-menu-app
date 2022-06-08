@@ -4,29 +4,55 @@ import AddOns from './AddOns'
 import styles from './ItemsPage.module.scss'
 import { MenuItemGroup } from '../../models/interfaces'
 import * as R from 'ramda'
-import { addMenuItemGroup } from '../../utils/localStorageHelper'
+import { MENU_ITEM_GROUP_KEY, addMenuItemGroup } from '../../utils/localStorageHelper'
 import { fotmatPrice } from '../../utils/dataHelper'
 import Link from 'next/link'
-import { IoIosArrowDropleftCircle } from "react-icons/io"
+import { IoIosArrowDropleftCircle } from 'react-icons/io'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import { NextParsedUrlQuery } from 'next/dist/server/request-meta'
+import stringToArray from './stringToArray'
+import { generateID } from '../../utils/modelHelper'
 
 interface Props {
-   itemId: string | string[] | undefined
-   catId: string | string[] | undefined
+   query: NextParsedUrlQuery
 }
 
 const ItemsPage = (props: Props) => {
-   const { itemId, catId } = props
+   const { query } = props
+   const { itemId, catId, itemsIds, quantity, boxes } = query
    const { menuItems, toppings, sauces } = useContext(menuContext)
 
-   const [quant, setQuant] = useState(1)
+   const definePrice = () => {
+      let price: number
+
+      const myItem = menuItems.find((item) => item.id === itemId)
+      price = myItem !== undefined ? myItem.price : 0
+
+      const myAddOns = stringToArray(boxes)
+      myAddOns.forEach((add) => {
+         const toppPrice = toppings.find((item) => item.id === add)
+         if (toppPrice !== undefined) price += toppPrice.price ? toppPrice.price : 0
+
+         const saucePrice = sauces.find((item) => item.id === add)
+         if (saucePrice !== undefined) price += saucePrice.price ? saucePrice.price : 0
+      })
+
+      return price
+   }
 
    const theItem = menuItems.find((item) => item.id === itemId)
    const minimumPrice = theItem !== undefined ? theItem.price : 0
-   const [addOns, setAddOns] = useState<string[]>([''])
-   const [price, setPrice] = useState(0)
+   const [addOns, setAddOns] = useState<string[]>([])
+   const [price, setPrice] = useState(theItem ? theItem.price : 0)
+   const [quant, setQuant] = useState(() => {
+      if (quantity === undefined) return 1
+      if (typeof quantity === 'object') return 1
+      else return parseInt(quantity)
+   })
    useEffect(() => {
-      theItem && setPrice(theItem.price)
-   }, [theItem])
+      setPrice(definePrice())
+      setAddOns(stringToArray(boxes))
+   }, [])
 
    const sections = [
       { sect: theItem?.toppingIds, title: 'Escolha seus Adicionais', addonList: toppings },
@@ -61,6 +87,26 @@ const ItemsPage = (props: Props) => {
       itemsGroupObject !== undefined && itemsGroupObject.forEach((item) => addMenuItemGroup(item))
    }
 
+   const { storedList, setStoredList, clearLocalStorage } =
+      useLocalStorage<MenuItemGroup>(MENU_ITEM_GROUP_KEY)
+   const replaceInLocalStorage = () => {
+      const orderIndices: number[] = []
+      storedList.forEach((item, idx) => {
+         stringToArray(itemsIds).includes(item.id) && orderIndices.push(idx)
+      })
+      const position = orderIndices[0]
+      const itemsGroupObject = interfacingMenuItemGroup(quant)
+      if (itemsGroupObject !== undefined) {
+         itemsGroupObject.forEach((item, idx) =>
+            storedList.splice(position + idx, 0, { id: generateID(), ...item })
+         )
+         const ids = stringToArray(itemsIds)
+         clearLocalStorage()
+         storedList.forEach((item) => !ids.includes(item.id) && addMenuItemGroup(item))
+      }
+      setStoredList(storedList)
+   }
+
    const addonAvailability = (addonArray: string[] | undefined) => {
       if (addonArray === undefined) return false
       if (addonArray.length === 0) return false
@@ -83,8 +129,11 @@ const ItemsPage = (props: Props) => {
                            }) no-repeat center`,
                         }}
                      ></div>
-                     <Link href={'/'}>
-                        <div className='fixed z-20 top-4 left-4 text-5xl' style={{ color: '#29fd53' }}>
+                     <Link href={`${itemsIds === undefined ? '/' : '/checkout'}`}>
+                        <div
+                           className='fixed z-20 top-4 left-4 text-5xl'
+                           style={{ color: '#29fd53' }}
+                        >
                            <IoIosArrowDropleftCircle />
                         </div>
                      </Link>
@@ -104,6 +153,7 @@ const ItemsPage = (props: Props) => {
                                        price={price}
                                        setPrice={setPrice}
                                        minimumPrice={minimumPrice}
+                                       boxes={boxes}
                                     />
                                  )}
                               </Fragment>
@@ -140,14 +190,17 @@ const ItemsPage = (props: Props) => {
                      </div>
                   </>
                )}
-               <Link href={'/'}>
+               <Link href={`${itemsIds === undefined ? '/' : '/checkout'}`}>
                   <div
                      className={`${styles.priceOrder} fixed flex flex-row font-semibold inset-x-0 bottom-0 py-4 px-8 cursor-pointer`}
                      onClick={() => {
-                        saveInLocalStorage()
+                        !itemsIds && saveInLocalStorage()
+                        itemsIds && replaceInLocalStorage()
                      }}
                   >
-                     <div className='block w-full text-left'>Adicionar</div>
+                     <div className='block w-full text-left'>
+                        {quantity !== undefined ? 'Alterar Pedido' : 'Adicionar'}
+                     </div>
                      <div className='block w-full text-right'>{fotmatPrice(quant * price)}</div>
                   </div>
                </Link>

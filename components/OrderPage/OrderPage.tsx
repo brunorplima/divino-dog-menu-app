@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { menuItemGroups, deleteMenuItemGroup } from '../../utils/localStorageHelper'
+import { addMenuItemGroup, MENU_ITEM_GROUP_KEY } from '../../utils/localStorageHelper'
 import { fotmatPrice } from '../../utils/dataHelper'
 import { menuContext } from '../contexts/MenuProvider'
 import style from './OrderPage.module.scss'
@@ -7,13 +7,18 @@ import { MenuItemGroup } from '../../models/interfaces'
 import { FaWindowClose } from 'react-icons/fa'
 import Link from 'next/link'
 import { equals, omit, uniq } from 'ramda'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 export default function OrderPage() {
    let totalBill = 0
 
    const { menuItems, toppings, sauces } = useContext(menuContext)
 
-   const [orders, setOrders] = useState(menuItemGroups())
+   const { storedList, clearLocalStorage } = useLocalStorage<MenuItemGroup>(MENU_ITEM_GROUP_KEY)
+
+   const [orders, setOrders] = useState(storedList)
+
+   //const [orders, setOrders] = useState(menuItemGroups())
 
    const idlessOrders = orders.map((order) => omit(['id'], order)) // removing id property to group equal orders together
    const ids = orders.map((order) => order.id)
@@ -41,11 +46,27 @@ export default function OrderPage() {
          !tester && newOrder.push(order)
          tester && deleteIds.push(order.id)
       })
-      //console.log('ids', ids)
-      //console.log('newOrders', newOrder)
 
-      deleteIds.forEach((id) => deleteMenuItemGroup(id))
+      clearLocalStorage()
+      newOrder.forEach((order) => addMenuItemGroup(omit(['id'], order)))
       setOrders(newOrder)
+   }
+
+   const linkToItemsPage = (e: Omit<MenuItemGroup, 'id'>, quant: number): string => {
+      const d = menuItems.find((item) => e.menuItemId === item.id)
+      const textCategoryId = d ? d.categoryId : ''
+
+      const is = orders.filter((order) => equals(omit(['id'], order), e))
+      const ids = is.map((order) => order.id).join('-')
+      const textIds = `&itemsIds=${ids}` // this variable holds the ids of the order that holds equals items
+
+      const textQuantity = `&quantity=${quant}`
+
+      const t = e.extraToppingIds ? e.extraToppingIds.join('-') : ''
+      const s = e.extraSauceIds ? e.extraSauceIds.join('-') : ''
+      const textBoxes = `${t}-${s}` === '-' ? '' : `&boxes=${t}-${s}`
+
+      return `/item?itemId=${e.menuItemId}&catId=${textCategoryId}${textIds}${textQuantity}${textBoxes}`
    }
 
    return (
@@ -75,27 +96,29 @@ export default function OrderPage() {
                   }}
                >
                   <div>{counter[idx]}x</div>
-                  <div>
-                     <div className='font-semibold'>{findItemName(menuItems, e.menuItemId)}</div>
-                     <div style={{ color: 'lightgray', fontSize: '0.85rem' }}>
-                        {!!e.extraSauceIds && e.extraSauceIds.length !== 0 && (
-                           <>
-                              <div className='font-semibold text-base'>Molhos</div>
-                              {e.extraSauceIds.map((id) => (
-                                 <div key={id}>{findItemName(sauces, id)}</div>
-                              ))}
-                           </>
-                        )}
-                        {!!e.extraToppingIds && e.extraToppingIds.length !== 0 && (
-                           <>
-                              <div className='font-semibold text-base'>Adicionais</div>
-                              {e.extraToppingIds.map((id) => (
-                                 <div key={id}>{findItemName(toppings, id)}</div>
-                              ))}
-                           </>
-                        )}
+                  <Link href={linkToItemsPage(e, counter[idx])}>
+                     <div>
+                        <div className='font-semibold'>{findItemName(menuItems, e.menuItemId)}</div>
+                        <div style={{ color: 'lightgray', fontSize: '0.85rem' }}>
+                           {!!e.extraSauceIds && e.extraSauceIds.length !== 0 && (
+                              <>
+                                 <div className='font-semibold text-base'>Molhos</div>
+                                 {e.extraSauceIds.map((id) => (
+                                    <div key={id}>{findItemName(sauces, id)}</div>
+                                 ))}
+                              </>
+                           )}
+                           {!!e.extraToppingIds && e.extraToppingIds.length !== 0 && (
+                              <>
+                                 <div className='font-semibold text-base'>Adicionais</div>
+                                 {e.extraToppingIds.map((id) => (
+                                    <div key={id}>{findItemName(toppings, id)}</div>
+                                 ))}
+                              </>
+                           )}
+                        </div>
                      </div>
-                  </div>
+                  </Link>
                   <div className='text-right'>{fotmatPrice(e.subTotal * counter[idx])}</div>
                   <div
                      id={`o-${String(idx)}`}
