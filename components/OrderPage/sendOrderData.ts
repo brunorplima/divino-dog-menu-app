@@ -1,4 +1,3 @@
-import useLocalStorage from '../../hooks/useLocalStorage'
 import { MenuItemGroup, Order } from '../../models/interfaces'
 import OrderModel from '../../models/OrderModel'
 import { setLocalStorageItem } from '../../utils/localStorageHelper'
