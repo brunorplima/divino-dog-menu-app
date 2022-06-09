@@ -11,3 +11,9 @@ export const fotmatPrice = (unformatted: number | undefined) => {
       else return `R$ ${unformatted},00`
    }
 }
+
+export const stringToArray = (urlValue: string | string[] | undefined) => {
+   if (urlValue === undefined) return ['']
+   if (typeof urlValue === 'string') return urlValue.split('-').filter((a) => a !== '')
+   else return urlValue
+}

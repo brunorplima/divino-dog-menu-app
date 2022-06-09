@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { IoIosArrowDropleftCircle } from 'react-icons/io'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { NextParsedUrlQuery } from 'next/dist/server/request-meta'
-import stringToArray from './stringToArray'
+import { stringToArray } from '../../utils/dataHelper'
 import { generateID } from '../../utils/modelHelper'
 
 interface Props {
@@ -42,17 +42,17 @@ const ItemsPage = (props: Props) => {
 
    const theItem = menuItems.find((item) => item.id === itemId)
    const minimumPrice = theItem !== undefined ? theItem.price : 0
-   const [addOns, setAddOns] = useState<string[]>([])
-   const [price, setPrice] = useState(theItem ? theItem.price : 0)
+   const [addOns, setAddOns] = useState<string[]>(stringToArray(boxes))
+   const [price, setPrice] = useState(definePrice()) //(theItem ? theItem.price : 0)
    const [quant, setQuant] = useState(() => {
       if (quantity === undefined) return 1
       if (typeof quantity === 'object') return 1
       else return parseInt(quantity)
    })
-   useEffect(() => {
+   /* useEffect(() => {
       setPrice(definePrice())
       setAddOns(stringToArray(boxes))
-   }, [])
+   }, []) */
 
    const sections = [
       { sect: theItem?.toppingIds, title: 'Escolha seus Adicionais', addonList: toppings },
@@ -129,7 +129,7 @@ const ItemsPage = (props: Props) => {
                            }) no-repeat center`,
                         }}
                      ></div>
-                     <Link href={`${itemsIds === undefined ? '/' : '/checkout'}`}>
+                     <Link href={`${itemsIds === undefined ? '/' : '/checkout'}`} passHref>
                         <div
                            className='fixed z-20 top-4 left-4 text-5xl'
                            style={{ color: '#29fd53' }}
@@ -190,7 +190,7 @@ const ItemsPage = (props: Props) => {
                      </div>
                   </>
                )}
-               <Link href={`${itemsIds === undefined ? '/' : '/checkout'}`}>
+               <Link href={`${itemsIds === undefined ? '/' : '/checkout'}`} passHref>
                   <div
                      className={`${styles.priceOrder} fixed flex flex-row font-semibold inset-x-0 bottom-0 py-4 px-8 cursor-pointer`}
                      onClick={() => {

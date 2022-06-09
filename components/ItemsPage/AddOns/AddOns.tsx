@@ -4,7 +4,8 @@ import styles from './AddOns.module.scss'
 import { fotmatPrice } from '../../../utils/dataHelper'
 import useElementRefList from '../../../hooks/useElementRefList'
 import { useState } from 'react'
-import stringToArray from '../stringToArray'
+import { stringToArray } from '../../../utils/dataHelper'
+import useMultipleStatesManager from '../../../hooks/useMultipleStatesManager'
 
 interface Props {
    addOnIds: string[]
@@ -36,7 +37,7 @@ const AddOns = ({
    minimumPrice,
    boxes,
 }: Props) => {
-   const MultipleStatesManager = <T extends { id: string; price: number | undefined }>(
+   /* const useMultipleStatesManager = <T extends { id: string; price: number | undefined }>(
       modelList: T[]
    ) => {
       const lightBoxes: MultipleStates[] = []
@@ -66,10 +67,11 @@ const AddOns = ({
          lightBoxes,
          runLightBoxesState,
       }
-   }
+   } */
 
-   const { lightBoxes, runLightBoxesState } = MultipleStatesManager<ToppingModel | SauceModel>(
-      addonList
+   const { lightBoxes, runLightBoxesState } = useMultipleStatesManager<ToppingModel | SauceModel>(
+      addonList,
+      boxes
    )
 
    const { ElementReffed, ElementReffer } = useElementRefList<HTMLInputElement>()
