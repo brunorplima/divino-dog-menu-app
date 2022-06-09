@@ -1,13 +1,10 @@
 import React from 'react'
-import { BiEditAlt } from 'react-icons/bi'
-import { MdDeleteOutline } from 'react-icons/md'
 import CategoryModel from '../../../models/CategoryModel'
 import ModelStandardFieldInfo from '../../verse/ModelStandardFieldInfo'
-import PrimaryButton from '../../verse/PrimaryButton'
 
 interface Props {
    readonly item: CategoryModel
-   readonly associatedMenuItems: string
+   readonly associatedMenuItems: string | JSX.Element
 }
 
 const AdminCategoriesView: React.FC<Props> = ({ item, associatedMenuItems }) => {

@@ -45,7 +45,7 @@ const SelectFormField: React.FC<Props> = ({
                   form={form}
                   meta={meta}
                   options={options}
-                  className={`${className} ${error && 'border-2 border-red-400'}`}
+                  className={`${className} ${error && touched && 'border-2 border-red-400'}`}
                   isMulti={isMulti}
                   placeholder={placeholder}
                />

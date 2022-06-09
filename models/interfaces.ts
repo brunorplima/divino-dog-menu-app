@@ -5,7 +5,7 @@ import {
    ORDER_STATUS_FINALIZADO,
    ORDER_STATUS_FINALIZANDO,
    ORDER_STATUS_PREPARANDO
-} from "../constants/modelsConstants"
+} from '../constants/modelsConstants'
 
 // Menu Items (Firestore path: menuItems)
 export interface MenuItem {
@@ -80,6 +80,35 @@ export interface User {
    readonly master?: boolean
 }
 
+// Settings (firestore path: settings)
+export interface Settings {
+   readonly id: string
+
+   // details of each order on the order management section on admin page
+   readonly orderDetailsOpenByDefault: boolean
+
+   // adds/removes an "add toppings" section on item page
+   readonly allowUserToAddToppings: boolean
+
+   // adds/removes a "remove toppings" section on item page
+   readonly allowUserToRemoveToppings: boolean
+
+   // adds/removes a "special instructions" on item page
+   readonly allowUserToGiveSpecialInstructions: boolean
+
+   // the content that will be placed on the about us page
+   readonly aboutUsContent: string
+
+   // how long unconfirmed orders should take to become a canceled order in seconds
+   readonly unconfirmedOrderExpiryTime: number
+
+   // the max allowed number of toppings users may add to a menuItemGroup
+   readonly maxAmountOfAddons: number
+
+   // the max allowed number of toppings users may remove to a menuItemGroup
+   readonly maxAmountOfRemoves: number
+}
+
 
 
 
@@ -88,7 +117,8 @@ export interface MenuItemGroup {
    readonly menuItemId: string
    readonly subTotal: number
    readonly extraToppingIds?: string[]
-   readonly extraSauceIds?: string[]
+   readonly extraSauceIds?: string[],
+   readonly optionId?: string
 }
 
 export interface UserAddress {

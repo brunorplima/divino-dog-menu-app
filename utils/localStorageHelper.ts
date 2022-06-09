@@ -8,12 +8,18 @@ export const setLocalStorageItem = <T = {}>(key: string, value: T) => {
    localStorage.setItem(key, JSON.stringify(value))
 }
 
+/**
+ * @deprecated The method should not be used
+ */
 export const menuItemGroups = (): MenuItemGroup[] => {
    const listString = localStorage.getItem(MENU_ITEM_GROUP_KEY)
    if (!listString) return []
    return JSON.parse(listString)
 }
 
+/**
+ * @deprecated The method should not be used
+ */
 export const addMenuItemGroup = (menuItemGroup: Omit<MenuItemGroup, 'id'>) => {
    const list = menuItemGroups()
    const newGroup: MenuItemGroup = {
@@ -24,7 +30,9 @@ export const addMenuItemGroup = (menuItemGroup: Omit<MenuItemGroup, 'id'>) => {
    setLocalStorageItem(MENU_ITEM_GROUP_KEY, list)
 }
 
-
+/**
+ * @deprecated The method should not be used
+ */
 export const deleteMenuItemGroup = (id: string) => {
    const list = menuItemGroups()
    const item = filter(propEq('id', id), list)

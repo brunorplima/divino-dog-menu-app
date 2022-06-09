@@ -17,3 +17,5 @@ export const stringToArray = (urlValue: string | string[] | undefined) => {
    if (typeof urlValue === 'string') return urlValue.split('-').filter((a) => a !== '')
    else return urlValue
 }
+export const capitalizeFirstLetter = (word: string) =>
+      word.toLowerCase().charAt(0).toUpperCase() + word.slice(1)

@@ -1,9 +1,10 @@
+import { capitalizeFirstLetter } from "../../../utils/dataHelper"
+
 interface Props {
    name: string
-   capitalizeFirstLetter: (word: string) => string
 }
 
-export default function MenuCategories({ name, capitalizeFirstLetter }: Props) {
+export default function MenuCategories({ name }: Props) {
    return (
       <>
          <div className="inline-block m-2.5 px-10 py-2.5">

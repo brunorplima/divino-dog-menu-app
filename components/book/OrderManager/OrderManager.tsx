@@ -1,7 +1,7 @@
 import { groupBy, isEmpty, prop } from 'ramda'
 import React, { useContext } from 'react'
 import { ORDER_ACTIVE_STATUTES } from '../../../constants/modelsConstants'
-import OrderManagerItem from '../../chapter/OrderManagerItem/OrderManagerItem'
+import OrderManagerItem from '../../chapter/OrderManagerItem'
 import { adminContext } from '../../contexts/AdminProvider'
 import styles from './OrderManager.module.scss'
 
