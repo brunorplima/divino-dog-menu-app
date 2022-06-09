@@ -3,8 +3,6 @@ import { useState } from 'react'
 import { setLocalStorageItem } from '../utils/localStorageHelper'
 import { generateID } from '../utils/modelHelper'
 
-export const MENU_ITEM_GROUP_KEY = 'menuItemGroups'
-
 const useLocalStorage = <T extends { id: string }>(key: string) => {
    const [storedList, setStoredList] = useState<T[]>(() => {
       if (typeof window === 'undefined') return []
@@ -17,17 +15,17 @@ const useLocalStorage = <T extends { id: string }>(key: string) => {
       }
    })
 
-   const auxConstructList = (objList: T[], pos: number, item: T) => {
+   const auxConstructList = (objList: T[] | Omit<T, 'id'>[], pos: number, item: T | Omit<T, 'id'>) => {
       objList.splice(pos, 1)
       objList.splice(pos, 0, item)
    }
 
-   const storeItem = (menuItem: Omit<T, 'id'>, position?: number) => {
+   const storeItem = (menuItem: Omit<T, 'id'>, idDefiner=true, position?: number) => {
       const list = [...storedList]
-      const newItem: T = { id: generateID(), ...menuItem } as T
+      const newItem: T = idDefiner ? { id: generateID(), ...menuItem } as T : { ...menuItem } as T
       position !== undefined ? auxConstructList(list, position, newItem) : list.push(newItem)
       setStoredList(list)
-      setLocalStorageItem(MENU_ITEM_GROUP_KEY, list)
+      setLocalStorageItem(key, list)
    }
 
    const deleteStoredItem = (id: string) => {

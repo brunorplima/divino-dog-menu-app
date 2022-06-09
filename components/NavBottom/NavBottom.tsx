@@ -5,7 +5,7 @@ import { BsPersonCircle } from 'react-icons/bs'
 import style from './NavBottom.module.scss'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import ElementRefList from '../../hooks/ElementRefList'
+import useElementRefList from '../../hooks/useElementRefList'
 
 export default function NavBottom() {
    const buttons = [
@@ -20,7 +20,7 @@ export default function NavBottom() {
 
    const [theStyle, setTheStyle] = useState(`translateX(calc(4.4rem * ${position}))`)
 
-   const { ElementReffed, ElementReffer } = ElementRefList()
+   const { ElementReffed, ElementReffer } = useElementRefList()
 
    const activeClass = (event: MouseEvent) => {
       const currElId = event.currentTarget.id

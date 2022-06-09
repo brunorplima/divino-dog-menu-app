@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { addMenuItemGroup, MENU_ITEM_GROUP_KEY } from '../../utils/localStorageHelper'
 import { fotmatPrice } from '../../utils/dataHelper'
 import { menuContext } from '../contexts/MenuProvider'
@@ -8,20 +8,17 @@ import { FaWindowClose } from 'react-icons/fa'
 import Link from 'next/link'
 import { equals, omit, uniq } from 'ramda'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import sendOrderData from './sendOrderData'
 
 export default function OrderPage() {
    let totalBill = 0
 
    const { menuItems, toppings, sauces } = useContext(menuContext)
 
-   const { storedList, clearLocalStorage } = useLocalStorage<MenuItemGroup>(MENU_ITEM_GROUP_KEY)
+   const { storedList, setStoredList, clearLocalStorage } = useLocalStorage<MenuItemGroup>(MENU_ITEM_GROUP_KEY)
 
-   const [orders, setOrders] = useState(storedList)
-
-   //const [orders, setOrders] = useState(menuItemGroups())
-
-   const idlessOrders = orders.map((order) => omit(['id'], order)) // removing id property to group equal orders together
-   const ids = orders.map((order) => order.id)
+   const idlessOrders = storedList.map((order) => omit(['id'], order)) // removing id property to group equal orders together
+   const ids = storedList.map((order) => order.id)
    const uniqueOrders = uniq(idlessOrders) // unique equal orders
    // counting amount of each unique equal order
    const indexes = idlessOrders.map((idless) =>
@@ -41,7 +38,7 @@ export default function OrderPage() {
    const deleteOrder = (o: Omit<MenuItemGroup, 'id'>) => {
       let newOrder: MenuItemGroup[] = []
       let deleteIds: string[] = []
-      orders.forEach((order) => {
+      storedList.forEach((order) => {
          const tester = equals(o, omit(['id'], order))
          !tester && newOrder.push(order)
          tester && deleteIds.push(order.id)
@@ -49,14 +46,14 @@ export default function OrderPage() {
 
       clearLocalStorage()
       newOrder.forEach((order) => addMenuItemGroup(omit(['id'], order)))
-      setOrders(newOrder)
+      setStoredList(newOrder)
    }
 
    const linkToItemsPage = (e: Omit<MenuItemGroup, 'id'>, quant: number): string => {
       const d = menuItems.find((item) => e.menuItemId === item.id)
       const textCategoryId = d ? d.categoryId : ''
 
-      const is = orders.filter((order) => equals(omit(['id'], order), e))
+      const is = storedList.filter((order) => equals(omit(['id'], order), e))
       const ids = is.map((order) => order.id).join('-')
       const textIds = `&itemsIds=${ids}` // this variable holds the ids of the order that holds equals items
 
@@ -150,14 +147,15 @@ export default function OrderPage() {
             }}
          >
             <div className='text-left'>
-               <Link href={`${orders.length !== 0 ? '/' : ''}`}>
+               <Link href={`${storedList.length !== 0 ? '/' : ''}`}>
                   <a
                      className='rounded-lg'
                      style={
-                        orders.length !== 0
+                        storedList.length !== 0
                            ? { background: '#29fd53', color: 'black', padding: '0.70rem' }
                            : { background: 'lightgray', color: 'gray', padding: '0.70rem' }
                      }
+                     onClick={() => sendOrderData(storedList)}
                   >
                      Confirmar Pedido
                   </a>

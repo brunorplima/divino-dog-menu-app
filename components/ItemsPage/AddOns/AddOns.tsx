@@ -2,7 +2,7 @@ import ToppingModel from '../../../models/ToppingModel'
 import SauceModel from '../../../models/SauceModel'
 import styles from './AddOns.module.scss'
 import { fotmatPrice } from '../../../utils/dataHelper'
-import ElementRefList from '../../../hooks/ElementRefList'
+import useElementRefList from '../../../hooks/useElementRefList'
 import { useState } from 'react'
 import stringToArray from '../stringToArray'
 
@@ -72,7 +72,7 @@ const AddOns = ({
       addonList
    )
 
-   const { ElementReffed, ElementReffer } = ElementRefList()
+   const { ElementReffed, ElementReffer } = useElementRefList()
 
    const changeCheckBoxClass = (element: HTMLElement | null | undefined, change: boolean) => {
       if (element) {
