@@ -20,7 +20,7 @@ export default function NavBottom() {
 
    const [theStyle, setTheStyle] = useState(`translateX(calc(4.4rem * ${position}))`)
 
-   const { ElementReffed, ElementReffer } = useElementRefList()
+   const { ElementReffed, ElementReffer } = useElementRefList<HTMLDivElement>()
 
    const activeClass = (event: MouseEvent) => {
       const currElId = event.currentTarget.id

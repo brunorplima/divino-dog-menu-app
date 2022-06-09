@@ -72,7 +72,7 @@ const AddOns = ({
       addonList
    )
 
-   const { ElementReffed, ElementReffer } = useElementRefList()
+   const { ElementReffed, ElementReffer } = useElementRefList<HTMLInputElement>()
 
    const changeCheckBoxClass = (element: HTMLElement | null | undefined, change: boolean) => {
       if (element) {
