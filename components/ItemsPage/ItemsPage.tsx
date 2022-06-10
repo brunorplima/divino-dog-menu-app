@@ -49,10 +49,6 @@ const ItemsPage = (props: Props) => {
       if (typeof quantity === 'object') return 1
       else return parseInt(quantity)
    })
-   /* useEffect(() => {
-      setPrice(definePrice())
-      setAddOns(stringToArray(boxes))
-   }, []) */
 
    const sections = [
       { sect: theItem?.toppingIds, title: 'Escolha seus Adicionais', addonList: toppings },

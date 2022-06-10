@@ -22,7 +22,7 @@ const useLocalStorage = <T extends { id: string }>(key: string) => {
 
    const storeItem = (menuItem: Omit<T, 'id'>, idDefiner=true, position?: number) => {
       const list = [...storedList]
-      const newItem: T = idDefiner ? { id: generateID(), ...menuItem } as T : { ...menuItem } as T
+      const newItem = idDefiner ? { id: generateID(), ...menuItem } as T : { ...menuItem } as T
       position !== undefined ? auxConstructList(list, position, newItem) : list.push(newItem)
       setStoredList(list)
       setLocalStorageItem(key, list)

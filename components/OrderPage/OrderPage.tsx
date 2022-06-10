@@ -18,7 +18,6 @@ export default function OrderPage() {
    const { storedList, setStoredList, clearLocalStorage } = useLocalStorage<MenuItemGroup>(MENU_ITEM_GROUP_KEY)
 
    const idlessOrders = storedList.map((order) => omit(['id'], order)) // removing id property to group equal orders together
-   const ids = storedList.map((order) => order.id)
    const uniqueOrders = uniq(idlessOrders) // unique equal orders
    // counting amount of each unique equal order
    const indexes = idlessOrders.map((idless) =>
@@ -49,21 +48,21 @@ export default function OrderPage() {
       setStoredList(newOrder)
    }
 
-   const linkToItemsPage = (e: Omit<MenuItemGroup, 'id'>, quant: number): string => {
-      const d = menuItems.find((item) => e.menuItemId === item.id)
+   const linkToItemsPage = (menuItem: Omit<MenuItemGroup, 'id'>, quant: number): string => {
+      const d = menuItems.find((item) => menuItem.menuItemId === item.id)
       const textCategoryId = d ? d.categoryId : ''
 
-      const is = storedList.filter((order) => equals(omit(['id'], order), e))
+      const is = storedList.filter((order) => equals(omit(['id'], order), menuItem))
       const ids = is.map((order) => order.id).join('-')
       const textIds = `&itemsIds=${ids}` // this variable holds the ids of the order that holds equals items
 
       const textQuantity = `&quantity=${quant}`
 
-      const t = e.extraToppingIds ? e.extraToppingIds.join('-') : ''
-      const s = e.extraSauceIds ? e.extraSauceIds.join('-') : ''
+      const t = menuItem.extraToppingIds ? menuItem.extraToppingIds.join('-') : ''
+      const s = menuItem.extraSauceIds ? menuItem.extraSauceIds.join('-') : ''
       const textBoxes = `${t}-${s}` === '-' ? '' : `&boxes=${t}-${s}`
 
-      return `/item?itemId=${e.menuItemId}&catId=${textCategoryId}${textIds}${textQuantity}${textBoxes}`
+      return `/item?itemId=${menuItem.menuItemId}&catId=${textCategoryId}${textIds}${textQuantity}${textBoxes}`
    }
 
    return (
@@ -126,7 +125,6 @@ export default function OrderPage() {
                      id={`o-${String(idx)}`}
                      className={`relative`}
                      onClick={() => deleteOrder(e)}
-                     data-deleter={ids.map((id) => `${id} `)}
                   >
                      <FaWindowClose size={20} />
                   </div>
