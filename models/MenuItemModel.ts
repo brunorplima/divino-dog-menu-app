@@ -3,7 +3,7 @@ import * as R from 'ramda'
 import { db } from '../firebase/app'
 import { collection, deleteDoc, doc, getDoc, onSnapshot, query, Query, setDoc, Unsubscribe } from "firebase/firestore";
 import Model from './Model';
-import { generateID } from '../utils/modelHelper';
+import { generateID, removeOutdatedPromotion } from '../utils/modelHelper';
 
 export default class MenuItemModel extends Model<MenuItem> {
 
@@ -58,6 +58,7 @@ export default class MenuItemModel extends Model<MenuItem> {
                menuItem.promoPrice.dateLimit = menuItem.promoPrice.dateLimit.toDate()
             }
             const menuItemModel = new MenuItemModel(menuItem as MenuItem)
+            removeOutdatedPromotion(menuItemModel)
             menuItems.push(menuItemModel)
          })
          setFunction(menuItems)
@@ -131,6 +132,12 @@ export default class MenuItemModel extends Model<MenuItem> {
 
    modify(values: Partial<Omit<MenuItem, 'id'>>) {
       this.menuItem = R.mergeRight(this.values(), values)
+   }
+
+   dissoc(keys: Array<keyof Omit<MenuItem, 'id' | 'name' | 'price' | 'isAvailable' | 'listOrder' | 'categoryId'>>) {
+      keys.forEach(key => {
+         this.menuItem = R.dissoc(key, this.menuItem)
+      })
    }
 
    removeProp(prop: 'optionIds' | 'toppingIds' | 'sauceIds' | 'description' | 'img' | 'promoPrice') {
