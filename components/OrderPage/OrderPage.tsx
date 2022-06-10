@@ -80,6 +80,11 @@ export default function OrderPage() {
          >
             <div className={`${style.hideScroller} text-left`}>Seu Pedido</div>
          </div>
+         {storedList.length === 0 && (
+            <div className='text-4xl'>
+               Você não fez nenhum pedido ainda, volte ao menu e faça seu pedido.
+            </div>
+         )}
          {uniqueOrders.map((e, idx) => (
             <div key={e.menuItemId + String(idx)} id={String(idx)}>
                <div
@@ -148,17 +153,18 @@ export default function OrderPage() {
          >
             <div className='text-left'>
                <Link href={`${storedList.length !== 0 ? '/' : ''}`}>
-                  <a
-                     className='rounded-lg'
+                  <button
+                     className='rounded-lg font-semibold'
                      style={
                         storedList.length !== 0
                            ? { background: '#29fd53', color: 'black', padding: '0.70rem' }
                            : { background: 'lightgray', color: 'gray', padding: '0.70rem' }
                      }
-                     onClick={() => sendOrderData(storedList)}
+                     disabled={storedList.length === 0}
+                     onClick={() => sendOrderData(storedList, clearLocalStorage)}
                   >
                      Confirmar Pedido
-                  </a>
+                  </button>
                </Link>
             </div>
             <div className='text-right'>{fotmatPrice(totalBill)}</div>

@@ -4,7 +4,7 @@ import { setLocalStorageItem } from '../../utils/localStorageHelper'
 
 export const ORDER_KEY = 'orderData'
 
-function sendOrderData(customerOrder: MenuItemGroup[], delivery = false) {
+function sendOrderData(customerOrder: MenuItemGroup[], func: () => void, delivery = false) {
    const order: Order = {
       id: '',
       totalPrice: 0,
@@ -18,6 +18,7 @@ function sendOrderData(customerOrder: MenuItemGroup[], delivery = false) {
 
    try {
       orderData.save()
+      func()
       const orderId = orderData.id
       setLocalStorageItem(ORDER_KEY, orderId)
       console.log(`Order saved under the ${orderId} id`)

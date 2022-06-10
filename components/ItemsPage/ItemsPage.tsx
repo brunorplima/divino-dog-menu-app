@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect, useState } from 'react'
+import { Fragment, useContext, useState } from 'react'
 import { menuContext } from '../contexts/MenuProvider'
 import AddOns from './AddOns'
 import styles from './ItemsPage.module.scss'
