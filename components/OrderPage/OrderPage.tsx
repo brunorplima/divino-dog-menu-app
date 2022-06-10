@@ -82,7 +82,7 @@ export default function OrderPage() {
          </div>
          {storedList.length === 0 && (
             <div className='text-4xl'>
-               Você não fez nenhum pedido ainda, volte ao menu e faça seu pedido.
+               Você não selecionou nenhum item ainda, volte ao menu e faça seu pedido.
             </div>
          )}
          {uniqueOrders.map((e, idx) => (
