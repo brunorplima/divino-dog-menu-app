@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import AdminCanceledOrders from '../../components/book/AdminCanceledOrders'
 import AdminProductsSection from '../../components/book/AdminProductsSection'
 import AdminSettingsSection from '../../components/book/AdminSettingsSection'
 import OrderManager from '../../components/book/OrderManager'
@@ -16,6 +17,7 @@ const AdminPage = () => {
             {section === 'orders' && <OrderManager />}
             {section === 'products' && <AdminProductsSection />}
             {section === 'settings' && <AdminSettingsSection />}
+            {section === 'canceledOrders' && <AdminCanceledOrders />}
          </AccountFrame>
       </WithSecureAdminAccess>
    )
