@@ -295,6 +295,7 @@ const AdminProductsSection = () => {
                               description={item.description}
                               img={item.img ? item.img : ''}
                               onView={() => setCurrentMenuItem({ item, action: 'view' })}
+                              promotionalPrice={item.promoPrice?.price}
                            />
                         </Fragment>
                      )
