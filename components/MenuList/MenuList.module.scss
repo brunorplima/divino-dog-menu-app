@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;800;900&display=swap');
 
 .menuGeneral {
    font-family: Nunito;
@@ -17,7 +17,8 @@
 
    .menuContent {
       scroll-behavior: smooth;
-      height: 75vh;
+      height: 80vh;
+      padding-bottom: 20vh;
 
       /* Hiding scrollbars */
       -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
