@@ -97,7 +97,7 @@ export default function OrderPage() {
                   }}
                >
                   <div>{counter[idx]}x</div>
-                  <Link href={linkToItemsPage(e, counter[idx])}>
+                  <Link href={linkToItemsPage(e, counter[idx])} passHref>
                      <div>
                         <div className='font-semibold'>{findItemName(menuItems, e.menuItemId)}</div>
                         <div style={{ color: 'lightgray', fontSize: '0.85rem' }}>
@@ -150,7 +150,7 @@ export default function OrderPage() {
             }}
          >
             <div className='text-left'>
-               <Link href={`${storedList.length !== 0 ? '/' : ''}`}>
+               <Link href={`${storedList.length !== 0 ? '/' : ''}`} passHref>
                   <button
                      className='rounded-lg font-semibold'
                      style={
