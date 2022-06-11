@@ -28,6 +28,7 @@ export interface Topping {
    readonly id: string
    readonly name: string
    readonly isAvailable: boolean
+   readonly canBeExtra: boolean
    readonly price?: number
 }
 
@@ -36,6 +37,7 @@ export interface Sauce {
    readonly id: string
    readonly name: string
    readonly isAvailable: boolean
+   readonly canBeExtra: boolean
    readonly price?: number
 }
 

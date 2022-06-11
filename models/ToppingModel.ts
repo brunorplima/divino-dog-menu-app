@@ -64,6 +64,7 @@ export default class ToppingModel extends Model<Topping> {
    get name()        { return this.topping.name }
    get price()       { return this.topping.price }
    get isAvailable() { return this.topping.isAvailable }
+   get canBeExtra()  { return this.topping.canBeExtra }
 
    values() {
       return this.topping

@@ -1,3 +1,4 @@
+import { has } from 'ramda'
 import React from 'react'
 import MenuItemOptionModel from '../../../models/MenuItemOptionModel'
 import SauceModel from '../../../models/SauceModel'
@@ -25,6 +26,12 @@ const AdminGeneralProductsView: React.FC<Props> = ({ item, associatedMenuItems }
             label='Em estoque'
             info={item.isAvailable ? 'Sim' : 'Não'}
          />
+         {has('canBeExtra', item.values()) && (
+            <ModelStandardFieldInfo
+               label='Adicionável'
+               info={(item as ToppingModel | SauceModel).canBeExtra ? 'Sim' : 'Não'}
+            />
+         )}
          {
             associatedMenuItems && (
                <ModelStandardFieldInfo

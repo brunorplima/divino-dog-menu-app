@@ -12,12 +12,14 @@ interface GeneralProduct {
    name: string
    isAvailable: boolean
    price?: number | ''
+   canBeExtra?: boolean
 }
 
 const initialGeneralProductValues: GeneralProduct = {
    name: '',
    isAvailable: true,
-   price: ''
+   price: '',
+   canBeExtra: false
 }
 
 interface Props {
@@ -42,10 +44,10 @@ const GeneralProductsForm: React.FC<Props> = ({ item, onClose, onCloseWithItem }
             let model: ToppingModel | SauceModel | MenuItemOptionModel | undefined
             switch (onCloseWithItem?.type) {
                case 'toppings':
-                  model = new ToppingModel(nonEmptyValues)
+                  model = new ToppingModel(nonEmptyValues as ToppingModel)
                   break
                case 'sauces':
-                  model = new SauceModel(nonEmptyValues)
+                  model = new SauceModel(nonEmptyValues as SauceModel)
                   break
                case 'menuItemOptions':
                   model = new MenuItemOptionModel(nonEmptyValues)
@@ -108,6 +110,21 @@ const GeneralProductsForm: React.FC<Props> = ({ item, onClose, onCloseWithItem }
                                     checked={values.isAvailable}
                                  />
                                  <label htmlFor="isAvailable">Em estoque</label>
+                              </div>
+                           )}
+                        </Field>
+                        
+                        <Field>
+                           {() => (
+                              <div className="flex gap-3 my-4 text-gray-200 items-center mb-3">
+                                 <input
+                                    type='checkbox'
+                                    name='canBeExtra'
+                                    id='canBeExtra'
+                                    onChange={handleChange}
+                                    checked={values.canBeExtra}
+                                 />
+                                 <label htmlFor="canBeExtra">Adicionável</label>
                               </div>
                            )}
                         </Field>
