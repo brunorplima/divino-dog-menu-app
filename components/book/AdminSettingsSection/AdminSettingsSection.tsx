@@ -195,7 +195,7 @@ const AdminSettingsSection = () => {
                />
             </div>
 
-            <div className='flex flex-col gap-3 my-4 text-gray-200 items-center'>
+            {/* <div className='flex flex-col gap-3 my-4 text-gray-200 items-center'>
                <label htmlFor='unconfirmedOrderExpiryTime' className='flex-1'>
                   <div className='text-lg'>Prazo limite de pedidos não confirmados</div>
                   <div className='text-gray-400'>
@@ -225,7 +225,7 @@ const AdminSettingsSection = () => {
                      </option>
                   ))}
                </select>
-            </div>
+            </div> */}
 
             <div className='flex flex-col gap-3 my-4 text-gray-200'>
                <label htmlFor='aboutUsContent' className='flex-1 '>
