@@ -34,11 +34,6 @@ const ProductItem: React.FC<Props> = ({
       <div className='flex flex-col flex-1 cursor-pointer' onClick={() => onView()}>
          <div className='text-base font-bold text-green-600'>{name}</div>
          <div className='gap-4'>
-            {!!img && (
-               <div className='w-28 mr-4 flex items-center float-left'>
-                  <img alt={name} src={img} />
-               </div>
-            )}
             <div>{description}</div>
             {!!price && <div className='text-green-600'>{priceToString(price)}</div>}
             <div className='flex'>
