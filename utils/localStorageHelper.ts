@@ -2,7 +2,7 @@ import { compose, filter, not, propEq } from "ramda"
 import { MenuItemGroup } from "../models/interfaces"
 import { generateID } from "./modelHelper"
 
-const MENU_ITEM_GROUP_KEY = 'menuItemGroups'
+export const MENU_ITEM_GROUP_KEY = 'menuItemGroups'
 
 export const setLocalStorageItem = <T = {}>(key: string, value: T) => {
    localStorage.setItem(key, JSON.stringify(value))

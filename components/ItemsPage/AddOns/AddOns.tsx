@@ -1,65 +1,96 @@
 import ToppingModel from '../../../models/ToppingModel'
 import SauceModel from '../../../models/SauceModel'
-import { BaseSyntheticEvent, Dispatch, SetStateAction, useRef } from 'react'
 import styles from './AddOns.module.scss'
 import { fotmatPrice } from '../../../utils/dataHelper'
+import useElementRefList from '../../../hooks/useElementRefList'
+import { useState } from 'react'
+import { stringToArray } from '../../../utils/dataHelper'
+import useMultipleStatesManager from '../../../hooks/useMultipleStatesManager'
 
 interface Props {
    addOnIds: string[]
    title: string
    addonList: ToppingModel[] | SauceModel[]
    addOns: string[]
-   setAddOns: Dispatch<SetStateAction<string[]>>
+   setAddOns: React.Dispatch<React.SetStateAction<string[]>>
    price: number
-   setPrice: Dispatch<SetStateAction<number>>
+   setPrice: React.Dispatch<React.SetStateAction<number>>
    minimumPrice: number
+   boxes: string | string[] | undefined
 }
 
-const AddOns = ({ addOnIds, title, addonList, addOns, setAddOns, price, setPrice, minimumPrice }: Props) => {
-   const checkBoxes = useRef<any[]>([])
-   checkBoxes.current = []
-   const appendInput = (el: any) => {
-      if (el && !checkBoxes.current.includes(el)) checkBoxes.current.push(el)
+interface MultipleStates {
+   id: string
+   subTotal: number
+   state: boolean
+   setState: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const AddOns = ({
+   addOnIds,
+   title,
+   addonList,
+   addOns,
+   setAddOns,
+   price,
+   setPrice,
+   minimumPrice,
+   boxes,
+}: Props) => {
+   const { lightBoxes, runLightBoxesState } = useMultipleStatesManager<ToppingModel | SauceModel>(
+      addonList,
+      boxes
+   )
+
+   const { ElementReffed, ElementReffer } = useElementRefList<HTMLInputElement>()
+
+   const changeCheckBoxClass = (element: HTMLElement | null | undefined, change: boolean) => {
+      if (element) {
+         const unmutableClasses = 'grid my-2 p-4 rounded-xl font-medium w-full'
+         const classes = change
+            ? `${styles.itemInfo} ${styles.checkedItemInfo} ${unmutableClasses}`
+            : `${styles.itemInfo} ${unmutableClasses}`
+         element.className = classes
+      }
    }
 
-   const unmutableClasses = 'grid my-2 p-4 rounded-xl font-medium w-full'
-   const changeCheckBoxClass = (element: any, change: boolean) => {
-      const classes = change
-         ? `${styles.itemInfo} ${styles.checkedItemInfo} ${unmutableClasses}`
-         : `${styles.itemInfo} ${unmutableClasses}`
-      element.className = classes
-   }
-
-   const changePrice = (event: BaseSyntheticEvent, value: any) => {
-      const checkerValue = event.currentTarget.name
-      const checker = event.currentTarget.checked
-      const currElId = event.currentTarget.id
-
-      if (checker) {
-         setPrice(price + value)
-         setAddOns([...addOns, checkerValue])
-         checkBoxes.current.forEach((ch) => {
-            ch.id === currElId && changeCheckBoxClass(ch.parentNode.parentNode.parentNode, true)
+   const setAllValues = (priceParsed: number, evaluator: boolean, idEvaluator: string) => {
+      if (evaluator) {
+         setPrice(price + priceParsed)
+         setAddOns([...addOns, idEvaluator])
+         ElementReffed.current.forEach((el) => {
+            el.id === idEvaluator &&
+               changeCheckBoxClass(el.parentElement?.parentElement?.parentElement, true)
          })
       } else {
-         setPrice(price - value < minimumPrice ? minimumPrice : price - value)
-         setAddOns(addOns.filter((a) => a !== checkerValue))
-         checkBoxes.current.forEach((ch) => {
-            ch.id === currElId && changeCheckBoxClass(ch.parentNode.parentNode.parentNode, false)
+         setPrice(price - priceParsed < minimumPrice ? minimumPrice : price - priceParsed)
+         setAddOns(addOns.filter((a) => a !== idEvaluator))
+         ElementReffed.current.forEach((el) => {
+            el.id === idEvaluator &&
+               changeCheckBoxClass(el.parentElement?.parentElement?.parentElement, false)
          })
       }
+   }
+
+   const changePrice = (event: React.MouseEvent<HTMLInputElement, MouseEvent>, value: number) => {
+      const checker = event.currentTarget.checked
+      const currElId = event.currentTarget.id
+      setAllValues(value, checker, currElId)
    }
 
    return (
       <div className={`${styles.topAddons} static`}>
          <div className='my-5 font-semibold'>{title}</div>
          {addonList.map(
-            (item) =>
+            (item, idx) =>
                addOnIds.includes(item.id) &&
                item.isAvailable && (
                   <div
                      key={item.id}
-                     className={`${styles.itemInfo} grid my-2 p-4 rounded-xl font-medium w-full`}
+                     className={`${styles.itemInfo} ${
+                        stringToArray(boxes).includes(item.id) && styles.checkedItemInfo
+                     } grid my-2 p-4 rounded-xl font-medium w-full`}
+                     onClick={(e) => e.target}
                   >
                      <div className='text-base'>
                         <label>{item.name}</label>
@@ -70,14 +101,17 @@ const AddOns = ({ addOnIds, title, addonList, addOns, setAddOns, price, setPrice
                         >
                            <input
                               onClick={(event) => {
+                                 runLightBoxesState(idx)
                                  changePrice(event, item.price ? item.price : 0)
                               }}
+                              onChange={(e) => {}}
                               className='relative block'
                               type='checkbox'
                               id={item.id}
                               name={item.id}
                               value={item.price}
-                              ref={appendInput}
+                              ref={(el) => ElementReffer(el, ElementReffed)}
+                              checked={lightBoxes[idx].state}
                            />
                         </div>
                      </div>

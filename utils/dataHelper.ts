@@ -12,5 +12,10 @@ export const fotmatPrice = (unformatted: number | undefined) => {
    }
 }
 
+export const stringToArray = (urlValue: string | string[] | undefined) => {
+   if (urlValue === undefined) return ['']
+   if (typeof urlValue === 'string') return urlValue.split('-').filter((a) => a !== '')
+   else return urlValue
+}
 export const capitalizeFirstLetter = (word: string) =>
       word.toLowerCase().charAt(0).toUpperCase() + word.slice(1)
