@@ -1,8 +1,11 @@
+import { isNil } from 'ramda'
 import React from 'react'
 import { BsCheck } from 'react-icons/bs'
 import { CgUnavailable } from 'react-icons/cg'
+import { MdOutlineMoneyOff } from 'react-icons/md'
 import { priceToString } from '../../../utils/dataHelper'
 import ListItemEditDelete from '../../verse/ListItemEditDelete'
+import { GoArrowSmallRight } from 'react-icons/go'
 
 interface Props {
    readonly name: string
@@ -10,6 +13,7 @@ interface Props {
    readonly onEdit: () => void
    readonly onDelete?: () => void
    readonly onView?: Function
+   readonly promotionalPrice?: number
    readonly price?: number
    readonly img?: string
    readonly description?: string
@@ -21,6 +25,7 @@ const ProductItem: React.FC<Props> = ({
    onEdit,
    onDelete,
    description,
+   promotionalPrice,
    price,
    isAvailable,
    onView = () => {}
@@ -63,6 +68,14 @@ const ProductItem: React.FC<Props> = ({
                   </>
                )}
             </div>
+            {!isNil(promotionalPrice) && (
+               <div className='flex gap-1'>
+                  <span style={{ transform: 'translateY(2px)' }}><MdOutlineMoneyOff /></span>
+                  <span>{`Promoção vigente`}</span>
+                  <span><GoArrowSmallRight size={20}/></span>
+                  <span>{priceToString(promotionalPrice)}</span>
+               </div>
+            )}
          </div>
       </div>
       <ListItemEditDelete onEdit={onEdit} onDelete={onDelete} />

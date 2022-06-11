@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.4",
+    "axios": "^0.27.2",
     "firebase": "^9.6.11",
     "formik": "^2.2.9",
     "moment": "^2.29.3",
