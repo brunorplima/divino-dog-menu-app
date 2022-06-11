@@ -64,6 +64,7 @@ export default class SauceModel extends Model<Sauce> {
    get name()        { return this.sauce.name }
    get price()       { return this.sauce.price }
    get isAvailable() { return this.sauce.isAvailable }
+   get canBeExtra()  { return this.sauce.canBeExtra }
 
    values() {
       return this.sauce
