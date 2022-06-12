@@ -6,8 +6,6 @@
 
    .fixedMenu {
       font-size: larger;
-      border-bottom: 2px solid white;
-      margin-bottom: 50px;
 
       /* Hiding scrollbars */
       -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
@@ -19,22 +17,14 @@
 
    .menuContent {
       scroll-behavior: smooth;
-      padding-bottom: 20vh;
       height: 80vh;
+      padding-bottom: 20vh;
 
       /* Hiding scrollbars */
       -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
       scrollbar-width: none; /* Hide scrollbar for Firefox */
       &::-webkit-scrollbar {
          display: none; /* Hide scrollbar for Chrome, Safari and Opera */
-      }
-
-      .catContent {
-         margin-bottom: 5rem;
-
-         .catTitle {
-            color: #29fd53;
-         }
       }
    }
 }
