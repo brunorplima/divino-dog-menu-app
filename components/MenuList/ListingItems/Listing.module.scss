@@ -4,19 +4,11 @@ $neonGreen: #39ff14;
 $neonBlue: #4d4dff;
 $neonRed: #ff3131;
 
-.anchorItem {
+.menuItems {
+   border-top: 1px solid white;
+   min-height: 120px;
 
-   .menuItem {
-      background: #444549;
-      padding: 1rem 1.3rem;
-      min-height: 9.375rem;
-
-      .itemTitle {
-         color: white;
-      }
-
-      .neonPrice {
-         color: $neonGreen;
-      }
+   .neonPrice {
+      color: $neonGreen;
    }
 }

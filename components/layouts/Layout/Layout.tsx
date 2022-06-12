@@ -11,7 +11,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
    return (
       <div className='m-auto lg:w-1/2 overflow-scroll'>
          <LoaderComponent />
-         {children}
+         <div className='px-4'>{children}</div>
       </div>
    )
 }
