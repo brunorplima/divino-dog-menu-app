@@ -73,7 +73,7 @@ export default function OrderPage() {
             <div className={`${style.hideScroller} text-left`}>Seu Pedido</div>
          </div>
          {storedList.length === 0 && (
-            <div className='text-4xl'>
+            <div className='text-4xl m-6'>
                Você não selecionou nenhum item ainda, volte ao menu e faça seu pedido.
             </div>
          )}
@@ -122,11 +122,11 @@ export default function OrderPage() {
          <br />
          <br />
          <br />
-         <div className={`${style.bottomPrice} fixed grid grid-cols-2 gap-3 font-semibold mt-12`}>
+         <div className={`${style.bottomPrice} flex justify-between font-semibold mt-12`}>
             <div className='text-left'>
                <Link href={`${storedList.length !== 0 ? '/' : ''}`} passHref>
                   <button
-                     className='rounded-lg font-semibold'
+                     className='rounded-lg font-semibold w-60'
                      style={
                         storedList.length !== 0
                            ? { background: '#29fd53', color: 'black', padding: '0.70rem' }

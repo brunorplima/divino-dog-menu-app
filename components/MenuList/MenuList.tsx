@@ -32,7 +32,7 @@ export default function MenuList() {
          </div>
          <div className={`${style.menuContent} overflow-auto z-10`}>
             {excludeEmptyCategory().map((category) => (
-               <div id={category.name} key={category.id} className={`${style.catContent}`}>
+               <div id={category.name} key={category.id} className={`${style.catContent} mt-12`}>
                   <h2 className={`${style.catTitle} italic text-3xl font-extrabold mb-5 mx-4 text-white`}>
                      {capitalizeFirstLetter(category.name)}
                   </h2>
