@@ -38,8 +38,9 @@ const Dialog: React.FC<Props> = ({
 
             {footer && (
                <div className='p-5 flex justify-end gap-2 pt-0'>
-                  {footer.map(element => (
+                  {footer.map((element, idx) => (
                      <PrimaryButton
+                        key={JSON.stringify(element) + idx}
                         label={element.label}
                         clickHandler={element.onClick}
                      />
