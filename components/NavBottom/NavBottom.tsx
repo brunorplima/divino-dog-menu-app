@@ -1,24 +1,26 @@
-import { Fragment, MouseEvent, useState } from 'react'
+import { Fragment, MouseEvent, useEffect, useMemo, useState } from 'react'
 import { BiCart, BiStore } from 'react-icons/bi'
 import { MdRestaurantMenu } from 'react-icons/md'
-import { BsPersonCircle } from 'react-icons/bs'
+import { AiOutlineFileSync } from 'react-icons/ai'
 import style from './NavBottom.module.scss'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import useElementRefList from '../../hooks/useElementRefList'
 
 export default function NavBottom() {
-   const buttons = [
+   const buttons = useMemo(() => [
       { name: 'Cardápio', icon: <MdRestaurantMenu />, link: '/' },
       { name: 'Pedidos', icon: <BiCart />, link: '/checkout' },
-      { name: 'Sobre nós', icon: <BiStore />, link: '/aboutus' },
-      { name: 'Perfil', icon: <BsPersonCircle />, link: '/login' },
-   ]
+      { name: 'Progresso', icon: <AiOutlineFileSync />, link: '/track_order' },
+      { name: 'Sobre nós', icon: <BiStore />, link: '/aboutus' }
+   ], [])
 
    const router = useRouter()
-   const position = buttons.findIndex((e) => e.link === router.pathname)
+   const [position, setPosition] = useState(buttons.findIndex((e) => e.link === router.pathname))
 
-   const [theStyle, setTheStyle] = useState(`translateX(calc(4.4rem * ${position}))`)
+   useEffect(() => {
+      setPosition(buttons.findIndex((e) => e.link === router.pathname))
+   }, [router])
 
    const { ElementReffed, ElementReffer } = useElementRefList<HTMLDivElement>()
 
@@ -30,7 +32,7 @@ export default function NavBottom() {
             : (el.className = style.button)
       })
 
-      setTheStyle(`translateX(calc(4.4rem * ${event.currentTarget.id}))`)
+      setPosition(parseInt(event.currentTarget.id))
    }
 
    return (
@@ -63,7 +65,7 @@ export default function NavBottom() {
                   </div>
                </Fragment>
             ))}
-            <div className={`${style.indicator} absolute`} style={{ transform: theStyle }}></div>
+            <div className={`${style.indicator} absolute`} style={{ transform: `translateX(calc(4.4rem * ${position}))` }}></div>
          </div>
       </div>
    )
