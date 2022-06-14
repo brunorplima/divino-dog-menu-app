@@ -1,4 +1,7 @@
 import { Fragment, MouseEvent, useEffect, useMemo, useState } from 'react'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import { MenuItemGroup } from '../../models/interfaces'
+import { MENU_ITEM_GROUP_KEY } from '../../utils/localStorageHelper'
 import { BiCart, BiStore } from 'react-icons/bi'
 import { MdRestaurantMenu } from 'react-icons/md'
 import { AiOutlineFileSync } from 'react-icons/ai'
@@ -14,7 +17,7 @@ export default function NavBottom() {
       { name: 'Progresso', icon: <AiOutlineFileSync />, link: '/track_order' },
       { name: 'Sobre nós', icon: <BiStore />, link: '/aboutus' }
    ], [])
-
+   const { storedList } = useLocalStorage<MenuItemGroup>(MENU_ITEM_GROUP_KEY)
    const router = useRouter()
    const [position, setPosition] = useState(buttons.findIndex((e) => e.link === router.pathname))
 
@@ -53,6 +56,9 @@ export default function NavBottom() {
                      <Link href={button.link}>
                         <a className='relative flex justify-center items-center flex-col w-full text-center font-light'>
                            <span className={`${style.icon} relative block text-center`}>
+                              {storedList.length > 0 && button.link === '/checkout' && (
+                                 <div className='absolute -top-3 right-0 text-sm font-bold'>{storedList.length}</div>
+                              )}
                               {button.icon}
                            </span>
                            <span
