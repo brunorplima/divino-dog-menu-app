@@ -68,39 +68,23 @@ export default function OrderPage() {
    return (
       <div className={`${style.orderPageOuterDiv} ${style.hideScroller} font-medium my-12 mb-52`}>
          <div
-            className={`${style.hideScroller} relative font-semibold text-xl my-12`}
-            style={{
-               background: '#29fd53',
-               color: 'black',
-               padding: '1rem 3rem',
-               left: '-1rem',
-               width: '100vw',
-            }}
+            className={`${style.topTitle} ${style.hideScroller} relative font-semibold text-xl my-12 w-screen`}
          >
             <div className={`${style.hideScroller} text-left`}>Seu Pedido</div>
          </div>
          {storedList.length === 0 && (
-            <div className='text-4xl'>
+            <div className='text-4xl m-6'>
                Você não selecionou nenhum item ainda, volte ao menu e faça seu pedido.
             </div>
          )}
          {uniqueOrders.map((e, idx) => (
             <div key={e.menuItemId + String(idx)} id={String(idx)}>
-               <div
-                  className='relative grid gap-3 my-1'
-                  style={{
-                     background: '#444549',
-                     padding: '1rem 1.3rem',
-                     left: '-1rem',
-                     width: '100vw',
-                     gridTemplateColumns: '1fr 3fr 2fr 1fr',
-                  }}
-               >
+               <div className={`${style.singleItem} relative grid gap-3 my-1 w-screen`}>
                   <div>{counter[idx]}x</div>
                   <Link href={linkToItemsPage(e, counter[idx])} passHref>
                      <div>
                         <div className='font-semibold'>{findItemName(menuItems, e.menuItemId)}</div>
-                        <div style={{ color: 'lightgray', fontSize: '0.85rem' }}>
+                        <div className={`${style.itemInfo}`}>
                            {!!e.extraSauceIds && e.extraSauceIds.length !== 0 && (
                               <>
                                  <div className='font-semibold text-base'>Molhos</div>
@@ -138,21 +122,11 @@ export default function OrderPage() {
          <br />
          <br />
          <br />
-         <div
-            className='fixed grid grid-cols-2 gap-3 font-semibold mt-12'
-            style={{
-               background: '#444549',
-               borderTop: '5px solid #222327',
-               padding: '1rem 3rem',
-               left: '-1rem',
-               right: '-1rem',
-               bottom: '7rem',
-            }}
-         >
+         <div className={`${style.bottomPrice} flex justify-between font-semibold mt-12`}>
             <div className='text-left'>
                <Link href={`${storedList.length !== 0 ? '/' : ''}`} passHref>
                   <button
-                     className='rounded-lg font-semibold'
+                     className='rounded-lg font-semibold w-60'
                      style={
                         storedList.length !== 0
                            ? { background: '#29fd53', color: 'black', padding: '0.70rem' }
