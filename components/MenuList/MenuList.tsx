@@ -17,6 +17,8 @@ export default function MenuList() {
       return R.reject(R.isNil, newCategories)
    }
 
+   const withoutSpaces = (str: string) => str.replace(' ', '')
+
    return (
       <div className={`${style.menuGeneral} font-medium text-gray-300 mb-10`}>
          <div
@@ -25,7 +27,7 @@ export default function MenuList() {
             <div className={`${style.listCategories} static z-20`}>
                {excludeEmptyCategory().map((category) => (
                   <Fragment key={category.id}>
-                     <MenuCategories name={category.name} />
+                     <MenuCategories name={category.name} link={withoutSpaces(category.name)} />
                   </Fragment>
                ))}
             </div>
@@ -34,7 +36,7 @@ export default function MenuList() {
          <br />
          <div className={`${style.menuContent} overflow-auto z-10`}>
             {excludeEmptyCategory().map((category) => (
-               <div id={category.name} key={category.id}>
+               <div id={withoutSpaces(category.name)} key={category.id}>
                   <h2 className={`${style.categories} text-2xl font-extrabold mb-5 text-white`}>
                      {capitalizeFirstLetter(category.name)}
                   </h2>
