@@ -2,9 +2,9 @@ import { MenuItemGroup, Order } from '../../models/interfaces'
 import OrderModel from '../../models/OrderModel'
 import { setLocalStorageItem } from '../../utils/localStorageHelper'
 
-export const ORDER_KEY = 'orderData'
+export const CURRENT_ORDERS_KEY = 'currentOrderIds'
 
-function sendOrderData(items: MenuItemGroup[], func: () => void, isDelivery = false) {
+function sendOrderData(items: MenuItemGroup[], func: (orderId: string) => void, isDelivery = false) {
    const order: Pick<Order, 'items' | 'isDelivery'> = {
       items,
       isDelivery,
@@ -14,11 +14,9 @@ function sendOrderData(items: MenuItemGroup[], func: () => void, isDelivery = fa
 
    try {
       orderData.save()
-      func()
-      const orderId = orderData.id
-      setLocalStorageItem(ORDER_KEY, orderId)
-   } catch (error) {
-      console.log(error)
+      func(orderData.id)
+   } catch (error: any) {
+      console.log(error.message)
    }
 }
 
