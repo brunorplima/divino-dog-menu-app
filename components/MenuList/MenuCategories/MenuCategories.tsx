@@ -7,7 +7,7 @@ interface Props {
 export default function MenuCategories({ name }: Props) {
    return (
       <>
-         <div className='inline-block m-2.5 px-10 py-2.5'>
+         <div className='inline-block mx-10 my-2.5'>
             <a href='#'>{capitalizeFirstLetter(name)}</a>
          </div>
       </>

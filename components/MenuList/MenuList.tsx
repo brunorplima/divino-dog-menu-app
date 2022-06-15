@@ -22,7 +22,7 @@ export default function MenuList() {
          <div
             className={`${style.fixedMenu} text-white font-extrabold whitespace-nowrap overflow-x-scroll`}
          >
-            <div className={`${style.listCategories} static z-20`}>
+            <div className={`static z-20`}>
                {excludeEmptyCategory().map((category) => (
                   <Fragment key={category.id}>
                      <MenuCategories name={category.name} />
@@ -30,12 +30,10 @@ export default function MenuList() {
                ))}
             </div>
          </div>
-         <hr />
-         <br />
          <div className={`${style.menuContent} overflow-auto z-10`}>
             {excludeEmptyCategory().map((category) => (
-               <div id={category.name} key={category.id}>
-                  <h2 className={`${style.categories} text-2xl font-extrabold mb-5 text-white`}>
+               <div id={category.name} key={category.id} className={`${style.catContent} mt-12`}>
+                  <h2 className={`${style.catTitle} italic text-3xl font-extrabold mb-5 mx-4 text-white`}>
                      {capitalizeFirstLetter(category.name)}
                   </h2>
                   {menuItems

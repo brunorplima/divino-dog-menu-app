@@ -9,13 +9,17 @@ interface Props {
 export default function Listing({ item }: Props) {
    return (
       <Link href={`/item?itemId=${item.id}&catId=${item.categoryId}`}>
-         <a className='cursor-pointer'>
-            <div className={`${style.menuItems} py-5 mb-5 relative`}>
-               <div>
-                  <h3 className='font-extrabold'>{item.name}</h3>
+         <a className={`${style.anchorItem} relative bg-white cursor-pointer`}>
+            <div>
+               <div className={`${style.menuItem} relative grid mb-8 w-screen`}>
+                  <div>
+                     <h3 className={`${style.itemTitle} font-extrabold`}>{item.name}</h3>
+                  </div>
+                  <div>{item.description}</div>
+                  <div className={`${style.neonPrice} relative bottom-0 font-semibold`}>
+                     R$ {item.price}
+                  </div>
                </div>
-               <div>{item.description}</div>
-               <div className={`${style.neonPrice} absolute bottom-0`}>R$ {item.price}</div>
             </div>
          </a>
       </Link>
