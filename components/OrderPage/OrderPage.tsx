@@ -8,14 +8,17 @@ import { FaWindowClose } from 'react-icons/fa'
 import Link from 'next/link'
 import { equals, omit, uniq } from 'ramda'
 import useLocalStorage from '../../hooks/useLocalStorage'
-import sendOrderData from './sendOrderData'
+import sendOrderData, { CURRENT_ORDERS_KEY } from './sendOrderData'
+import useSimpleLocalStorage from '../../hooks/useSimpleLocalStorage'
+import { useRouter } from 'next/router'
 
 export default function OrderPage() {
    let totalBill = 0
 
+   const router = useRouter()
    const { menuItems, toppings, sauces } = useContext(menuContext)
-
    const { storedList, setStoredList, clearLocalStorage } = useLocalStorage<MenuItemGroup>(MENU_ITEM_GROUP_KEY)
+   const { addItem } = useSimpleLocalStorage(CURRENT_ORDERS_KEY)
 
    const idlessOrders = storedList.map((order) => omit(['id'], order)) // removing id property to group equal orders together
    const uniqueOrders = uniq(idlessOrders) // unique equal orders
@@ -68,39 +71,23 @@ export default function OrderPage() {
    return (
       <div className={`${style.orderPageOuterDiv} ${style.hideScroller} font-medium my-12 mb-52`}>
          <div
-            className={`${style.hideScroller} relative font-semibold text-xl my-12`}
-            style={{
-               background: '#29fd53',
-               color: 'black',
-               padding: '1rem 3rem',
-               left: '-1rem',
-               width: '100vw',
-            }}
+            className={`${style.topTitle} ${style.hideScroller} relative font-semibold text-xl my-12 w-screen`}
          >
             <div className={`${style.hideScroller} text-left`}>Seu Pedido</div>
          </div>
          {storedList.length === 0 && (
-            <div className='text-4xl'>
-               Você não selecionou nenhum item ainda, volte ao menu e faça seu pedido.
+            <div className='text-4xl m-6'>
+               Você não selecionou nenhum item ainda.
             </div>
          )}
          {uniqueOrders.map((e, idx) => (
             <div key={e.menuItemId + String(idx)} id={String(idx)}>
-               <div
-                  className='relative grid gap-3 my-1'
-                  style={{
-                     background: '#444549',
-                     padding: '1rem 1.3rem',
-                     left: '-1rem',
-                     width: '100vw',
-                     gridTemplateColumns: '1fr 3fr 2fr 1fr',
-                  }}
-               >
+               <div className={`${style.singleItem} relative grid gap-3 my-1 w-screen`}>
                   <div>{counter[idx]}x</div>
                   <Link href={linkToItemsPage(e, counter[idx])} passHref>
                      <div>
                         <div className='font-semibold'>{findItemName(menuItems, e.menuItemId)}</div>
-                        <div style={{ color: 'lightgray', fontSize: '0.85rem' }}>
+                        <div className={`${style.itemInfo}`}>
                            {!!e.extraSauceIds && e.extraSauceIds.length !== 0 && (
                               <>
                                  <div className='font-semibold text-base'>Molhos</div>
@@ -139,7 +126,7 @@ export default function OrderPage() {
          <br />
          <br />
          <div
-            className='fixed grid grid-cols-2 gap-3 font-semibold mt-12'
+            className='fixed flex justify-between gap-3 font-semibold mt-12'
             style={{
                background: '#444549',
                borderTop: '5px solid #222327',
@@ -150,20 +137,22 @@ export default function OrderPage() {
             }}
          >
             <div className='text-left'>
-               <Link href={`${storedList.length !== 0 ? '/' : ''}`} passHref>
-                  <button
-                     className='rounded-lg font-semibold'
-                     style={
-                        storedList.length !== 0
-                           ? { background: '#29fd53', color: 'black', padding: '0.70rem' }
-                           : { background: 'lightgray', color: 'gray', padding: '0.70rem' }
-                     }
-                     disabled={storedList.length === 0}
-                     onClick={() => sendOrderData(storedList, clearLocalStorage)}
-                  >
-                     Confirmar Pedido
-                  </button>
-               </Link>
+               <button
+                  className='rounded-lg font-semibold'
+                  style={
+                     storedList.length !== 0
+                        ? { background: '#29fd53', color: 'black', padding: '0.70rem' }
+                        : { background: 'lightgray', color: 'gray', padding: '0.70rem' }
+                  }
+                  disabled={storedList.length === 0}
+                  onClick={() => sendOrderData(storedList, (orderId: string) => {
+                     addItem(orderId)
+                     router.push('/track_order?justOrdered=true')
+                     clearLocalStorage()
+                  })}
+               >
+                  Confirmar Pedido
+               </button>
             </div>
             <div className='text-right'>{fotmatPrice(totalBill)}</div>
          </div>

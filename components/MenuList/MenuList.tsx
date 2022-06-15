@@ -24,7 +24,7 @@ export default function MenuList() {
          <div
             className={`${style.fixedMenu} text-white font-extrabold whitespace-nowrap overflow-x-scroll`}
          >
-            <div className={`${style.listCategories} static z-20`}>
+            <div className={`static z-20`}>
                {excludeEmptyCategory().map((category) => (
                   <Fragment key={category.id}>
                      <MenuCategories name={category.name} link={withoutSpaces(category.name)} />
@@ -32,8 +32,6 @@ export default function MenuList() {
                ))}
             </div>
          </div>
-         <hr />
-         <br />
          <div className={`${style.menuContent} overflow-auto z-10`}>
             {excludeEmptyCategory().map((category) => (
                <div id={withoutSpaces(category.name)} key={category.id}>

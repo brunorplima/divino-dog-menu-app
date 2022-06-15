@@ -9,8 +9,9 @@ import SettingsProvider from '../components/contexts/SettingsProvider'
 import NavBottom from '../components/NavBottom'
 import { useRouter } from 'next/router'
 
+const navBottomLinks = ['/', '/checkout', '/track_order', '/aboutus']
+
 function MyApp({ Component, pageProps }: AppProps) {
-   const navBottomLinks = ['/', '/checkout', '/aboutus']
    const router = useRouter()
 
    return (
