@@ -1,5 +1,10 @@
 .allDiv {
    height: 88vh;
+
+   a {
+      color: #29fd53;
+      text-decoration: underline;
+   }
 }
 
 @media (max-height: 850px) {
