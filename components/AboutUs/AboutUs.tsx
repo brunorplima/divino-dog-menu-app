@@ -47,7 +47,7 @@ function AboutUs() {
                      Bruno é um programador fullstack muito experiente. Socialista convicto e
                      cristão reformado, reside na terra do pé grande, o Canadá. Apoiou as políticas
                      de Trudeau durante a pandemia e tomou 7 doses de vacinas de diferentes marcas
-                     só por precaução: &quot;Vai que a gente pega isso daí e vira borboleta!?&quot;{' '}
+                     só por precaução: &quot;Vai que a gente pega isso daí e vira borboleta!?&quot;
                      <a href='https://brunoreactdeveloper.web.app/' target='_blank'>
                         You can also check me online as well
                      </a>
