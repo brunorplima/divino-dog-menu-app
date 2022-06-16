@@ -23,10 +23,12 @@ const ItemsPage = (props: Props) => {
    const { menuItems, toppings, sauces } = useContext(menuContext)
 
    const definePrice = () => {
-      let price: number
+      let price: number = 0
 
       const myItem = menuItems.find((item) => item.id === itemId)
-      price = myItem !== undefined ? myItem.price : 0
+      if (myItem !== undefined) {
+         price += myItem.promoPrice !== undefined ? myItem.promoPrice.price : myItem.price
+      }
 
       const myAddOns = stringToArray(boxes)
       myAddOns.forEach((add) => {
@@ -43,7 +45,7 @@ const ItemsPage = (props: Props) => {
    const theItem = menuItems.find((item) => item.id === itemId)
    const minimumPrice = theItem !== undefined ? theItem.price : 0
    const [addOns, setAddOns] = useState<string[]>(stringToArray(boxes))
-   const [price, setPrice] = useState(definePrice()) //(theItem ? theItem.price : 0)
+   const [price, setPrice] = useState(definePrice())
    const [quant, setQuant] = useState(() => {
       if (quantity === undefined) return 1
       if (typeof quantity === 'object') return 1

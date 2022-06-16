@@ -5,6 +5,9 @@ import { menuContext } from '../contexts/MenuProvider'
 import style from './MenuList.module.scss'
 import * as R from 'ramda'
 import { capitalizeFirstLetter } from '../../utils/dataHelper'
+import { PromoPrice } from '../../models/interfaces'
+import MenuItemModel from '../../models/MenuItemModel'
+import CategoryModel from '../../models/CategoryModel'
 
 export default function MenuList() {
    const { menuItems, categories } = useContext(menuContext)
@@ -12,12 +15,23 @@ export default function MenuList() {
    const excludeEmptyCategory = () => {
       const sortedCategories = categories.sort((a, b) => a.listOrder - b.listOrder)
       const newCategories = sortedCategories.map(
-         (cat) => menuItems.find((x) => x.categoryId === cat.id) && cat
+         (cat) => menuItems.find((x) => x.categoryId === cat.id || x.promoPrice) && cat
       )
       return R.reject(R.isNil, newCategories)
    }
 
    const withoutSpaces = (str: string) => str.replace(' ', '')
+
+   const checkCategoriesAndPromo = (item: MenuItemModel, category: CategoryModel) => {
+      if (item.promoPrice !== undefined && category.name === 'Promoções') return true
+      if (
+         item.promoPrice === undefined &&
+         category.name !== 'Promoções' &&
+         category.id === item.categoryId
+      )
+         return true
+      else return false
+   }
 
    return (
       <div className={`${style.menuGeneral} font-medium text-gray-300 mb-10`}>
@@ -40,14 +54,11 @@ export default function MenuList() {
                   </h2>
                   {menuItems
                      .sort((a, b) => a.listOrder - b.listOrder)
-                     .map(
-                        (item) =>
-                           category.id === item.categoryId && (
-                              <Fragment key={item.id}>
-                                 <ListingItems item={item} />
-                              </Fragment>
-                           )
-                     )}
+                     .map((item) => (
+                        <Fragment key={item.id}>
+                           {checkCategoriesAndPromo(item, category) && <ListingItems item={item} />}
+                        </Fragment>
+                     ))}
                </div>
             ))}
          </div>

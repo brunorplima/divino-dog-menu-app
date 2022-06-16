@@ -1,6 +1,7 @@
 import style from './Listing.module.scss'
 import MenuItemModel from '../../../models/MenuItemModel'
 import Link from 'next/link'
+import { fotmatPrice } from '../../../utils/dataHelper'
 
 interface Props {
    item: MenuItemModel
@@ -17,7 +18,7 @@ export default function Listing({ item }: Props) {
                   </div>
                   <div>{item.description}</div>
                   <div className={`${style.neonPrice} relative bottom-0 font-semibold`}>
-                     R$ {item.price}
+                     {item.promoPrice !== undefined ? fotmatPrice(item.promoPrice.price) : fotmatPrice(item.price)}
                   </div>
                </div>
             </div>
