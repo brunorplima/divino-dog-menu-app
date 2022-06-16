@@ -1,4 +1,4 @@
-import { defaultTo, filter, join, pluck, propEq } from 'ramda'
+import { defaultTo, filter, has, join, pluck, propEq } from 'ramda'
 import React, { Fragment, useContext, useMemo, useState } from 'react'
 import ProductItem from '../../chapter/ProductItem'
 import { menuContext } from '../../contexts/MenuProvider'
@@ -223,16 +223,19 @@ const AdminProductsSection = () => {
                <AdminGeneralProductsView
                   item={currentProduct.item}
                   associatedMenuItems={tsfRelatedMenuItems}
+                  hasCanBeExtra={currentProduct.type !== 'menuItemOptions'}
                />
             )}
             {currentProduct && currentProduct.action === 'edit' && (
                <GeneralProductsForm
                   item={currentProduct.item}
+                  hasCanBeExtra={currentProduct.type !== 'menuItemOptions'}
                   onClose={() => setCurrentProduct({ ...currentProduct, action: 'view' })}
                />
             )}
             {currentProduct && currentProduct.action === 'create' && (
                <GeneralProductsForm
+                  hasCanBeExtra={currentProduct.type !== 'menuItemOptions'}
                   onCloseWithItem={{
                      type: currentProduct.type,
                      close: (item: ToppingModel | SauceModel | MenuItemOptionModel) =>
