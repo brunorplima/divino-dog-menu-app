@@ -84,7 +84,8 @@ const AddOns = ({
          {addonList.map(
             (item, idx) =>
                addOnIds.includes(item.id) &&
-               item.isAvailable && (
+               item.isAvailable &&
+               item.canBeExtra && (
                   <div
                      key={item.id}
                      className={`${styles.itemInfo} ${
