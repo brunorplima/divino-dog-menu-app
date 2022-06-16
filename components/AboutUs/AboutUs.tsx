@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useContext } from 'react'
 import { settingsContext } from '../contexts/SettingsProvider'
 import LogoComponent from '../verse/LogoComponent/LogoComponent'
@@ -47,10 +48,11 @@ function AboutUs() {
                      Bruno é um programador fullstack muito experiente. Socialista convicto e
                      cristão reformado, reside na terra do pé grande, o Canadá. Apoiou as políticas
                      de Trudeau durante a pandemia e tomou 7 doses de vacinas de diferentes marcas
-                     só por precaução: &quot;Vai que a gente pega isso daí e vira borboleta!?&quot;&nbsp;
-                     <a href='https://brunoreactdeveloper.web.app/' target='_blank'>
-                        Você também pode me encontrar online
-                     </a>
+                     só por precaução: &quot;Vai que a gente pega isso daí e vira
+                     borboleta!?&quot;&nbsp;
+                     <Link href='https://brunoreactdeveloper.web.app/'>
+                        <a target='_blank'>Você também pode me encontrar online</a>
+                     </Link>
                      .
                   </p>
                </div>
