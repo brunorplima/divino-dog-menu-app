@@ -100,7 +100,7 @@ const AdminProductsSection = () => {
    const getActive = (value: Tab) => (tab === value ? 'bg-gray-700' : 'active:bg-gray-500')
 
    return (
-      <div className='text-gray-200'>
+      <div className='text-gray-200 max-w-3xl ml-auto mr-auto mb-10'>
          <div className="grid place-content-center my-4 relative">
             <h1 className='text-xl'>Produtos</h1>
             <div className=''>
