@@ -6,8 +6,13 @@ import MenuProvider from '../components/contexts/MenuProvider'
 import AuthProvider from '../components/contexts/AuthProvider'
 import AdminProvider from '../components/contexts/AdminProvider'
 import SettingsProvider from '../components/contexts/SettingsProvider'
-import NavBottom from '../components/NavBottom'
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
+
+const NonSSRNavBottom = dynamic(
+   () => import('../components/NavBottom'),
+   { ssr: false }   
+)
 
 const navBottomLinks = ['/', '/checkout', '/track_order', '/aboutus']
 
@@ -20,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <SettingsProvider>
                <MenuProvider>
                   <Component {...pageProps} />
-                  {navBottomLinks.includes(router.pathname) && <NavBottom />}
+                  {navBottomLinks.includes(router.pathname) && <NonSSRNavBottom />}
                </MenuProvider>
             </SettingsProvider>
          </AdminProvider>
