@@ -8,7 +8,7 @@ const AdminCanceledOrders = () => {
    return (
       <div className='p-4'>
          <div
-            className='flex flex-col items-center gap-3 text-gray-300 overflow-y-scroll mb-4 border border-gray-200 rounded p-2'
+            className='flex flex-col items-center gap-3 text-gray-300 overflow-y-scroll mb-4 border border-gray-200 rounded p-2 max-w-sm ml-auto mr-auto'
             style={{ minWidth: 280 }}
          >
             <h2 className='text-2xl py-3'>Pedidos Cancelados</h2>
