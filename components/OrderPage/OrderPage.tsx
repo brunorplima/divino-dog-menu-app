@@ -11,6 +11,7 @@ import useLocalStorage from '../../hooks/useLocalStorage'
 import sendOrderData, { CURRENT_ORDERS_KEY } from './sendOrderData'
 import useSimpleLocalStorage from '../../hooks/useSimpleLocalStorage'
 import { useRouter } from 'next/router'
+import LoaderComponent from '../verse/LoaderComponent'
 
 export default function OrderPage() {
    let totalBill = 0
@@ -156,6 +157,8 @@ export default function OrderPage() {
             </div>
             <div className='text-right'>{fotmatPrice(totalBill)}</div>
          </div>
+
+         <LoaderComponent show={menuItems.length === 0}/>
       </div>
    )
 }

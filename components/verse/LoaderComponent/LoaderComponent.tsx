@@ -1,30 +1,21 @@
-import { useEffect, useState } from "react"
-import PuffLoader from "react-spinners/PuffLoader"
+import PuffLoader from 'react-spinners/PuffLoader'
 
-const loaderLayout = (loading: boolean) => {
-   return (
-      <>
+interface Props {
+   readonly show: boolean
+   readonly size?: number
+}
+
+const LoaderComponent: React.FC<Props> = ({ show, size = 60 }) => (
+   <>
+      {show && (
          <div
-            className="text-2xl font-bold text-white flex justify-center items-center h-screen"
-            style={{
-               background: "#222327",
-               zIndex: 2,
-            }}
+            className='text-2xl absolute w-screen top-0 left-0 font-bold text-white flex justify-center items-center h-screen z-10'
+            style={{ background: '#222327' }}
          >
-            <PuffLoader color={"#29fd53"} loading={loading} size={60} />
+            <PuffLoader color={'#29fd53'} loading={true} size={size} />
          </div>
-      </>
-   )
-}
-
-const LoaderComponent = () => {
-   const [loading, setLoading] = useState(true)
-
-   useEffect(() => {
-      setLoading(false)
-   }, [])
-
-   return <>{loading && loaderLayout(loading)}</>
-}
+      )}
+   </>
+)
 
 export default LoaderComponent
