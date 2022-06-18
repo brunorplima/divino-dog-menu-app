@@ -19,15 +19,15 @@ const AdminSettingsSection = () => {
 
    if (!settingsModel) return null
    return (
-      <div className='text-gray-200 mb-14'>
+      <div className='text-gray-200 mb-14 max-w-3xl ml-auto mr-auto'>
          <div className='grid place-content-center my-4'>
             <h1 className='text-xl'>Configurações</h1>
          </div>
 
          <div
-            className='rounded border-2 border-gray-700 p-3 rounded-tl-none border-t-8 text-sm flex flex-col gap-2'
+            className='rounded border-2 border-gray-700 p-3 rounded-tl-none border-t-8 text-sm flex flex-col gap-2 items-center'
          >
-            <div className='flex justify-between gap-3 my-4 text-gray-200 items-center'>
+            <div className='flex justify-between gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
                <label htmlFor='orderDetailsOpenByDefault' className='flex-1'>
                   <div className='text-lg'>Detalhes de pedidos abertos</div>
                   <div className='text-gray-400'>
@@ -54,7 +54,7 @@ const AdminSettingsSection = () => {
                />
             </div>
             
-            <div className='flex justify-between gap-3 my-4 text-gray-200 items-center'>
+            <div className='flex justify-between gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
                <label htmlFor='allowUserToAddToppings' className='flex-1'>
                   <div className='text-lg'>Permitir usuário adicionar ingredientes</div>
                   <div className='text-gray-400'>
@@ -81,7 +81,7 @@ const AdminSettingsSection = () => {
                />
             </div>
 
-            <div className='flex flex-col gap-3 my-4 text-gray-200 items-center'>
+            <div className='flex flex-col gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
                <label htmlFor='maxAmountOfAddons' className='flex-1'>
                   <div className='text-lg'>Adicionais permitidos</div>
                   <div className='text-gray-400'>
@@ -111,7 +111,7 @@ const AdminSettingsSection = () => {
                </select>
             </div>
 
-            <div className='flex justify-between gap-3 my-4 text-gray-200 items-center'>
+            <div className='flex justify-between gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
                <label htmlFor='allowUserToRemoveToppings' className='flex-1'>
                   <div className='text-lg'>Permitir usuário remover ingredientes</div>
                   <div className='text-gray-400'>
@@ -138,7 +138,7 @@ const AdminSettingsSection = () => {
                />
             </div>
 
-            <div className='flex flex-col gap-3 my-4 text-gray-200 items-center'>
+            <div className='flex flex-col gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
                <label htmlFor='maxAmountOfAddons' className='flex-1'>
                   <div className='text-lg'>Remoções permitidas</div>
                   <div className='text-gray-400'>
@@ -168,7 +168,7 @@ const AdminSettingsSection = () => {
                </select>
             </div>
 
-            <div className='flex justify-between gap-3 my-4 text-gray-200 items-center'>
+            <div className='flex justify-between gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
                <label htmlFor='allowUserToGiveSpecialInstructions' className='flex-1'>
                   <div className='text-lg'>Permitir detalhes no pedido</div>
                   <div className='text-gray-400'>
@@ -227,7 +227,7 @@ const AdminSettingsSection = () => {
                </select>
             </div> */}
 
-            <div className='flex flex-col gap-3 my-4 text-gray-200'>
+            <div className='flex flex-col gap-3 my-4 text-gray-200 max-w-sm w-full'>
                <label htmlFor='aboutUsContent' className='flex-1 '>
                   <div className='text-lg'>Conteúdo da página Sobre Nós</div>
                </label>
