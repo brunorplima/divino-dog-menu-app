@@ -61,13 +61,13 @@ const OrderManagerItem: React.FC<Props> = ({ order, buttonLabel }) => {
             transition-all border-b border-gray-700
             ${isOpen ? styles.shown : styles.hidden} ${styles.default}
          `}>
-            {order.items.map(group => {
+            {order.items.map((group, idx) => {
                const item = find(propEq('id', group.menuItemId), menuItems)
                const extraToppings = filter(t => Boolean(group.extraToppingIds?.includes(t.id)), toppings)
                const extraSauces = filter(s => Boolean(group.extraSauceIds?.includes(s.id)), sauces)
                const option = find(propEq('id', group.optionId), menuItemOptions)
                return (
-                  <div className='flex gap-2 mb-1' key={group.id}>
+                  <div className='flex gap-2 mb-1' key={group.id + idx.toString()}>
                      <div className='-translate-y-1'>
                         <GoArrowSmallRight size={28} />
                      </div>
