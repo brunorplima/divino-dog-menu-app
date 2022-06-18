@@ -5,6 +5,7 @@ import { menuContext } from '../contexts/MenuProvider'
 import style from './MenuList.module.scss'
 import * as R from 'ramda'
 import { capitalizeFirstLetter } from '../../utils/dataHelper'
+import LoaderComponent from '../verse/LoaderComponent'
 
 export default function MenuList() {
    const { menuItems, categories } = useContext(menuContext)
@@ -34,8 +35,11 @@ export default function MenuList() {
          </div>
          <div className={`${style.menuContent} overflow-auto z-10`}>
             {excludeEmptyCategory().map((category) => (
-               <div id={withoutSpaces(category.name)} key={category.id}>
-                  <h2 className={`${style.categories} text-2xl font-extrabold mb-5 text-white`}>
+               <div id={withoutSpaces(category.name)} key={category.id} className='scroll-m-10'>
+                  <h2
+                     className={`${style.categories} text-2xl pl-5 mt-10 font-extrabold mb-5 text-white italic`}
+                     style={{ color: '#29fd53' }}
+                  >
                      {capitalizeFirstLetter(category.name)}
                   </h2>
                   {menuItems
@@ -51,6 +55,8 @@ export default function MenuList() {
                </div>
             ))}
          </div>
+
+         <LoaderComponent show={menuItems.length === 0}/>
       </div>
    )
 }
