@@ -1,0 +1,2 @@
+
+export const PROMOTION_ID_CATEGORY = 'IGNZNJA6HYSCL'

@@ -1,8 +1,11 @@
+import moment from 'moment'
+import MenuItemModel from '../models/MenuItemModel'
+
 export const priceToString = (price: number, withDecimal = true) => {
    return `$ ${withDecimal ? price.toFixed(2) : price.toFixed(0)}`
 }
 
-export const fotmatPrice = (unformatted: number | undefined) => {
+export const formatPrice = (unformatted: number | undefined) => {
    if (unformatted !== undefined) {
       if (String(unformatted).includes('.'))
          return `R$ ${String(unformatted).replace('.', ',')}${
@@ -18,4 +21,16 @@ export const stringToArray = (urlValue: string | string[] | undefined) => {
    else return urlValue
 }
 export const capitalizeFirstLetter = (word: string) =>
-      word.toLowerCase().charAt(0).toUpperCase() + word.slice(1)
+   word.toLowerCase().charAt(0).toUpperCase() + word.slice(1)
+
+export const checkPromoDate = (
+   item: MenuItemModel | undefined,
+   serverDate?: Date | undefined
+) => {
+   if (item !== undefined) {
+      const endDate = moment(item ? item.promoPrice?.dateLimit : 0)
+      const startDate = moment(serverDate)
+      const diffDate = endDate.diff(startDate, 'seconds', true) > 0
+      return diffDate
+   } else return false
+}

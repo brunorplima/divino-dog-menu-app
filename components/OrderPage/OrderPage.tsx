@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { addMenuItemGroup, MENU_ITEM_GROUP_KEY } from '../../utils/localStorageHelper'
-import { fotmatPrice } from '../../utils/dataHelper'
+import { formatPrice } from '../../utils/dataHelper'
 import { menuContext } from '../contexts/MenuProvider'
 import style from './OrderPage.module.scss'
 import { MenuItemGroup } from '../../models/interfaces'
@@ -107,7 +107,7 @@ export default function OrderPage() {
                         </div>
                      </div>
                   </Link>
-                  <div className='text-right'>{fotmatPrice(e.subTotal * counter[idx])}</div>
+                  <div className='text-right'>{formatPrice(e.subTotal * counter[idx])}</div>
                   <div
                      id={`o-${String(idx)}`}
                      className={`relative`}
@@ -154,7 +154,7 @@ export default function OrderPage() {
                   Confirmar Pedido
                </button>
             </div>
-            <div className='text-right'>{fotmatPrice(totalBill)}</div>
+            <div className='text-right'>{formatPrice(totalBill)}</div>
          </div>
       </div>
    )

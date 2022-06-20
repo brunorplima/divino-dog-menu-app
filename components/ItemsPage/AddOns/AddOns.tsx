@@ -1,9 +1,8 @@
 import ToppingModel from '../../../models/ToppingModel'
 import SauceModel from '../../../models/SauceModel'
 import styles from './AddOns.module.scss'
-import { fotmatPrice } from '../../../utils/dataHelper'
+import { formatPrice } from '../../../utils/dataHelper'
 import useElementRefList from '../../../hooks/useElementRefList'
-import { useState } from 'react'
 import { stringToArray } from '../../../utils/dataHelper'
 import useMultipleStatesManager from '../../../hooks/useMultipleStatesManager'
 
@@ -116,7 +115,7 @@ const AddOns = ({
                         </div>
                      </div>
                      <div className='text-base'>
-                        {item.price !== undefined && item.price > 0 && fotmatPrice(item.price)}
+                        {item.price !== undefined && item.price > 0 && formatPrice(item.price)}
                      </div>
                   </div>
                )
