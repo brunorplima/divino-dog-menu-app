@@ -12,6 +12,7 @@ import { deleteLocalStorageItem } from '../../utils/localStorageHelper'
 import TrackOrderInfo from '../book/TrackOrderInfo'
 import Dialog from '../chapter/Dialog'
 import { CURRENT_ORDERS_KEY } from '../OrderPage/sendOrderData'
+import LoaderComponent from '../verse/LoaderComponent'
 
 const TrackingOrderPage = () => {
    const router = useRouter()
@@ -39,7 +40,7 @@ const TrackingOrderPage = () => {
          )
          unsubscribe.current = OrderModel.listenToQuery(q, setOrders)
       } else {
-         if (!isNil(orders)) setOrders(null)
+         if (orders !== []) setOrders([])
       }
 
       return unsubscribe.current
@@ -112,6 +113,8 @@ const TrackingOrderPage = () => {
          >
             <>Para confirmar seu pedido é preciso realizar o pagamento</>
          </Dialog>
+
+         <LoaderComponent show={isNil(orders)}/>
       </div>
    )
 }

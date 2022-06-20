@@ -9,9 +9,10 @@ import ModelStandardFieldInfo from '../../verse/ModelStandardFieldInfo'
 interface Props {
    readonly item: ToppingModel | SauceModel | MenuItemOptionModel
    readonly associatedMenuItems: string
+   readonly hasCanBeExtra?: boolean
 }
 
-const AdminGeneralProductsView: React.FC<Props> = ({ item, associatedMenuItems }) => {
+const AdminGeneralProductsView: React.FC<Props> = ({ item, associatedMenuItems, hasCanBeExtra }) => {
   return (
       <div className='text-white'>
          <h2 className='text-xl text-green-500 mb-6'>
@@ -26,7 +27,7 @@ const AdminGeneralProductsView: React.FC<Props> = ({ item, associatedMenuItems }
             label='Em estoque'
             info={item.isAvailable ? 'Sim' : 'Não'}
          />
-         {has('canBeExtra', item.values()) && (
+         {hasCanBeExtra && (
             <ModelStandardFieldInfo
                label='Adicionável'
                info={(item as ToppingModel | SauceModel).canBeExtra ? 'Sim' : 'Não'}

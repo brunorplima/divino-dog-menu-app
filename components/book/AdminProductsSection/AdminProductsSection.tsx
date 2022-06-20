@@ -1,4 +1,4 @@
-import { defaultTo, filter, join, pluck, propEq } from 'ramda'
+import { defaultTo, filter, has, join, pluck, propEq } from 'ramda'
 import React, { Fragment, useContext, useMemo, useState } from 'react'
 import ProductItem from '../../chapter/ProductItem'
 import { menuContext } from '../../contexts/MenuProvider'
@@ -100,7 +100,7 @@ const AdminProductsSection = () => {
    const getActive = (value: Tab) => (tab === value ? 'bg-gray-700' : 'active:bg-gray-500')
 
    return (
-      <div className='text-gray-200'>
+      <div className='text-gray-200 max-w-3xl ml-auto mr-auto mb-10'>
          <div className="grid place-content-center my-4 relative">
             <h1 className='text-xl'>Produtos</h1>
             <div className=''>
@@ -223,16 +223,19 @@ const AdminProductsSection = () => {
                <AdminGeneralProductsView
                   item={currentProduct.item}
                   associatedMenuItems={tsfRelatedMenuItems}
+                  hasCanBeExtra={currentProduct.type !== 'menuItemOptions'}
                />
             )}
             {currentProduct && currentProduct.action === 'edit' && (
                <GeneralProductsForm
                   item={currentProduct.item}
+                  hasCanBeExtra={currentProduct.type !== 'menuItemOptions'}
                   onClose={() => setCurrentProduct({ ...currentProduct, action: 'view' })}
                />
             )}
             {currentProduct && currentProduct.action === 'create' && (
                <GeneralProductsForm
+                  hasCanBeExtra={currentProduct.type !== 'menuItemOptions'}
                   onCloseWithItem={{
                      type: currentProduct.type,
                      close: (item: ToppingModel | SauceModel | MenuItemOptionModel) =>

@@ -25,13 +25,14 @@ const initialGeneralProductValues: GeneralProduct = {
 interface Props {
    item?: ToppingModel | SauceModel | MenuItemOptionModel
    readonly onClose?: () => void
+   readonly hasCanBeExtra?: boolean
    readonly onCloseWithItem?: {
       type: GeneralProducts
       close: (item: ToppingModel | SauceModel | MenuItemOptionModel) => void
    }
 }
 
-const GeneralProductsForm: React.FC<Props> = ({ item, onClose, onCloseWithItem }) => {
+const GeneralProductsForm: React.FC<Props> = ({ item, onClose, hasCanBeExtra, onCloseWithItem }) => {
 
    const process = async (values: GeneralProduct): Promise<ToppingModel | SauceModel | MenuItemOptionModel | undefined> => {
       const nonEmptyValues = { ...values, price: values.price as number }
@@ -114,20 +115,22 @@ const GeneralProductsForm: React.FC<Props> = ({ item, onClose, onCloseWithItem }
                            )}
                         </Field>
                         
-                        <Field>
-                           {() => (
-                              <div className="flex gap-3 my-4 text-gray-200 items-center mb-3">
-                                 <input
-                                    type='checkbox'
-                                    name='canBeExtra'
-                                    id='canBeExtra'
-                                    onChange={handleChange}
-                                    checked={values.canBeExtra}
-                                 />
-                                 <label htmlFor="canBeExtra">Adicionável</label>
-                              </div>
-                           )}
-                        </Field>
+                        {hasCanBeExtra && (
+                           <Field>
+                              {() => (
+                                 <div className="flex gap-3 my-4 text-gray-200 items-center mb-3">
+                                    <input
+                                       type='checkbox'
+                                       name='canBeExtra'
+                                       id='canBeExtra'
+                                       onChange={handleChange}
+                                       checked={values.canBeExtra}
+                                    />
+                                    <label htmlFor="canBeExtra">Adicionável</label>
+                                 </div>
+                              )}
+                           </Field>
+                        )}
 
                         <div className="flex justify-center">
                            <PrimaryButton
