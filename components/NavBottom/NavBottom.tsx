@@ -56,9 +56,10 @@ export default function NavBottom() {
                      <Link href={button.link}>
                         <a className='relative flex justify-center items-center flex-col w-full text-center font-light'>
                            <span className={`${style.icon} relative block text-center`}>
+                              {/* number of chosen menu item groups removed until related issues are resolved. More Details on PR #102
                               {storedList.length > 0 && button.link === '/checkout' && (
                                  <div className='absolute -top-3 right-0 text-sm font-bold'>{storedList.length}</div>
-                              )}
+                              )} */}
                               {button.icon}
                            </span>
                            <span
