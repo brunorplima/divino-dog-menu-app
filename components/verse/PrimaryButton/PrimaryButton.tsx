@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useMemo } from 'react'
+import React, { CSSProperties, MouseEventHandler, useMemo } from 'react'
 
 type BgColor = 'gray' | 'green'
 
@@ -10,6 +10,7 @@ interface Props {
    readonly icon?: any,
    readonly bgColor?: BgColor
    readonly className?: string
+   readonly style?: CSSProperties
 }
 
 const PrimaryButton: React.FC<Props> = ({
@@ -19,7 +20,8 @@ const PrimaryButton: React.FC<Props> = ({
    clickHandler = () => {},
    type = 'button',
    bgColor = 'gray',
-   className = ''
+   className = '',
+   style = {}
 }) => {
 
    const bgColorStyle = useMemo(() => {
@@ -32,6 +34,7 @@ const PrimaryButton: React.FC<Props> = ({
          className={`${bgColorStyle} py-2 px-10 w-8 text-white min-w-max flex gap-2 rounded-lg duration-300 ${className}`}
          disabled={disabled}
          onClick={() => clickHandler()}
+         style={style}
       >
          <span className='translate-y-1'>
             {icon}

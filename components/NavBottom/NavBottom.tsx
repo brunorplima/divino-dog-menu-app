@@ -9,6 +9,7 @@ import style from './NavBottom.module.scss'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import useElementRefList from '../../hooks/useElementRefList'
+import useLocalStorageCollection from '../../hooks/useLocalStorageCollection'
 
 export default function NavBottom() {
    const buttons = useMemo(() => [
@@ -17,13 +18,35 @@ export default function NavBottom() {
       { name: 'Progresso', icon: <AiOutlineFileSync />, link: '/track_order' },
       { name: 'Sobre nós', icon: <BiStore />, link: '/aboutus' }
    ], [])
-   const { storedList } = useLocalStorage<MenuItemGroup>(MENU_ITEM_GROUP_KEY)
+   // const { collection,  } = useLocalStorageCollection<MenuItemGroup>(MENU_ITEM_GROUP_KEY)
+   const [checkoutCount, setCheckoutCount] = useState<number>((() => {
+      if (typeof window === 'undefined') return 0
+      try {
+         const coll = localStorage.getItem(MENU_ITEM_GROUP_KEY)
+         if (!coll) return 0
+         return JSON.parse(coll).length
+      } catch (error) {
+         console.log(error)
+         return 0
+      }
+   }))
    const router = useRouter()
    const [position, setPosition] = useState(buttons.findIndex((e) => e.link === router.pathname))
 
    useEffect(() => {
       setPosition(buttons.findIndex((e) => e.link === router.pathname))
    }, [router])
+
+   useEffect(() => {
+      const syncStorage = () => {
+         if (typeof window === 'undefined') return
+         const collectionInStorage = JSON.parse(localStorage.getItem(MENU_ITEM_GROUP_KEY) as string)
+         setCheckoutCount(collectionInStorage.length)
+      }
+      addEventListener('storage', syncStorage)
+
+      return () => removeEventListener('storage', syncStorage)
+   }, [localStorage])
 
    const { ElementReffed, ElementReffer } = useElementRefList<HTMLDivElement>()
 
@@ -56,8 +79,8 @@ export default function NavBottom() {
                      <Link href={button.link}>
                         <a className='relative flex justify-center items-center flex-col w-full text-center font-light'>
                            <span className={`${style.icon} relative block text-center`}>
-                              {storedList.length > 0 && button.link === '/checkout' && (
-                                 <div className='absolute -top-3 right-0 text-sm font-bold'>{storedList.length}</div>
+                              {checkoutCount > 0 && button.link === '/checkout' && (
+                                 <div className='absolute -top-3 right-0 text-sm font-bold'>{checkoutCount}</div>
                               )}
                               {button.icon}
                            </span>
