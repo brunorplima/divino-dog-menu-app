@@ -9,8 +9,6 @@ function AboutUs() {
 
    const backImageFileName = 'hotdog-with-ketchup-mustard-lettuce-wooden-surface.jpg'
 
-   const text = settingsModel ? settingsModel.aboutUsContent.split('\\n') : ['']
-
    return (
       <div className={`${style.allDiv} h-screen text-lg`}>
          <div className={`${style.firstDiv} absolute top-0 w-full`}>
@@ -31,12 +29,9 @@ function AboutUs() {
                   <br />
                   <p className={`${style.greenTitle}`}>Quem somos nós</p>
                   <br />
-                  {text.map((t) => (
-                     <>
-                        <p>{t}</p>
-                        <br />
-                     </>
-                  ))}
+                  <div className='whitespace-pre-wrap mb-32'>
+                     {settingsModel.aboutUsContent}
+                  </div>
                </>
             )}
             <p className={`${style.greenTitle}`}>Nossos desenvolvedores</p>
