@@ -131,8 +131,7 @@ const ItemsPage = (props: Props) => {
       else return true
    }
 
-   const defineButtonState = (addOnsTester: string[] = []) => {
-      // @ts-ignore
+   const defineButtonState = (addOnsTester: any[] = []) => {
       if (theItem?.optionIds && theItem?.optionIds?.length > 0 && addOnsTester.includes(undefined)) return false
       else return true
    }
