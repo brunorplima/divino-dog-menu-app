@@ -1,4 +1,4 @@
-import { Fragment, useContext, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import { menuContext } from '../contexts/MenuProvider'
 import AddOns from './AddOns'
 import styles from './ItemsPage.module.scss'
@@ -20,7 +20,7 @@ interface Props {
 const ItemsPage = (props: Props) => {
    const { query } = props
    const { itemId, catId, itemsIds, quantity, boxes } = query
-   const { menuItems, toppings, sauces } = useContext(menuContext)
+   const { menuItems, toppings, sauces, menuItemOptions } = useContext(menuContext)
 
    const definePrice = () => {
       let price: number
@@ -43,7 +43,7 @@ const ItemsPage = (props: Props) => {
    const theItem = menuItems.find((item) => item.id === itemId)
    const minimumPrice = theItem !== undefined ? theItem.price : 0
    const [addOns, setAddOns] = useState<string[]>(stringToArray(boxes))
-   const [price, setPrice] = useState(definePrice()) //(theItem ? theItem.price : 0)
+   const [price, setPrice] = useState(definePrice())
    const [quant, setQuant] = useState(() => {
       if (quantity === undefined) return 1
       if (typeof quantity === 'object') return 1
@@ -51,8 +51,25 @@ const ItemsPage = (props: Props) => {
    })
 
    const sections = [
-      { sect: theItem?.toppingIds, title: 'Escolha seus Adicionais', addonList: toppings },
-      { sect: theItem?.sauceIds, title: 'Escolha seus Molhos', addonList: sauces },
+      {
+         sect: theItem?.toppingIds,
+         title: 'Escolha seus Adicionais',
+         addonList: toppings,
+         singleOption: false,
+      },
+      {
+         sect: theItem?.sauceIds,
+         title: 'Escolha seus Molhos',
+         addonList: sauces,
+         singleOption: false,
+      },
+      {
+         sect: theItem?.optionIds,
+         title: 'Escolha sua Opção',
+         addonList: menuItemOptions,
+         subTitle: 'Escolha obrigatória',
+         singleOption: true,
+      },
    ]
 
    const interfacingMenuItemGroup = (quantity: number): Omit<MenuItemGroup, 'id'>[] | undefined => {
@@ -65,13 +82,18 @@ const ItemsPage = (props: Props) => {
             R.isNil,
             sauces.map((sauce) => addOns.find((item) => sauce.id === item))
          )
-         const finalInterface = []
+         const optionId = R.reject(
+            R.isNil,
+            menuItemOptions.map((option) => addOns.find((item) => option.id === item))
+         )
+         const finalInterface: Omit<MenuItemGroup, 'id'>[] = []
          for (let i = 0; i < quantity; i++) {
             finalInterface.push({
                menuItemId: theItem.id,
                subTotal: price,
                extraToppingIds: extraToppingIds,
                extraSauceIds: extraSauceIds,
+               optionId: optionId[0],
             })
          }
          return finalInterface
@@ -109,6 +131,17 @@ const ItemsPage = (props: Props) => {
       else return true
    }
 
+   const defineButtonState = (addOnsTester: string[] = []) => {
+      // @ts-ignore
+      if (theItem?.optionIds && theItem?.optionIds?.length > 0 && addOnsTester.includes(undefined)) return false
+      else return true
+   }
+   const [buttonState, setButtonState] = useState(defineButtonState())
+   useEffect(() => {
+      setButtonState(defineButtonState(addOns))
+      console.log(addOns)
+   }, [addOns])
+
    return (
       <div
          className={`${styles.content} text-white relative text-xl overflow-y-scroll overflow-x-hidden px-4 -pb-64`}
@@ -143,6 +176,8 @@ const ItemsPage = (props: Props) => {
                                     <AddOns
                                        addOnIds={section.sect}
                                        title={section.title}
+                                       subTitle={section.subTitle}
+                                       singleOption={section.singleOption}
                                        addonList={section.addonList}
                                        addOns={addOns}
                                        setAddOns={setAddOns}
@@ -186,12 +221,16 @@ const ItemsPage = (props: Props) => {
                      </div>
                   </>
                )}
-               <Link href={`${itemsIds === undefined ? '/' : '/checkout'}`} passHref>
+               <Link href={`${buttonState ? (itemsIds === undefined ? '/' : '/checkout') : '#'}`} passHref>
                   <div
-                     className={`${styles.priceOrder} fixed flex flex-row font-semibold inset-x-0 bottom-0 py-4 px-8 cursor-pointer`}
+                     className={`${buttonState ? styles.greenButton : styles.grayButton} ${
+                        styles.priceOrder
+                     } fixed flex flex-row font-semibold inset-x-0 bottom-0 py-4 px-8 cursor-pointer`}
                      onClick={() => {
-                        !itemsIds && saveInLocalStorage()
-                        itemsIds && replaceInLocalStorage()
+                        if (buttonState) {
+                           !itemsIds && saveInLocalStorage()
+                           itemsIds && replaceInLocalStorage()
+                        }
                      }}
                   >
                      <div className='block w-full text-left'>
