@@ -1,6 +1,5 @@
 import { MenuItemGroup, Order } from '../../models/interfaces'
 import OrderModel from '../../models/OrderModel'
-import { setLocalStorageItem } from '../../utils/localStorageHelper'
 
 export const CURRENT_ORDERS_KEY = 'currentOrderIds'
 

@@ -5,13 +5,14 @@ import styles from './ItemsPage.module.scss'
 import { MenuItemGroup } from '../../models/interfaces'
 import * as R from 'ramda'
 import { MENU_ITEM_GROUP_KEY, addMenuItemGroup } from '../../utils/localStorageHelper'
-import { fotmatPrice } from '../../utils/dataHelper'
+import { checkPromoDate, formatPrice } from '../../utils/dataHelper'
 import Link from 'next/link'
 import { IoIosArrowDropleftCircle } from 'react-icons/io'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { NextParsedUrlQuery } from 'next/dist/server/request-meta'
 import { stringToArray } from '../../utils/dataHelper'
 import { generateID } from '../../utils/modelHelper'
+import { getServerDate } from '../../utils/apiHelper'
 
 interface Props {
    query: NextParsedUrlQuery
@@ -22,11 +23,16 @@ const ItemsPage = (props: Props) => {
    const { itemId, catId, itemsIds, quantity, boxes } = query
    const { menuItems, toppings, sauces, menuItemOptions } = useContext(menuContext)
 
-   const definePrice = () => {
-      let price: number
+   const definePrice = (serverDate?: Date) => {
+      let price = 0
 
       const myItem = menuItems.find((item) => item.id === itemId)
-      price = myItem !== undefined ? myItem.price : 0
+      const diffDate = checkPromoDate(myItem, serverDate)
+      
+      if (myItem === undefined) price = 0
+      else if (myItem.promoPrice === undefined) price = myItem.price
+      else if (diffDate) price = myItem.promoPrice.price
+      else price = myItem.price
 
       const myAddOns = stringToArray(boxes)
       myAddOns.forEach((add) => {
@@ -49,6 +55,18 @@ const ItemsPage = (props: Props) => {
       if (typeof quantity === 'object') return 1
       else return parseInt(quantity)
    })
+
+   useEffect(()=> {
+      const serverDate = getServerDate()
+      serverDate.then((resp) => {
+         definePrice(resp)
+      })
+   }, [])
+
+   useEffect(() => {
+      setPrice(definePrice())
+      typeof quantity === 'string' && setQuant(parseInt(quantity))
+   }, [definePrice(), quantity])
 
    const sections = [
       {
@@ -235,7 +253,7 @@ const ItemsPage = (props: Props) => {
                      <div className='block w-full text-left'>
                         {quantity !== undefined ? 'Alterar Pedido' : 'Adicionar'}
                      </div>
-                     <div className='block w-full text-right'>{fotmatPrice(quant * price)}</div>
+                     <div className='block w-full text-right'>{formatPrice(quant * price)}</div>
                   </div>
                </Link>
             </>
