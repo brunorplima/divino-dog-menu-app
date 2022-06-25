@@ -1,9 +1,14 @@
-import { groupBy, isEmpty, prop } from 'ramda'
-import React, { useContext } from 'react'
-import { ORDER_ACTIVE_STATUTES } from '../../../constants/modelsConstants'
+import moment from 'moment'
+import { filter, groupBy, isEmpty, prop, propEq } from 'ramda'
+import React, { useContext, useEffect } from 'react'
+import { ORDER_ACTIVE_STATUTES, ORDER_STATUS_CONFIRMAR } from '../../../constants/modelsConstants'
+import { getServerDate } from '../../../utils/apiHelper'
 import OrderManagerItem from '../../chapter/OrderManagerItem'
 import { adminContext } from '../../contexts/AdminProvider'
+import { settingsContext } from '../../contexts/SettingsProvider'
 import styles from './OrderManager.module.scss'
+
+const MINUTE_IN_MS = 20000
 
 const statusTitle = {
    confirmar: 'Não Confirmados',
@@ -15,8 +20,29 @@ const statusTitle = {
 }
 
 const OrderManager = () => {
+   const { settingsModel } = useContext(settingsContext)
    const { activeOrders, latestFinalizedOrders } = useContext(adminContext)
    const ordersByStatus = groupBy(prop('status'), activeOrders)
+
+   useEffect(() => {
+      const clearInterval = applyExpiryDateChecked()
+
+      return clearInterval
+   }, [])
+
+   const applyExpiryDateChecked = (): () => void => {
+      const expiryDateChecker = async () => {
+         const dateTime = await getServerDate()
+         filter(propEq('status', ORDER_STATUS_CONFIRMAR), activeOrders).forEach(async order => {
+            if (!settingsModel) return
+            const expiryMoment = moment(order.statusUpdatedAt).add(settingsModel.unconfirmedOrderExpiryTime, 'seconds')
+            if (expiryMoment.isBefore(moment(dateTime))) await order.toStatus('cancelado')
+         })
+      }
+      const interval = setInterval(expiryDateChecker, MINUTE_IN_MS)
+
+      return () => clearInterval(interval)
+   }
 
    return (
       <div className={`${styles.container} w-max px-5 flex gap-8 pt-3`}>

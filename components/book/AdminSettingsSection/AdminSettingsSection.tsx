@@ -106,12 +106,10 @@ const AdminSettingsSection = () => {
                   <option value={1}>1</option>
                   <option value={2}>2</option>
                   <option value={3}>3</option>
-                  <option value={4}>4</option>
-                  <option value={5}>5</option>
                </select>
             </div>
 
-            <div className='flex justify-between gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
+            {/* <div className='flex justify-between gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
                <label htmlFor='allowUserToRemoveToppings' className='flex-1'>
                   <div className='text-lg'>Permitir usuário remover ingredientes</div>
                   <div className='text-gray-400'>
@@ -166,9 +164,9 @@ const AdminSettingsSection = () => {
                   <option value={4}>4</option>
                   <option value={5}>5</option>
                </select>
-            </div>
+            </div> */}
 
-            <div className='flex justify-between gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
+            {/* <div className='flex justify-between gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
                <label htmlFor='allowUserToGiveSpecialInstructions' className='flex-1'>
                   <div className='text-lg'>Permitir detalhes no pedido</div>
                   <div className='text-gray-400'>
@@ -193,13 +191,13 @@ const AdminSettingsSection = () => {
                   }}
                   checked={settingsModel?.allowUserToGiveSpecialInstructions || false}
                />
-            </div>
+            </div> */}
 
-            {/* <div className='flex flex-col gap-3 my-4 text-gray-200 items-center'>
+            <div className='flex flex-col gap-3 my-4 text-gray-200 items-center'>
                <label htmlFor='unconfirmedOrderExpiryTime' className='flex-1'>
                   <div className='text-lg'>Prazo limite de pedidos não confirmados</div>
                   <div className='text-gray-400'>
-                     Chegando nesse prazo limite, pedidos que não foram confirmados terão seu status mudado para cancelado.
+                     Atingido esse limite, pedidos que não foram confirmados terão seus status mudado para cancelado.
                   </div>
                </label>
                <select
@@ -225,7 +223,7 @@ const AdminSettingsSection = () => {
                      </option>
                   ))}
                </select>
-            </div> */}
+            </div>
 
             <div className='flex flex-col gap-3 my-4 text-gray-200 max-w-sm w-full'>
                <label htmlFor='aboutUsContent' className='flex-1 '>

@@ -17,7 +17,7 @@ export default function OrderPage() {
    let totalBill = 0
 
    const router = useRouter()
-   const { menuItems, toppings, sauces } = useContext(menuContext)
+   const { menuItems, toppings, sauces, menuItemOptions } = useContext(menuContext)
    const { storedList, setStoredList, clearLocalStorage } = useLocalStorage<MenuItemGroup>(MENU_ITEM_GROUP_KEY)
    const { addItem } = useSimpleLocalStorage(CURRENT_ORDERS_KEY)
 
@@ -64,7 +64,8 @@ export default function OrderPage() {
 
       const t = menuItem.extraToppingIds ? menuItem.extraToppingIds.join('-') : ''
       const s = menuItem.extraSauceIds ? menuItem.extraSauceIds.join('-') : ''
-      const textBoxes = `${t}-${s}` === '-' ? '' : `&boxes=${t}-${s}`
+      const r = menuItem.optionId ? menuItem.optionId : ''
+      const textBoxes = `${t}-${s}-${r}` === '-' ? '' : `&boxes=${t}-${s}-${r}`
 
       return `/item?itemId=${menuItem.menuItemId}&catId=${textCategoryId}${textIds}${textQuantity}${textBoxes}`
    }
@@ -104,6 +105,9 @@ export default function OrderPage() {
                                     <div key={id}>{findItemName(toppings, id)}</div>
                                  ))}
                               </>
+                           )}
+                           {!!e.optionId && e.optionId.length !== 0 && (
+                              <div>{findItemName(menuItemOptions, e.optionId)}</div>
                            )}
                         </div>
                      </div>

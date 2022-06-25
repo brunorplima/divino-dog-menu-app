@@ -3,13 +3,16 @@ import SauceModel from '../../../models/SauceModel'
 import styles from './AddOns.module.scss'
 import { formatPrice } from '../../../utils/dataHelper'
 import useElementRefList from '../../../hooks/useElementRefList'
-import { stringToArray } from '../../../utils/dataHelper'
+import { useEffect, useState } from 'react'
 import useMultipleStatesManager from '../../../hooks/useMultipleStatesManager'
+import MenuItemOptionModel from '../../../models/MenuItemOptionModel'
 
 interface Props {
    addOnIds: string[]
    title: string
-   addonList: ToppingModel[] | SauceModel[]
+   subTitle?: string
+   singleOption: boolean
+   addonList: ToppingModel[] | SauceModel[] | MenuItemOptionModel[]
    addOns: string[]
    setAddOns: React.Dispatch<React.SetStateAction<string[]>>
    price: number
@@ -18,16 +21,11 @@ interface Props {
    boxes: string | string[] | undefined
 }
 
-interface MultipleStates {
-   id: string
-   subTotal: number
-   state: boolean
-   setState: React.Dispatch<React.SetStateAction<boolean>>
-}
-
 const AddOns = ({
    addOnIds,
    title,
+   subTitle,
+   singleOption,
    addonList,
    addOns,
    setAddOns,
@@ -36,10 +34,9 @@ const AddOns = ({
    minimumPrice,
    boxes,
 }: Props) => {
-   const { lightBoxes, runLightBoxesState } = useMultipleStatesManager<ToppingModel | SauceModel>(
-      addonList,
-      boxes
-   )
+   const { lightBoxes, runLightBoxesState } = useMultipleStatesManager<
+      ToppingModel | SauceModel | MenuItemOptionModel
+   >(addonList, boxes)
 
    const { ElementReffed, ElementReffer } = useElementRefList<HTMLInputElement>()
 
@@ -53,10 +50,13 @@ const AddOns = ({
       }
    }
 
-   const setAllValues = (priceParsed: number, evaluator: boolean, idEvaluator: string) => {
+   const setAllValues = (priceParsed: number, evaluator: boolean, idEvaluator: string, verOption: boolean) => {
       if (evaluator) {
          setPrice(price + priceParsed)
-         setAddOns([...addOns, idEvaluator])
+         if(verOption) {
+            const uniqAddOns = lightBoxes.find(box => box.state)
+            uniqAddOns && setAddOns([uniqAddOns.id])
+         } else setAddOns([...addOns, idEvaluator])
          ElementReffed.current.forEach((el) => {
             el.id === idEvaluator &&
                changeCheckBoxClass(el.parentElement?.parentElement?.parentElement, true)
@@ -71,24 +71,45 @@ const AddOns = ({
       }
    }
 
-   const changePrice = (event: React.MouseEvent<HTMLInputElement, MouseEvent>, value: number) => {
+   const changePrice = (event: React.MouseEvent<HTMLInputElement, MouseEvent>, value: number, verOption = false) => {
       const checker = event.currentTarget.checked
       const currElId = event.currentTarget.id
-      setAllValues(value, checker, currElId)
+      setAllValues(value, checker, currElId, verOption)
    }
+
+   const checkCanBeExtra = (item: any) => {
+      if ('canBeExtra' in item) return item.canBeExtra
+      return true
+   }
+
+   const [addOnsHelper, setAddOnsHelper] = useState<string>('')
+
+   useEffect(() => {
+      if(singleOption) {
+         const selectedBox = lightBoxes.filter((box) => box.state)
+         setAddOnsHelper(selectedBox[0]?.id)
+         const aditionalPrice = selectedBox[0]?.subTotal === undefined ? 0 : selectedBox[0]?.subTotal
+         setPrice(minimumPrice + aditionalPrice)
+      }
+   }, [lightBoxes])
+
+   useEffect(() => {
+      singleOption && setAddOns([addOnsHelper])
+   }, [addOnsHelper])
 
    return (
       <div className={`${styles.topAddons} static`}>
-         <div className='my-5 font-semibold'>{title}</div>
+         <div className='mt-5 font-semibold'>{title}</div>
+         <div className='mb-5 mt-1 ml-2 text-sm font-semibold'>{subTitle}</div>
          {addonList.map(
             (item, idx) =>
                addOnIds.includes(item.id) &&
                item.isAvailable &&
-               item.canBeExtra && (
+               checkCanBeExtra(item) && (
                   <div
                      key={item.id}
                      className={`${styles.itemInfo} ${
-                        stringToArray(boxes).includes(item.id) && styles.checkedItemInfo
+                        lightBoxes[idx].state && styles.checkedItemInfo
                      } grid my-2 p-4 rounded-xl font-medium w-full`}
                      onClick={(e) => e.target}
                   >
@@ -101,10 +122,10 @@ const AddOns = ({
                         >
                            <input
                               onClick={(event) => {
-                                 runLightBoxesState(idx)
+                                 runLightBoxesState(idx, singleOption)
                                  changePrice(event, item.price ? item.price : 0)
                               }}
-                              onChange={(e) => {}}
+                              onChange={(event) => {}}
                               className='relative block'
                               type='checkbox'
                               id={item.id}
