@@ -16,7 +16,7 @@ export const formatPrice = (unformatted: number | undefined) => {
 }
 
 export const stringToArray = (urlValue: string | string[] | undefined) => {
-   if (urlValue === undefined) return ['']
+   if (urlValue === undefined) return [] as string[]
    if (typeof urlValue === 'string') return urlValue.split('-').filter((a) => a !== '')
    else return urlValue
 }
