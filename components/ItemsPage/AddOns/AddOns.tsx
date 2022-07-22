@@ -19,6 +19,7 @@ interface Props {
    setPrice: React.Dispatch<React.SetStateAction<number>>
    minimumPrice: number
    boxes: string | string[] | undefined
+   maxAmount: number
 }
 
 const AddOns = ({
@@ -33,6 +34,7 @@ const AddOns = ({
    setPrice,
    minimumPrice,
    boxes,
+   maxAmount,
 }: Props) => {
    const { lightBoxes, runLightBoxesState } = useMultipleStatesManager<
       ToppingModel | SauceModel | MenuItemOptionModel
@@ -50,11 +52,16 @@ const AddOns = ({
       }
    }
 
-   const setAllValues = (priceParsed: number, evaluator: boolean, idEvaluator: string, verOption: boolean) => {
+   const setAllValues = (
+      priceParsed: number,
+      evaluator: boolean,
+      idEvaluator: string,
+      verOption: boolean
+   ) => {
       if (evaluator) {
          setPrice(price + priceParsed)
-         if(verOption) {
-            const uniqAddOns = lightBoxes.find(box => box.state)
+         if (verOption) {
+            const uniqAddOns = lightBoxes.find((box) => box.state)
             uniqAddOns && setAddOns([uniqAddOns.id])
          } else setAddOns([...addOns, idEvaluator])
          ElementReffed.current.forEach((el) => {
@@ -71,7 +78,11 @@ const AddOns = ({
       }
    }
 
-   const changePrice = (event: React.MouseEvent<HTMLInputElement, MouseEvent>, value: number, verOption = false) => {
+   const changePrice = (
+      event: React.MouseEvent<HTMLInputElement, MouseEvent>,
+      value: number,
+      verOption = false
+   ) => {
       const checker = event.currentTarget.checked
       const currElId = event.currentTarget.id
       setAllValues(value, checker, currElId, verOption)
@@ -85,10 +96,11 @@ const AddOns = ({
    const [addOnsHelper, setAddOnsHelper] = useState<string>('')
 
    useEffect(() => {
-      if(singleOption) {
+      if (singleOption) {
          const selectedBox = lightBoxes.filter((box) => box.state)
          setAddOnsHelper(selectedBox[0]?.id)
-         const aditionalPrice = selectedBox[0]?.subTotal === undefined ? 0 : selectedBox[0]?.subTotal
+         const aditionalPrice =
+            selectedBox[0]?.subTotal === undefined ? 0 : selectedBox[0]?.subTotal
          setPrice(minimumPrice + aditionalPrice)
       }
    }, [lightBoxes])
@@ -97,9 +109,27 @@ const AddOns = ({
       singleOption && setAddOns([addOnsHelper])
    }, [addOnsHelper])
 
+   const handleStateAndPrices = (
+      index: number,
+      event: React.MouseEvent<HTMLInputElement, MouseEvent>,
+      item: ToppingModel | SauceModel | MenuItemOptionModel,
+      state: boolean
+   ) => {
+      const execution = () => {
+         runLightBoxesState(index, singleOption)
+         changePrice(event, item.price ? item.price : 0)
+      }
+
+      if (state) {
+         execution()
+      } else if (addOns.length < maxAmount) {
+         execution()
+      }
+   }
+
    return (
       <div className={`${styles.topAddons} static`}>
-         <div className='mt-5 font-semibold'>{title}</div>
+         <div className='font-semibold'>{title}</div>
          <div className='mb-5 mt-1 ml-2 text-sm font-semibold'>{subTitle}</div>
          {addonList.map(
             (item, idx) =>
@@ -122,8 +152,7 @@ const AddOns = ({
                         >
                            <input
                               onClick={(event) => {
-                                 runLightBoxesState(idx, singleOption)
-                                 changePrice(event, item.price ? item.price : 0)
+                                 handleStateAndPrices(idx, event, item, lightBoxes[idx].state)
                               }}
                               onChange={(event) => {}}
                               className='relative block'
