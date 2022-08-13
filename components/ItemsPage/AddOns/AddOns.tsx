@@ -6,6 +6,7 @@ import useElementRefList from '../../../hooks/useElementRefList'
 import { useEffect, useState } from 'react'
 import useMultipleStatesManager from '../../../hooks/useMultipleStatesManager'
 import MenuItemOptionModel from '../../../models/MenuItemOptionModel'
+import CheckBox from '../../book/CheckBox'
 
 interface Props {
    addOnIds: string[]
@@ -53,14 +54,19 @@ const AddOns = ({
    }
 
    const setAllValues = (
+      
       priceParsed: number,
+     
       evaluator: boolean,
+     
       idEvaluator: string,
+     
       verOption: boolean
+   
    ) => {
       if (evaluator) {
          setPrice(price + priceParsed)
-         if (verOption) {
+         if  (verOption) {
             const uniqAddOns = lightBoxes.find((box) => box.state)
             uniqAddOns && setAddOns([uniqAddOns.id])
          } else setAddOns([...addOns, idEvaluator])
@@ -79,9 +85,13 @@ const AddOns = ({
    }
 
    const changePrice = (
+      
       event: React.MouseEvent<HTMLInputElement, MouseEvent>,
+     
       value: number,
+     
       verOption = false
+   
    ) => {
       const checker = event.currentTarget.checked
       const currElId = event.currentTarget.id
@@ -96,10 +106,11 @@ const AddOns = ({
    const [addOnsHelper, setAddOnsHelper] = useState<string>('')
 
    useEffect(() => {
-      if (singleOption) {
+      if  (singleOption) {
          const selectedBox = lightBoxes.filter((box) => box.state)
          setAddOnsHelper(selectedBox[0]?.id)
          const aditionalPrice =
+           
             selectedBox[0]?.subTotal === undefined ? 0 : selectedBox[0]?.subTotal
          setPrice(minimumPrice + aditionalPrice)
       }
@@ -147,23 +158,18 @@ const AddOns = ({
                         <label>{item.name}</label>
                      </div>
                      <div className='justify-center items-center w-4/5 row-start-1 row-end-3 col-start-2 h-full'>
-                        <div
-                           className={`${styles.checkBoxDiv} relative justify-center item-center`}
-                        >
-                           <input
-                              onClick={(event) => {
-                                 handleStateAndPrices(idx, event, item, lightBoxes[idx].state)
-                              }}
-                              onChange={(event) => {}}
-                              className='relative block'
-                              type='checkbox'
-                              id={item.id}
-                              name={item.id}
-                              value={item.price}
-                              ref={(el) => ElementReffer(el, ElementReffed)}
-                              checked={lightBoxes[idx].state}
-                           />
-                        </div>
+                        <CheckBox
+                           func={(event) => {
+                              runLightBoxesState(idx, singleOption)
+                              changePrice(event, item.price ? item.price : 0)
+                           }}
+                           id={item.id}
+                           name={item.id}
+                           value={item.price}
+                           state={lightBoxes[idx].state}
+                           reffed={ElementReffed}
+                           reffer={ElementReffer}
+                        />
                      </div>
                      <div className='text-base'>
                         {item.price !== undefined && item.price > 0 && formatPrice(item.price)}
