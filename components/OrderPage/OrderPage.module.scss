@@ -1,3 +1,10 @@
+.b {
+   background-color: #29fd53;
+   border-radius: 5px;
+   color: #222327;
+   font-weight: 900;
+}
+
 .orderPageOuterDiv {
    color: white;
    height: 55vh;
@@ -17,6 +24,10 @@
          color: lightgray;
          font-size: 0.85rem;
       }
+
+      /* div {
+         margin: auto;
+      } */
    }
 
    .bottomPrice {

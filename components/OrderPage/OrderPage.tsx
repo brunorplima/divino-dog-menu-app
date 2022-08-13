@@ -1,33 +1,46 @@
-import React, { useContext } from 'react'
-import { addMenuItemGroup, MENU_ITEM_GROUP_KEY } from '../../utils/localStorageHelper'
+import React, { useContext, useEffect, useState } from 'react'
 import { formatPrice } from '../../utils/dataHelper'
 import { menuContext } from '../contexts/MenuProvider'
 import style from './OrderPage.module.scss'
 import { MenuItemGroup } from '../../models/interfaces'
 import { FaWindowClose } from 'react-icons/fa'
-import Link from 'next/link'
-import { equals, omit, uniq } from 'ramda'
-import useLocalStorage from '../../hooks/useLocalStorage'
-import sendOrderData, { CURRENT_ORDERS_KEY } from './sendOrderData'
-import useSimpleLocalStorage from '../../hooks/useSimpleLocalStorage'
-import { useRouter } from 'next/router'
 import LoaderComponent from '../verse/LoaderComponent'
+import useStoredCheckout from '../../hooks/useStoredCheckout'
+import { CHECKOUT_STORAGE_KEY, CURRENT_ORDERS_KEY } from '../../constants/localStorageConstants'
+import useSimpleLocalStorage from '../../hooks/useStoredSentOrder'
+import sendOrderData from './sendOrderData'
+import { useRouter } from 'next/router'
 
 export default function OrderPage() {
-   let totalBill = 0
-
    const router = useRouter()
-   const { menuItems, toppings, sauces, menuItemOptions } = useContext(menuContext)
-   const { storedList, setStoredList, clearLocalStorage } = useLocalStorage<MenuItemGroup>(MENU_ITEM_GROUP_KEY)
+
+   // This one manages orders sent to shopkeeper
    const { addItem } = useSimpleLocalStorage(CURRENT_ORDERS_KEY)
 
-   const idlessOrders = storedList.map((order) => omit(['id'], order)) // removing id property to group equal orders together
-   const uniqueOrders = uniq(idlessOrders) // unique equal orders
-   // counting amount of each unique equal order
-   const indexes = idlessOrders.map((idless) =>
-      uniqueOrders.findIndex((unique) => equals(unique, idless))
+   const { menuItems, toppings, sauces, menuItemOptions } = useContext(menuContext)
+
+   // This one manages orders yet to be sent to shopkeeper
+   const { storedData, manageableStorage, setLocalStorage, clearLocalStorage } =
+      useStoredCheckout<MenuItemGroup>(CHECKOUT_STORAGE_KEY)
+   // counting amount of each repeated order
+   const [counter, setCounter] = useState<number[]>(
+      manageableStorage.map((list) => list.ids.length)
    )
-   const counter = uniq(indexes).map((u) => indexes.filter((ind) => ind === u).length)
+   const priceWatcher = () => {
+      let bill = 0
+      manageableStorage.forEach((unique, idx) => {
+         bill += unique.order.subTotal * counter[idx]
+      })
+      return bill
+   }
+   const [totalBill, setTotalBill] = useState<number>(priceWatcher())
+
+   useEffect(() => {
+      setCounter(manageableStorage.map((list) => list.ids.length))
+   }, [storedData])
+   useEffect(() => {
+      setTotalBill(priceWatcher())
+   }, [counter])
 
    const findItemName = <T extends { id: string; name: string }>(
       objArray: T[],
@@ -38,38 +51,6 @@ export default function OrderPage() {
       return res !== undefined ? res.name : `Absent Model: ${comparator}`
    }
 
-   const deleteOrder = (o: Omit<MenuItemGroup, 'id'>) => {
-      let newOrder: MenuItemGroup[] = []
-      let deleteIds: string[] = []
-      storedList.forEach((order) => {
-         const tester = equals(o, omit(['id'], order))
-         !tester && newOrder.push(order)
-         tester && deleteIds.push(order.id)
-      })
-
-      clearLocalStorage()
-      newOrder.forEach((order) => addMenuItemGroup(omit(['id'], order)))
-      setStoredList(newOrder)
-   }
-
-   const linkToItemsPage = (menuItem: Omit<MenuItemGroup, 'id'>, quant: number): string => {
-      const d = menuItems.find((item) => menuItem.menuItemId === item.id)
-      const textCategoryId = d ? d.categoryId : ''
-
-      const is = storedList.filter((order) => equals(omit(['id'], order), menuItem))
-      const ids = is.map((order) => order.id).join('-')
-      const textIds = `&itemsIds=${ids}` // this variable holds the ids of the order that holds equals items
-
-      const textQuantity = `&quantity=${quant}`
-
-      const t = menuItem.extraToppingIds ? menuItem.extraToppingIds.join('-') : ''
-      const s = menuItem.extraSauceIds ? menuItem.extraSauceIds.join('-') : ''
-      const r = menuItem.optionId ? menuItem.optionId : ''
-      const textBoxes = `${t}-${s}-${r}` === '-' ? '' : `&boxes=${t}-${s}-${r}`
-
-      return `/item?itemId=${menuItem.menuItemId}&catId=${textCategoryId}${textIds}${textQuantity}${textBoxes}`
-   }
-
    return (
       <div className={`${style.orderPageOuterDiv} ${style.hideScroller} font-medium my-12 mb-52`}>
          <div
@@ -77,51 +58,64 @@ export default function OrderPage() {
          >
             <div className={`${style.hideScroller} text-left`}>Seu Pedido</div>
          </div>
-         {storedList.length === 0 && (
-            <div className='text-4xl m-6'>
-               Você não selecionou nenhum item ainda.
-            </div>
+         {storedData.length === 0 && (
+            <div className='text-4xl m-6'>Você não selecionou nenhum item ainda.</div>
          )}
-         {uniqueOrders.map((e, idx) => (
-            <div key={e.menuItemId + String(idx)} id={String(idx)}>
+         {manageableStorage.map((e, idx) => (
+            <div key={e.order.menuItemId + String(idx)} id={String(idx)}>
                <div className={`${style.singleItem} relative grid gap-3 my-1 w-screen`}>
-                  <div>{counter[idx]}x</div>
-                  <Link href={linkToItemsPage(e, counter[idx])} passHref>
-                     <div>
-                        <div className='font-semibold'>{findItemName(menuItems, e.menuItemId)}</div>
-                        <div className={`${style.itemInfo}`}>
-                           {!!e.extraSauceIds && e.extraSauceIds.length !== 0 && (
-                              <>
-                                 <div className='font-semibold text-base'>Molhos</div>
-                                 {e.extraSauceIds.map((id) => (
-                                    <div key={id}>{findItemName(sauces, id)}</div>
-                                 ))}
-                              </>
-                           )}
-                           {!!e.extraToppingIds && e.extraToppingIds.length !== 0 && (
-                              <>
-                                 <div className='font-semibold text-base'>Adicionais</div>
-                                 {e.extraToppingIds.map((id) => (
-                                    <div key={id}>{findItemName(toppings, id)}</div>
-                                 ))}
-                              </>
-                           )}
-                           {!!e.optionId && e.optionId.length !== 0 && (
-                              <div>{findItemName(menuItemOptions, e.optionId)}</div>
-                           )}
-                        </div>
+                  <div className='flex flex-col'>
+                     <p
+                        className={`text-center m-auto h-7 w-14 ${style.b}`}
+                        onClick={() => setLocalStorage(manageableStorage, idx, 'addition')}
+                     >
+                        +
+                     </p>
+                     <p className={`text-center m-auto`}>{counter[idx]}x</p>
+                     <p
+                        className={`text-center m-auto h-7 w-14 ${style.b}`}
+                        onClick={() => setLocalStorage(manageableStorage, idx, 'subtraction')}
+                     >
+                        -
+                     </p>
+                  </div>
+                  {/* <Link href={linkToItemsPage(e, counter[idx])} passHref> */}
+                  <div>
+                     <div className='font-semibold'>
+                        {findItemName(menuItems, e.order.menuItemId)}
                      </div>
-                  </Link>
-                  <div className='text-right'>{formatPrice(e.subTotal * counter[idx])}</div>
+                     <div className={`${style.itemInfo}`}>
+                        {!!e.order.extraSauceIds && e.order.extraSauceIds.length !== 0 && (
+                           <>
+                              <div className='font-semibold text-base'>Molhos</div>
+                              {e.order.extraSauceIds.map((id) => (
+                                 <div key={id}>{findItemName(sauces, id)}</div>
+                              ))}
+                           </>
+                        )}
+                        {!!e.order.extraToppingIds && e.order.extraToppingIds.length !== 0 && (
+                           <>
+                              <div className='font-semibold text-base'>Adicionais</div>
+                              {e.order.extraToppingIds.map((id) => (
+                                 <div key={id}>{findItemName(toppings, id)}</div>
+                              ))}
+                           </>
+                        )}
+                        {!!e.order.optionId && e.order.optionId.length !== 0 && (
+                           <div>{findItemName(menuItemOptions, e.order.optionId)}</div>
+                        )}
+                     </div>
+                  </div>
+                  {/* </Link> */}
+                  <div className='text-right'>{formatPrice(e.order.subTotal)}</div>
                   <div
                      id={`o-${String(idx)}`}
                      className={`relative`}
-                     onClick={() => deleteOrder(e)}
+                     onClick={() => setLocalStorage(manageableStorage, idx, 'remotion')}
                   >
                      <FaWindowClose size={20} />
                   </div>
                </div>
-               <span className='hidden'>{(totalBill += e.subTotal * counter[idx])}</span>
             </div>
          ))}
          <br />
@@ -145,16 +139,18 @@ export default function OrderPage() {
                <button
                   className='rounded-lg font-semibold'
                   style={
-                     storedList.length !== 0
+                     storedData.length !== 0
                         ? { background: '#29fd53', color: 'black', padding: '0.70rem' }
                         : { background: 'lightgray', color: 'gray', padding: '0.70rem' }
                   }
-                  disabled={storedList.length === 0}
-                  onClick={() => sendOrderData(storedList, (orderId: string) => {
-                     addItem(orderId)
-                     router.push('/track_order?justOrdered=true')
-                     clearLocalStorage()
-                  })}
+                  disabled={storedData.length === 0}
+                  onClick={() =>
+                     sendOrderData(storedData, (orderId: string) => {
+                        addItem(orderId)
+                        router.push('/track_order?justOrdered=true')
+                        clearLocalStorage()
+                     })
+                  }
                >
                   Confirmar Pedido
                </button>
@@ -162,7 +158,7 @@ export default function OrderPage() {
             <div className='text-right'>{formatPrice(totalBill)}</div>
          </div>
 
-         <LoaderComponent show={menuItems.length === 0}/>
+         <LoaderComponent show={menuItems.length === 0} />
       </div>
    )
 }

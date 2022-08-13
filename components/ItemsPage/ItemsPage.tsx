@@ -156,7 +156,6 @@ const ItemsPage = (props: Props) => {
    const [buttonState, setButtonState] = useState(defineButtonState())
    useEffect(() => {
       setButtonState(defineButtonState(addOns))
-      console.log(addOns)
    }, [addOns])
 
    return (
