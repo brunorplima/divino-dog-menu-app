@@ -13,6 +13,7 @@ import { NextParsedUrlQuery } from 'next/dist/server/request-meta'
 import { stringToArray } from '../../utils/dataHelper'
 import { generateID } from '../../utils/modelHelper'
 import { getServerDate } from '../../utils/apiHelper'
+import { settingsContext } from '../contexts/SettingsProvider'
 
 interface Props {
    query: NextParsedUrlQuery
@@ -23,12 +24,18 @@ const ItemsPage = (props: Props) => {
    const { itemId, catId, itemsIds, quantity, boxes } = query
    const { menuItems, toppings, sauces, menuItemOptions } = useContext(menuContext)
 
+   const { settingsModel } = useContext(settingsContext)
+   const maxAmount = settingsModel?.maxAmountOfAddons ? settingsModel?.maxAmountOfAddons : 0
+   const toppingsAllowed = settingsModel?.allowUserToAddToppings
+      ? settingsModel?.allowUserToAddToppings
+      : false
+
    const definePrice = (serverDate?: Date) => {
       let price = 0
 
       const myItem = menuItems.find((item) => item.id === itemId)
       const diffDate = checkPromoDate(myItem, serverDate)
-      
+
       if (myItem === undefined) price = 0
       else if (myItem.promoPrice === undefined) price = myItem.price
       else if (diffDate) price = myItem.promoPrice.price
@@ -56,7 +63,7 @@ const ItemsPage = (props: Props) => {
       else return parseInt(quantity)
    })
 
-   useEffect(()=> {
+   useEffect(() => {
       const serverDate = getServerDate()
       serverDate.then((resp) => {
          definePrice(resp)
@@ -75,12 +82,12 @@ const ItemsPage = (props: Props) => {
          addonList: toppings,
          singleOption: false,
       },
-      {
+      /* {
          sect: theItem?.sauceIds,
          title: 'Escolha seus Molhos',
          addonList: sauces,
          singleOption: false,
-      },
+      }, */
       {
          sect: theItem?.optionIds,
          title: 'Escolha sua Opção',
@@ -150,13 +157,13 @@ const ItemsPage = (props: Props) => {
    }
 
    const defineButtonState = (addOnsTester: any[] = []) => {
-      if (theItem?.optionIds && theItem?.optionIds?.length > 0 && addOnsTester.includes(undefined)) return false
+      if (theItem?.optionIds && theItem?.optionIds?.length > 0 && addOnsTester.includes(undefined))
+         return false
       else return true
    }
    const [buttonState, setButtonState] = useState(defineButtonState())
    useEffect(() => {
       setButtonState(defineButtonState(addOns))
-      console.log(addOns)
    }, [addOns])
 
    return (
@@ -186,24 +193,35 @@ const ItemsPage = (props: Props) => {
                      <div className={`${styles.itemDescription} relative flex flex-col gap-6`}>
                         <div className='text-4xl font-bold'>{theItem.name}</div>
                         <div>{theItem.description}</div>
-                        <div className='pb-4'>
+                        {(theItem.optionIds?.length === 0 || !theItem.optionIds) &&
+                           toppingsAllowed && (
+                              <div className='pt-4 font-semibold'>
+                                 {maxAmount === 1 && `Somente 1 adicional permitido`}
+                                 {maxAmount >= 2 && `Até ${maxAmount} adicionais permitidos`}
+                              </div>
+                           )}
+                        <div>
                            {sections.map((section) => (
                               <Fragment key={section.title}>
-                                 {addonAvailability(section.sect) && section.sect !== undefined && (
-                                    <AddOns
-                                       addOnIds={section.sect}
-                                       title={section.title}
-                                       subTitle={section.subTitle}
-                                       singleOption={section.singleOption}
-                                       addonList={section.addonList}
-                                       addOns={addOns}
-                                       setAddOns={setAddOns}
-                                       price={price}
-                                       setPrice={setPrice}
-                                       minimumPrice={minimumPrice}
-                                       boxes={boxes}
-                                    />
-                                 )}
+                                 {maxAmount > 0 &&
+                                    (toppingsAllowed || section.singleOption) &&
+                                    addonAvailability(section.sect) &&
+                                    section.sect !== undefined && (
+                                       <AddOns
+                                          addOnIds={section.sect}
+                                          title={section.title}
+                                          subTitle={section.subTitle}
+                                          singleOption={section.singleOption}
+                                          addonList={section.addonList}
+                                          addOns={addOns}
+                                          setAddOns={setAddOns}
+                                          price={price}
+                                          setPrice={setPrice}
+                                          minimumPrice={minimumPrice}
+                                          boxes={boxes}
+                                          maxAmount={maxAmount}
+                                       />
+                                    )}
                               </Fragment>
                            ))}
                         </div>
@@ -238,7 +256,10 @@ const ItemsPage = (props: Props) => {
                      </div>
                   </>
                )}
-               <Link href={`${buttonState ? (itemsIds === undefined ? '/' : '/checkout') : '#'}`} passHref>
+               <Link
+                  href={`${buttonState ? (itemsIds === undefined ? '/' : '/checkout') : '#'}`}
+                  passHref
+               >
                   <div
                      className={`${buttonState ? styles.greenButton : styles.grayButton} ${
                         styles.priceOrder

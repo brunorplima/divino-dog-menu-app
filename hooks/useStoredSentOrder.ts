@@ -1,6 +1,6 @@
-import { clone, equals, reject } from "ramda"
-import { useEffect, useState } from "react"
-import { setLocalStorageItem } from "../utils/localStorageHelper"
+import { clone, equals, reject } from 'ramda'
+import { useEffect, useState } from 'react'
+import { setLocalStorageItem } from '../utils/localStorageHelper'
 
 const useSimpleLocalStorage = (key: string) => {
    const [storedItem, setStoredItem] = useState<string[] | null>(() => {
