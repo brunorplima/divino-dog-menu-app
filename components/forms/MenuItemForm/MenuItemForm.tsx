@@ -5,7 +5,7 @@ import { MenuItem } from '../../../models/interfaces'
 import MenuItemModel from '../../../models/MenuItemModel'
 import menuItemFormSchema from '../../../schemas/menuItemSchema'
 import { storeFile } from '../../../utils/firebaseHelper'
-import { getOptionsFromList } from '../../../utils/modelHelper'
+import { getOptionsFromList, getWeekDayOptions } from '../../../utils/modelHelper'
 import { menuContext } from '../../contexts/MenuProvider'
 import FormField from '../../forms/fields/FormField'
 import PrimaryButton from '../../verse/PrimaryButton'
@@ -44,7 +44,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
    const process = async (values: MenuItemFormSchema): Promise<MenuItemModel | undefined> => {
       try {
          let imageUrl
-         if (values.img) imageUrl = await storeFile(values.img as File, MenuItemModel.PATH) 
+         if (values.img) imageUrl = await storeFile(values.img as File, MenuItemModel.PATH)
          const nonEmptyValues = reject(
             val => isNil(val) || isEmpty(val),
             mergeLeft({ img: imageUrl }, values)
@@ -64,7 +64,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
             const menuItem = new MenuItemModel({
                ...omit(['id'], {
                   ...nonEmptyValues,
-                  listOrder: nonEmptyValues.listOrder ? nonEmptyValues : 999
+                  listOrder: nonEmptyValues.listOrder ? nonEmptyValues.listOrder : 999
                }) as MenuItem,
             })
             if (values.img) menuItem.modify({ img: imageUrl })
@@ -208,6 +208,16 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
                            isMulti
                            error={errors.optionIds}
                            touched={touched.optionIds}
+                        />
+
+                        <SelectFormField
+                           name='weekDays'
+                           label='Dias Disponíveis (se não servir todo dia)'
+                           containerClassName='mb-3'
+                           options={getWeekDayOptions()}
+                           isMulti
+                           error={errors.sauceIds}
+                           touched={touched.sauceIds}
                         />
 
                         <span className='text-gray-100'>Adicionar promoção</span>

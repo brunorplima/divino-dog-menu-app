@@ -20,3 +20,20 @@ export const ORDER_STATUSES: OrderStatus[] = [
    ...ORDER_ACTIVE_STATUTES,
    ...ORDER_INACTIVE_STATUSES
 ]
+
+export const SUNDAY = 'Domingo'
+export const MONDAY = 'Segunda'
+export const TUESDAY = 'Terça'
+export const WEDNESDAY = 'Quarta'
+export const THURSDAY = 'Quinta'
+export const FRIDAY = 'Sexta'
+export const SATURDAY = 'Sábado'
+export const WEEK_DAYS = [
+   MONDAY,
+   TUESDAY,
+   WEDNESDAY,
+   THURSDAY,
+   FRIDAY,
+   SATURDAY,
+   SUNDAY
+]

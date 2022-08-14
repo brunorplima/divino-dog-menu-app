@@ -4,6 +4,7 @@ import { db } from '../firebase/app'
 import { collection, deleteDoc, doc, getDoc, onSnapshot, query, Query, setDoc, Unsubscribe } from "firebase/firestore";
 import Model from './Model';
 import { generateID, removeOutdatedPromotion } from '../utils/modelHelper';
+import { WEEK_DAYS } from '../constants/modelsConstants'
 
 export default class MenuItemModel extends Model<MenuItem> {
 
@@ -18,6 +19,7 @@ export default class MenuItemModel extends Model<MenuItem> {
             ...item
          }
       }
+      this.validate()
    }
    
    /**
@@ -95,6 +97,7 @@ export default class MenuItemModel extends Model<MenuItem> {
    get price()       { return this.menuItem.price }
    get isAvailable() { return this.menuItem.isAvailable }
    get categoryId()  { return this.menuItem.categoryId }
+   get weekDays()    { return this.menuItem.weekDays }
    get optionIds()   { return this.menuItem.optionIds }
    get toppingIds()  { return this.menuItem.toppingIds }
    get sauceIds()    { return this.menuItem.sauceIds }
@@ -102,6 +105,35 @@ export default class MenuItemModel extends Model<MenuItem> {
    get listOrder()   { return this.menuItem.listOrder }
    get img()         { return this.menuItem.img }
    get promoPrice()  { return this.menuItem.promoPrice }
+
+   availableDaysToString() {
+      let availableDaysString = ''
+      let isFollowingDay = false
+      let returnCount = 0
+      this.weekDays?.forEach((num, idx, arr) => {
+         if (!idx) availableDaysString += WEEK_DAYS[num]
+         else {
+            if (num - 1 === arr[idx - 1] && idx + 1 !== arr.length) {
+               isFollowingDay = true
+               returnCount++
+               return
+            }
+            else {
+               if (isFollowingDay && idx + 1 !== arr.length) {
+                  isFollowingDay = false
+                  if (returnCount > 1) availableDaysString += ` à ${WEEK_DAYS[arr[idx - 1]]}, ${WEEK_DAYS[num]}`
+                  else availableDaysString += `, ${WEEK_DAYS[arr[idx - 1]]}, ${WEEK_DAYS[num]}`
+               } else if (isFollowingDay && idx + 1 === arr.length) {
+                  availableDaysString += ` à ${WEEK_DAYS[num]}`
+               } else {
+                  availableDaysString += `, ${WEEK_DAYS[num]}`
+               }
+               returnCount = 0
+            }
+         }
+      })
+      return availableDaysString
+   }
 
    hasPromo() {
       return this.hasValidPromo() && this.promoPrice
@@ -130,17 +162,24 @@ export default class MenuItemModel extends Model<MenuItem> {
       return true
    }
 
+   private validate() {
+      if (this.weekDays && this.weekDays.length) {
+         this.modify({ weekDays: this.weekDays.map(str => Number(str)) })
+      }
+      else this.removeProp('weekDays')
+   }
+
    modify(values: Partial<Omit<MenuItem, 'id'>>) {
       this.menuItem = R.mergeRight(this.values(), values)
    }
 
-   dissoc(keys: Array<keyof Omit<MenuItem, 'id' | 'name' | 'price' | 'isAvailable' | 'listOrder' | 'categoryId'>>) {
+   dissoc(keys: Array<keyof Omit<MenuItem, 'id' | 'name' | 'price' | 'isAvailable' | 'listOrder' | 'categoryId' | 'weekDays'>>) {
       keys.forEach(key => {
          this.menuItem = R.dissoc(key, this.menuItem)
       })
    }
 
-   removeProp(prop: 'optionIds' | 'toppingIds' | 'sauceIds' | 'description' | 'img' | 'promoPrice') {
+   removeProp(prop: 'optionIds' | 'toppingIds' | 'sauceIds' | 'description' | 'img' | 'promoPrice' | 'weekDays') {
       this.menuItem = R.dissoc(prop, this.values())
    }
 
