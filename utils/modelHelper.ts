@@ -1,7 +1,8 @@
 import moment from "moment"
-import { isNil, omit } from "ramda"
+import { isNil } from "ramda"
 import { Option } from "../components/chapter/CustomSelect/CustomSelect"
 import { UserOrNull } from "../components/contexts/AuthProvider"
+import { WEEK_DAYS } from "../constants/modelsConstants"
 import MenuItemModel from "../models/MenuItemModel"
 import { getServerDate } from "./apiHelper"
 
@@ -22,6 +23,13 @@ export const isAdminUser = (user: UserOrNull) => (user?.admin as boolean) || (us
 export const getOptionsFromList = (list: { id: string, name: string }[]): Option[] => {
    return list.map(item => ({ label: item.name, value: item.id }))
 }
+
+export const getWeekDayOptions = () => WEEK_DAYS.map((day, idx) => (
+   {
+      label: day,
+      value: idx.toString()
+   }
+))
 
 export const removeOutdatedPromotion = async (item: MenuItemModel) => {
    const date = await getServerDate()
