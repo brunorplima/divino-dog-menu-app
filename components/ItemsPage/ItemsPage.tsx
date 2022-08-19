@@ -4,14 +4,12 @@ import AddOns from './AddOns'
 import styles from './ItemsPage.module.scss'
 import { MenuItemGroup } from '../../models/interfaces'
 import * as R from 'ramda'
-import { MENU_ITEM_GROUP_KEY, addMenuItemGroup } from '../../utils/localStorageHelper'
+import { addMenuItemGroup } from '../../utils/localStorageHelper'
 import { checkPromoDate, formatPrice } from '../../utils/dataHelper'
 import Link from 'next/link'
 import { IoIosArrowDropleftCircle } from 'react-icons/io'
-import useLocalStorage from '../../hooks/useLocalStorage'
 import { NextParsedUrlQuery } from 'next/dist/server/request-meta'
 import { stringToArray } from '../../utils/dataHelper'
-import { generateID } from '../../utils/modelHelper'
 import { getServerDate } from '../../utils/apiHelper'
 import { settingsContext } from '../contexts/SettingsProvider'
 
@@ -128,26 +126,6 @@ const ItemsPage = (props: Props) => {
    const saveInLocalStorage = () => {
       const itemsGroupObject = interfacingMenuItemGroup(quant)
       itemsGroupObject !== undefined && itemsGroupObject.forEach((item) => addMenuItemGroup(item))
-   }
-
-   const { storedList, setStoredList, clearLocalStorage } =
-      useLocalStorage<MenuItemGroup>(MENU_ITEM_GROUP_KEY)
-   const replaceInLocalStorage = () => {
-      const orderIndices: number[] = []
-      storedList.forEach((item, idx) => {
-         stringToArray(itemsIds).includes(item.id) && orderIndices.push(idx)
-      })
-      const position = orderIndices[0]
-      const itemsGroupObject = interfacingMenuItemGroup(quant)
-      if (itemsGroupObject !== undefined) {
-         itemsGroupObject.forEach((item, idx) =>
-            storedList.splice(position + idx, 0, { id: generateID(), ...item })
-         )
-         const ids = stringToArray(itemsIds)
-         clearLocalStorage()
-         storedList.forEach((item) => !ids.includes(item.id) && addMenuItemGroup(item))
-      }
-      setStoredList(storedList)
    }
 
    const addonAvailability = (addonArray: string[] | undefined) => {
@@ -267,7 +245,6 @@ const ItemsPage = (props: Props) => {
                      onClick={() => {
                         if (buttonState) {
                            !itemsIds && saveInLocalStorage()
-                           itemsIds && replaceInLocalStorage()
                         }
                      }}
                   >
