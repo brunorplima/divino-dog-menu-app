@@ -4,8 +4,15 @@ $neonGreen: #39ff14;
 $neonBlue: #4d4dff;
 $neonRed: #ff3131;
 
-.anchorItem {
+.lineThrough {
+   color: gray;
+   text-decoration: line-through;
+}
+.gray {
+   color: gray;
+}
 
+.anchorItem {
    .menuItem {
       background: #444549;
       padding: 1rem 1.3rem;
@@ -13,6 +20,14 @@ $neonRed: #ff3131;
 
       .itemTitle {
          color: white;
+
+         .hidden {
+            visibility: hidden;
+         }
+         .weekDays {
+            font-size: 15px;
+            font-weight: 500;
+         }
       }
 
       .neonPrice {
