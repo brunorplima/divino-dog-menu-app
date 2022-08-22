@@ -1,5 +1,5 @@
 import { head, last } from 'ramda'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { settingsContext } from '../../contexts/SettingsProvider'
 import { FIELD_CLASS_NAME } from '../../../constants/formConstants'
 
@@ -16,6 +16,31 @@ const expiryTimes = [
 
 const AdminSettingsSection = () => {
    const { settingsModel } = useContext(settingsContext)
+   const [aboutUsContent, setAboutUsContent] = useState(settingsModel?.aboutUsContent || '')
+   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
+
+   useEffect(() => {
+      if (timer) {
+         clearTimeout(timer)
+      }
+      setTimer(setTimeout(saveAboutUsContent, 1000))
+   }, [aboutUsContent])
+
+   const handleAboutUsContentChange = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const value = ev.currentTarget.value
+      setAboutUsContent(value)
+   }
+
+   const saveAboutUsContent = () => {
+      try {
+         settingsModel?.modify({ aboutUsContent })
+         settingsModel?.save()
+         setTimer(null)
+      }
+      catch (err: any) {
+         console.log(err.message)
+      }
+   }
 
    if (!settingsModel) return null
    return (
@@ -233,19 +258,8 @@ const AdminSettingsSection = () => {
                   className={`${FIELD_CLASS_NAME} w-full h-40 text-base`}
                   name='aboutUsContent'
                   id='aboutUsContent'
-                  value={settingsModel?.aboutUsContent || ''}
-                  onChange={ev => {
-                     const value = ev.currentTarget.value
-                     try {
-                        settingsModel?.modify({
-                           aboutUsContent: value
-                        })
-                        settingsModel?.save()
-                     }
-                     catch (err: any) {
-                        console.log(err.message)
-                     }
-                  }}
+                  value={aboutUsContent}
+                  onChange={e => handleAboutUsContentChange(e)}
                ></textarea>
             </div>
          </div>
