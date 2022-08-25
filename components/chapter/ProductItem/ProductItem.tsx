@@ -8,6 +8,7 @@ import ListItemEditDelete from '../../verse/ListItemEditDelete'
 import { GoArrowSmallRight } from 'react-icons/go'
 
 interface Props {
+   readonly id: string
    readonly name: string
    readonly isAvailable: boolean
    readonly onEdit: () => void
@@ -15,12 +16,11 @@ interface Props {
    readonly onView?: Function
    readonly promotionalPrice?: number
    readonly price?: number
-   readonly img?: string
    readonly description?: string
 }
 
 const ProductItem: React.FC<Props> = ({
-   img,
+   id,
    name,
    onEdit,
    onDelete,
@@ -73,7 +73,12 @@ const ProductItem: React.FC<Props> = ({
             )}
          </div>
       </div>
-      <ListItemEditDelete onEdit={onEdit} onDelete={onDelete} />
+      <ListItemEditDelete
+         modalId={`itemEditDelete-${id}`}
+         itemName={name}
+         onEdit={onEdit}
+         onDelete={onDelete}
+      />
    </div>
 )
 
