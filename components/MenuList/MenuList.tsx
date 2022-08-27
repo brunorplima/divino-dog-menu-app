@@ -34,12 +34,12 @@ export default function MenuList() {
       category: CategoryModel,
       serverDate: Date | undefined
    ) => {
-      const tester = checkPromoDate(item, serverDate)
+      const isPromotionActive = checkPromoDate(item, serverDate)
 
-      if (item.promoPrice !== undefined && category.id === PROMOTION_ID_CATEGORY && tester)
+      if (item.promoPrice !== undefined && category.id === PROMOTION_ID_CATEGORY && isPromotionActive)
          return true
       if (
-         (item.promoPrice === undefined || !tester) &&
+         (item.promoPrice === undefined || !isPromotionActive) &&
          category.id !== PROMOTION_ID_CATEGORY &&
          category.id === item.categoryId
       )
@@ -84,7 +84,7 @@ export default function MenuList() {
                            {checkCategoriesAndPromo(item, category, serverDate) && (
                               <ListingItems
                                  item={item}
-                                 tester={checkPromoDate(item, serverDate)}
+                                 isPromotionActive={checkPromoDate(item, serverDate)}
                               />
                            )}
                         </Fragment>

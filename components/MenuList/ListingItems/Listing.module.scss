@@ -12,26 +12,24 @@ $neonRed: #ff3131;
    color: gray;
 }
 
-.anchorItem {
-   .menuItem {
-      background: #444549;
-      padding: 1rem 1.3rem;
-      min-height: 9.375rem;
+.menuItem {
+   background: #444549;
+   padding: 1rem 1.3rem;
+   min-height: 9.375rem;
 
-      .itemTitle {
-         color: white;
+   .itemTitle {
+      color: white;
 
-         .hidden {
-            visibility: hidden;
-         }
-         .weekDays {
-            font-size: 15px;
-            font-weight: 500;
-         }
+      .hidden {
+         visibility: hidden;
       }
-
-      .neonPrice {
-         color: $neonGreen;
+      .weekDays {
+         font-size: 15px;
+         font-weight: 500;
       }
+   }
+
+   .neonPrice {
+      color: $neonGreen;
    }
 }
