@@ -3,7 +3,7 @@ import React, { Fragment, useContext, useMemo, useState } from 'react'
 import ProductItem from '../../chapter/ProductItem'
 import { menuContext } from '../../contexts/MenuProvider'
 import EmptyListMessage from '../../verse/EmptyListMessage'
-import ListItemDetailsEdit from '../../verse/ListItemEditDelete'
+import ListItemEditDelete from '../../verse/ListItemEditDelete'
 import MenuItemModel from '../../../models/MenuItemModel'
 import AdminMenuItemView from '../../chapter/AdminMenuItemView'
 import PrimaryModal from '../PrimaryModal'
@@ -285,6 +285,7 @@ const AdminProductsSection = () => {
                      return (
                         <Fragment key={item.id}>
                            <ProductItem
+                              id={item.id}
                               name={item.name}
                               isAvailable={item.isAvailable}
                               onEdit={() => {
@@ -296,7 +297,6 @@ const AdminProductsSection = () => {
                               onDelete={async () => await item.delete()}
                               price={item.price}
                               description={item.description}
-                              img={item.img ? item.img : ''}
                               onView={() => setCurrentMenuItem({ item, action: 'view' })}
                               promotionalPrice={item.promoPrice?.price}
                            />
@@ -314,6 +314,7 @@ const AdminProductsSection = () => {
                      return (
                         <Fragment key={item.id}>
                            <ProductItem
+                              id={item.id}
                               name={item.name}
                               isAvailable={item.isAvailable}
                               onEdit={() => setCurrentProduct({
@@ -339,6 +340,7 @@ const AdminProductsSection = () => {
                      return (
                         <Fragment key={item.id}>
                            <ProductItem
+                              id={item.id}
                               name={item.name}
                               isAvailable={item.isAvailable}
                               onEdit={() => setCurrentProduct({
@@ -364,6 +366,7 @@ const AdminProductsSection = () => {
                      return (
                         <Fragment key={item.id}>
                            <ProductItem
+                              id={item.id}
                               name={item.name}
                               isAvailable={item.isAvailable}
                               onEdit={() => setCurrentProduct({
@@ -403,11 +406,13 @@ const AdminProductsSection = () => {
                                     </div>
                                     <div>Ordem: {item.listOrder}</div>
                                  </div>
-                                 <ListItemDetailsEdit
+                                 <ListItemEditDelete
                                     onEdit={() => setCurrentCategory({
                                        item,
                                        action: 'edit'
                                     })}
+                                    modalId={`itemEditDelete-${item.id}`}
+                                    itemName={item.name}
                                     onDelete={async () => await item.delete()}
                                     horizontal
                                  />
