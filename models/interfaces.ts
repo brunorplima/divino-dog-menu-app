@@ -138,6 +138,5 @@ export interface PromoPrice {
 export type OrderStatus = typeof ORDER_STATUS_CONFIRMAR
 | typeof ORDER_STATUS_CONFIRMADO
 | typeof ORDER_STATUS_PREPARANDO
-| typeof ORDER_STATUS_FINALIZANDO
 | typeof ORDER_STATUS_FINALIZADO
 | typeof ORDER_STATUS_CANCELADO
