@@ -21,7 +21,6 @@ interface StatusInfo {
    readonly confirmar: StatusInfoEach
    readonly confirmado: StatusInfoEach
    readonly preparando: StatusInfoEach
-   readonly finalizando: StatusInfoEach
    readonly finalizado: StatusInfoEach
    readonly cancelado: StatusInfoEach
 }
@@ -46,15 +45,10 @@ const TrackOrderInfo: React.FC<Props> = ({ order }) => {
          percent: 50,
          previousStatuses: ['confirmar', 'confirmado']
       },
-      finalizando: {
-         text: 'Seu número está prestes a ser chamado',
-         percent: 75,
-         previousStatuses: ['confirmar', 'confirmado', 'preparando']
-      },
       finalizado: {
          text: 'Pedido finalizado',
          percent: 100,
-         previousStatuses: ['confirmar', 'confirmado', 'preparando', 'finalizando']
+         previousStatuses: ['confirmar', 'confirmado', 'preparando']
       },
       cancelado: {
          text: 'Pedido foi cancelado',
