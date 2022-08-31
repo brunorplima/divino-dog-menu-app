@@ -37,12 +37,12 @@ const TrackOrderInfo: React.FC<Props> = ({ order }) => {
       },
       confirmado: {
          text: 'Pagamento e pedido confirmados',
-         percent: 25,
+         percent: 33,
          previousStatuses: ['confirmar']
       },
       preparando: {
          text: 'Pedido está sendo preparado',
-         percent: 50,
+         percent: 66,
          previousStatuses: ['confirmar', 'confirmado']
       },
       finalizado: {
