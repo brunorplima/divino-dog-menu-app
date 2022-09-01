@@ -34,3 +34,13 @@ export const checkPromoDate = (
       return diffDate
    } else return false
 }
+
+export const compareWeekDaysToModel = (weekDaysModel: number[] | undefined, getDate?: Date) => {
+   if (weekDaysModel === undefined) return true
+   else if (weekDaysModel.length === 0) return false
+
+   const numberDay = getDate === undefined ? new Date().getDay() : getDate.getDay()
+
+   const definedDay = numberDay - 1 === -1 ? 7 : numberDay - 1
+   return weekDaysModel.includes(definedDay)
+}

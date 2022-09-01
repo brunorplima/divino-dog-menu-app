@@ -1,29 +1,53 @@
 import style from './Listing.module.scss'
 import MenuItemModel from '../../../models/MenuItemModel'
-import Link from 'next/link'
-import { formatPrice } from '../../../utils/dataHelper'
+import { compareWeekDaysToModel, formatPrice } from '../../../utils/dataHelper'
+import { useState, useEffect } from 'react'
+import { getServerDate } from '../../../utils/apiHelper'
+import ConditionalLinkRender from './ConditionalLinkRender'
 
 interface Props {
    item: MenuItemModel
-   tester: boolean
+   isPromotionActive: boolean
 }
 
-export default function Listing({ item, tester }: Props) {
+export default function Listing({ item, isPromotionActive }: Props) {
+   const [activeItem, setActiveItem] = useState(compareWeekDaysToModel(item.weekDays))
+
+   useEffect(() => {
+      const serverDate = getServerDate()
+      serverDate.then((resp) => {
+         setActiveItem(compareWeekDaysToModel(item.weekDays, resp))
+      })
+   }, [])
+
    return (
-      <Link href={`/item?itemId=${item.id}&catId=${item.categoryId}`}>
-         <a className={`${style.anchorItem} relative bg-white cursor-pointer`}>
-            <div>
-               <div className={`${style.menuItem} relative grid mb-8 w-screen`}>
-                  <div>
-                     <h3 className={`${style.itemTitle} font-extrabold`}>{item.name}</h3>
-                  </div>
-                  <div>{item.description}</div>
-                  <div className={`${style.neonPrice} relative bottom-0 font-semibold`}>
-                     {(item.promoPrice !== undefined && tester) ? formatPrice(item.promoPrice.price) : formatPrice(item.price)}
-                  </div>
+      <ConditionalLinkRender link={activeItem} item={item}>
+         <div
+            className={`${!activeItem ? style.lineThrough : ''} relative bg-white cursor-pointer`}
+         >
+            <div className={`${style.menuItem} relative grid mb-8 w-screen`}>
+               <div>
+                  <h3 className={`${style.itemTitle} font-extrabold`}>
+                     {`${item.name}`}{' '}
+                     <span
+                        className={
+                           item.availableDaysToString() !== '' ? style.weekDays : style.hidden
+                        }
+                     >{`(disponível ${item.availableDaysToString()})`}</span>
+                  </h3>
+               </div>
+               <div>{item.description}</div>
+               <div
+                  className={`${
+                     !activeItem ? style.gray : style.neonPrice
+                  } relative bottom-0 font-semibold`}
+               >
+                  {item.promoPrice !== undefined && isPromotionActive
+                     ? formatPrice(item.promoPrice.price)
+                     : formatPrice(item.price)}
                </div>
             </div>
-         </a>
-      </Link>
+         </div>
+      </ConditionalLinkRender>
    )
 }
