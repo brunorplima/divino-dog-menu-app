@@ -23,20 +23,30 @@ const PrimaryButton: React.FC<Props> = ({
 }) => {
 
    const bgColorStyle = useMemo(() => {
-      return bgColor === 'gray' ? 'bg-gray-500 hover:bg-gray-400' : 'bg-green-500 hover:bg-green-700'
-   }, [bgColor])
+      let className = bgColor === 'gray' ? 'bg-gray-500' : 'bg-green-500'
+      if (!disabled) className += bgColor === 'gray' ? ' hover:bg-gray-400' : ' hover:bg-green-700'
+      return className
+   }, [bgColor, disabled])
 
    return (
       <button
          type={type}
-         className={`${bgColorStyle} py-2 px-10 w-8 text-white min-w-max flex gap-2 rounded-lg duration-300 ${className}`}
+         className={`
+            ${bgColorStyle} py-2 px-10 w-8 text-white min-w-max flex gap-2 rounded-lg 
+            duration-300 ${disabled && 'cursor-not-allowed text-gray-400'} ${className}
+         `}
          disabled={disabled}
          onClick={() => clickHandler()}
       >
-         <span className='translate-y-1'>
-            {icon}
-         </span>
-         {` ${label}`}
+         {icon && (
+            <>
+               <span className={label ? 'translate-y-' : ''}>
+                  {icon}
+               </span>
+               {label && ' '}
+            </>
+         )}
+         {label && label}
       </button>
    )
 }

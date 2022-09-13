@@ -72,6 +72,8 @@ export default class UserModel extends Model<User> {
    get admin()          { return this.user.admin }
    get master()         { return this.user.master }
 
+   get fullName()       { return `${this.user.firstName} ${this.user.lastName}` }
+
    values() {
       return this.user
    }
@@ -86,6 +88,14 @@ export default class UserModel extends Model<User> {
       this.user = R.mergeRight(this.values(), values)
    }
 
+   addAdminRole(isMasterUser = false) {
+      if (isMasterUser && !this.admin) this.user = R.mergeRight(this.user, { admin: true })
+   }
+
+   removeAdminRole(isMasterUser = false) {
+      if (isMasterUser && this.admin) this.user = R.dissoc('admin', this.user)
+   }
+
    async save() {
       if (!this.isValid()) throw new Error('One or more of the values is/are not valid')
 
@@ -96,6 +106,12 @@ export default class UserModel extends Model<User> {
 
    async delete() {
       return await deleteDoc(doc(db, UserModel.PATH, this.id))
+   }
+
+   mainAddressToString() {
+      if (R.isNil(this.addresses)) return ''
+      const mainAddress = R.find(R.propEq('isMain', true), this.addresses)
+      return `${mainAddress?.description}, ${mainAddress?.zipCode}`
    }
 
    toString() {
