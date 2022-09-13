@@ -14,9 +14,11 @@ interface Props {
 }
 
 const AdminUsersSearchResults: React.FC<Props> = ({ users, filteredUsers, searchValues, setUserToEdit, setFilteredUsers }) => {
+   console.log('users:', users)
+   console.log('filteredUsers:', filteredUsers)
    return (
       <div className='p-3'>
-         {users.length > 0 && !filteredUsers && (
+         {!filteredUsers && (
             <>
                <div className="py-2 mb-3">
                   <div className='flex'>
