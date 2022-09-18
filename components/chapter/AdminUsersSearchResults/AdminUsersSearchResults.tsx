@@ -13,9 +13,13 @@ interface Props {
    readonly setFilteredUsers: React.Dispatch<React.SetStateAction<UserModel[] | null>>
 }
 
-const AdminUsersSearchResults: React.FC<Props> = ({ users, filteredUsers, searchValues, setUserToEdit, setFilteredUsers }) => {
-   console.log('users:', users)
-   console.log('filteredUsers:', filteredUsers)
+const AdminUsersSearchResults: React.FC<Props> = ({
+   users,
+   filteredUsers,
+   searchValues,
+   setUserToEdit,
+   setFilteredUsers
+}) => {
    return (
       <div className='p-3'>
          {!filteredUsers && (

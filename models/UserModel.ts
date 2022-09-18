@@ -1,7 +1,19 @@
 import { User } from './interfaces'
 import * as R from 'ramda'
 import { db } from '../firebase/app'
-import { collection, deleteDoc, doc, getDoc, onSnapshot, query, Query, setDoc, Unsubscribe } from 'firebase/firestore'
+import {
+   collection,
+   deleteDoc,
+   doc,
+   getDoc,
+   getDocs,
+   onSnapshot,
+   query,
+   Query,
+   QueryConstraint,
+   setDoc,
+   Unsubscribe
+} from 'firebase/firestore'
 import Model from './Model'
 
 export default class UserModel extends Model<User> {
@@ -23,6 +35,14 @@ export default class UserModel extends Model<User> {
       const userModel = new UserModel(docRef.data() as User)
 
       return userModel
+   }
+
+   static async findMany(constraints: QueryConstraint[] = []) {
+      const q = query(collection(db, UserModel.PATH), ...constraints)
+      const users: UserModel[] = []
+      const { docs } = await getDocs(q)
+      docs.forEach(doc => users.push(new UserModel(doc.data() as User)))
+      return users
    }
 
    static listenToAll(setFunction: Function): Unsubscribe {

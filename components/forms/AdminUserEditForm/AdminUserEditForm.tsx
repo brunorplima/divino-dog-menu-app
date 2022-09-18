@@ -1,6 +1,7 @@
 import { Form, Formik } from 'formik'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import UserModel from '../../../models/UserModel'
+import Dialog from '../../chapter/Dialog'
 import PrimaryButton from '../../verse/PrimaryButton'
 import SelectFormField from '../fields/SelectFormField'
 
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const AdminUserEditForm: React.FC<Props> = ({ user, onSubmit }) => {
+   const [dialogOpen, setDialogOpen] = useState(false)
    const initialValue: UserEditForm = useMemo(() => {
       if (user.admin) return { userType: ADMIN_USER_TYPE }
       return { userType: REGULAR_USER_TYPE }
@@ -52,9 +54,47 @@ const AdminUserEditForm: React.FC<Props> = ({ user, onSubmit }) => {
                      />
                      <PrimaryButton
                         label='Salvar'
-                        type='submit'
                         disabled={values.userType === initialValue.userType}
+                        clickHandler={() => setDialogOpen(true)}
                      />
+
+                     <Dialog
+                        id='confirmUserRoleChange'
+                        isOpen={dialogOpen}
+                        onClose={() => setDialogOpen(false)}
+                        footer={[
+                           {
+                              label: 'Cancel',
+                              onClick: () => {
+                                 setDialogOpen(false)
+                              }
+                           },
+                           {
+                              label: 'Ok',
+                              onClick: () => {
+                                 onSubmit(values)
+                                 setDialogOpen(false)
+                              }
+                           }
+                        ]}
+                     >
+                        <>
+                           {values.userType === 'Administrador'
+                              ? (
+                                 <>
+                                    <p>Tem certeza que quer transformar {user.fullName} em um Administrador?</p>
+                                    <p>{user.fullName} terá acesso a esse painél de administradores e poderá modificar seu banco de dados.</p>
+                                 </>
+                              )
+                              : (
+                                 <>
+                                    <p>Tem certeza que quer remover a condição de administrador de {user.fullName}?</p>
+                                    <p>{user.fullName} perderá acesso a esse painél de administradores e não poderá mais modificar seu banco de dados.</p>
+                                 </>
+                              )
+                           }
+                        </>
+                     </Dialog>
                   </Form>
                )}
             </Formik>

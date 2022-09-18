@@ -11,10 +11,10 @@ export interface UserSearchForm {
 
 interface Props {
    readonly onSubmit: (values: UserSearchForm) => void
-   readonly disableSearch: boolean
+   readonly isLoading: boolean
 }
 
-const AdminUsersSearchForm: React.FC<Props> = ({ onSubmit, disableSearch }) => {
+const AdminUsersSearchForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
    const initialValues: UserSearchForm = { searchText: '', searchProp: 'emailAddress' }
 
    return (
@@ -24,7 +24,7 @@ const AdminUsersSearchForm: React.FC<Props> = ({ onSubmit, disableSearch }) => {
                initialValues={initialValues}
                onSubmit={onSubmit}
             >
-               {() => (
+               {({ values }) => (
                   <Form>
                      <div className='flex justify-between items-end mb-4'>
                         <FormField
@@ -39,7 +39,7 @@ const AdminUsersSearchForm: React.FC<Props> = ({ onSubmit, disableSearch }) => {
                            icon={<BiSearchAlt size={20} />}
                            className='px-0 py-0 flex justify-center items-center h-8 w-8'
                            type='submit'
-                           disabled={disableSearch}
+                           disabled={isLoading || !values.searchText.length}
                         />
                      </div>
                      <div className='flex gap-8'>

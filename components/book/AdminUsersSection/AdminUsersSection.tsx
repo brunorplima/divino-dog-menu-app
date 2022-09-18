@@ -1,8 +1,6 @@
-import { collection, getDocs, limit, orderBy, query, QueryConstraint, Unsubscribe, where } from 'firebase/firestore'
+import { limit, orderBy, QueryConstraint, where } from 'firebase/firestore'
 import * as R from 'ramda'
 import React, { useContext, useEffect, useState } from 'react'
-import { db } from '../../../firebase/app'
-import { User } from '../../../models/interfaces'
 import UserModel from '../../../models/UserModel'
 import AdminUsersSearchResults from '../../chapter/AdminUsersSearchResults'
 import { adminContext } from '../../contexts/AdminProvider'
@@ -19,33 +17,29 @@ const AdminUsersSection = () => {
    const [loadingSearch, setLoadingSearch] = useState(false)
    const { users, setUsers } = useContext(adminContext)
    const { user } = useContext(authContext)
-   let unsubscribeUsers: Unsubscribe = () => {}
 
    useEffect(() => {
-      if (!users.length) unsubscribeUsers = fetchUsers()
-      return unsubscribeUsers
+      fetchUsers()
    }, [])
-
-   useEffect(() => {
-      if (!filteredUsers) unsubscribeUsers()
-   }, [filteredUsers])
 
    useEffect(() => {
       if (R.isNil(filteredUsers) && !R.isNil(searchValues)) setSearchValues(null)
    }, [filteredUsers])
 
-   function fetchUsers() {
-      const usersRef = collection(db, UserModel.PATH)
-      const usersQuery = query(usersRef, orderBy('firstName', 'asc'), limit(20))
-      const unsubscribe = UserModel.listenToQuery(usersQuery, setUsers)
-      return unsubscribe
+   async function fetchUsers() {
+      const constraints: QueryConstraint[] = [orderBy('firstName', 'asc'), limit(20)]
+      const userRes = await UserModel.findMany(constraints)
+      setUsers(userRes)
    }
 
-   function onSearchSubmit(values: UserSearchForm) {
+   async function onSearchSubmit(values: UserSearchForm) {
       setLoadingSearch(true)
       try {
          const { searchText, searchProp } = values
-         if (!searchText) return
+         if (!searchText) {
+            setLoadingSearch(false)
+            return
+         }
          const whereClauses: QueryConstraint[] = []
          if (searchProp === 'firstName') {
             whereClauses.push(where('firstName', '==', searchText))
@@ -56,20 +50,12 @@ const AdminUsersSection = () => {
          if (searchProp === 'emailAddress') {
             whereClauses.push(where('emailAddress', '==', searchText))
          }
-         const usersQuery = query(collection(db, UserModel.PATH), ...whereClauses)
-         getDocs(usersQuery)
-            .then(res => {
-               const usersList: UserModel[] = []
-               res.docs.forEach(doc => usersList.push(new UserModel(doc.data() as User)))
-               setSearchValues(values)
-               setFilteredUsers(usersList)
-               setLoadingSearch(false)
-            })
-            .catch(reason => {
-               console.log(reason)
-               setLoadingSearch(false)
-            })
+         const usersList = await UserModel.findMany(whereClauses)
+         setSearchValues(values)
+         setFilteredUsers(usersList)
+         setLoadingSearch(false)
       } catch (err: any) {
+         setLoadingSearch(false)
          console.log(err.message)
       }
    }
@@ -92,7 +78,7 @@ const AdminUsersSection = () => {
             <h1 className='text-xl'>Usuários</h1>
          </div>
 
-         <AdminUsersSearchForm onSubmit={onSearchSubmit} disableSearch={loadingSearch} />
+         <AdminUsersSearchForm onSubmit={onSearchSubmit} isLoading={loadingSearch} />
 
          <AdminUsersSearchResults
             users={users}
