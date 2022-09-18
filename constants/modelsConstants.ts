@@ -36,3 +36,16 @@ export const WEEK_DAYS = [
    SATURDAY,
    SUNDAY
 ]
+
+export const JANUARY    = 'Janeiro'
+export const FEBRUARY   = 'Fevereiro'
+export const MARCH      = 'Março'
+export const APRIL      = 'Abril'
+export const MAY        = 'Maio'
+export const JUNE       = 'Junho'
+export const JULY       = 'Julho'
+export const AUGUST     = 'Agosto'
+export const SEPTEMBER  = 'Setembro'
+export const OCTOBER    = 'Outubro'
+export const NOVEMBER   = 'Novembro'
+export const DECEMBER   = 'Dezembro'
