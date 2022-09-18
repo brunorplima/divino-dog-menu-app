@@ -5,19 +5,24 @@ import { authContext } from './AuthProvider'
 import { ORDER_ACTIVE_STATUTES, ORDER_STATUS_CANCELADO, ORDER_STATUS_FINALIZADO } from '../../constants/modelsConstants'
 import { collection, limit, orderBy, query, where } from 'firebase/firestore'
 import { db } from '../../firebase/app'
+import UserModel from '../../models/UserModel'
 
 interface AdminContext {
    readonly activeOrders: OrderModel[]
    readonly latestFinalizedOrders: OrderModel[]
    readonly latestCanceledOrders: OrderModel[]
    readonly existingCodeNumbers: string[]
+   readonly users: UserModel[]
+   readonly setUsers: React.Dispatch<React.SetStateAction<UserModel[]>>
 }
 
 export const adminContext = createContext<AdminContext>({
    activeOrders: [],
    latestFinalizedOrders: [],
    existingCodeNumbers: [],
-   latestCanceledOrders: []
+   latestCanceledOrders: [],
+   users: [],
+   setUsers: () => {}
 })
 
 const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -25,6 +30,7 @@ const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>
    const [latestFinalizedOrders, setLatestFinalizedOrders] = useState<OrderModel[]>([])
    const [latestCanceledOrders, setLatestCanceledOrders] = useState<OrderModel[]>([])
    const [existingCodeNumbers, setExistingCodeNumbers] = useState<string[]>([])
+   const [users, setUsers] = useState<UserModel[]>([])
    const { user } = useContext(authContext)
 
    useEffect(() => {
@@ -73,7 +79,9 @@ const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>
          activeOrders,
          latestFinalizedOrders,
          latestCanceledOrders,
-         existingCodeNumbers
+         existingCodeNumbers,
+         users,
+         setUsers
       }}>
          {children}
       </adminContext.Provider>
