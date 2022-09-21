@@ -40,7 +40,7 @@ const TrackingOrderPage = () => {
          )
          unsubscribe.current = OrderModel.listenToQuery(q, setOrders)
       } else {
-         if (orders !== []) setOrders([])
+         setOrders([])
       }
 
       return unsubscribe.current
