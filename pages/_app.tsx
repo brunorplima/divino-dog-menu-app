@@ -8,6 +8,7 @@ import AdminProvider from '../components/contexts/AdminProvider'
 import SettingsProvider from '../components/contexts/SettingsProvider'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
+import LocalStorageProvider from '../components/contexts/LocalStorageProvider'
 
 const NonSSRNavBottom = dynamic(
    () => import('../components/NavBottom'),
@@ -24,8 +25,10 @@ function MyApp({ Component, pageProps }: AppProps) {
          <AdminProvider>
             <SettingsProvider>
                <MenuProvider>
-                  <Component {...pageProps} />
-                  {navBottomLinks.includes(router.pathname) && <NonSSRNavBottom />}
+                  <LocalStorageProvider>
+                     <Component {...pageProps} />
+                     {navBottomLinks.includes(router.pathname) && <NonSSRNavBottom />}
+                  </LocalStorageProvider>
                </MenuProvider>
             </SettingsProvider>
          </AdminProvider>
