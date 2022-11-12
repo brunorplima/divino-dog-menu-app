@@ -2,7 +2,7 @@ import { equals, omit, uniq } from 'ramda'
 import { useEffect, useState } from 'react'
 import { generateID } from '../utils/modelHelper'
 
-interface MenegeableStorage<T> {
+export interface MenegeableStorage<T> {
    ids: string[]
    order: Omit<T, 'id'>
 }

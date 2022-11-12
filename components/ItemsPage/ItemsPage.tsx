@@ -12,12 +12,18 @@ import { NextParsedUrlQuery } from 'next/dist/server/request-meta'
 import { stringToArray } from '../../utils/dataHelper'
 import { getServerDate } from '../../utils/apiHelper'
 import { settingsContext } from '../contexts/SettingsProvider'
+import { localStorageContext } from '../contexts/LocalStorageProvider'
+import { generateID } from '../../utils/modelHelper'
 
 interface Props {
    query: NextParsedUrlQuery
 }
 
 const ItemsPage = (props: Props) => {
+   // Importing useContext for local storage
+   const { menuItemGroups, addMenuItemGroup, addIdlessMenuItemGroup } = useContext(localStorageContext)
+
+   // Importing requirements
    const { query } = props
    const { itemId, catId, itemsIds, quantity, boxes } = query
    const { menuItems, toppings, sauces, menuItemOptions } = useContext(menuContext)
@@ -125,7 +131,7 @@ const ItemsPage = (props: Props) => {
 
    const saveInLocalStorage = () => {
       const itemsGroupObject = interfacingMenuItemGroup(quant)
-      itemsGroupObject !== undefined && itemsGroupObject.forEach((item) => addMenuItemGroup(item))
+      itemsGroupObject && addIdlessMenuItemGroup(itemsGroupObject)
    }
 
    const addonAvailability = (addonArray: string[] | undefined) => {
