@@ -162,8 +162,8 @@ const ItemsPage = (props: Props) => {
                      ></div>
                      <Link href={`${itemsIds === undefined ? '/' : '/checkout'}`} passHref>
                         <div
-                           className='fixed z-20 top-4 left-4 text-5xl'
-                           style={{ color: '#29fd53' }}
+                           className='bg-black fixed z-20 top-4 left-4 text-5xl'
+                           style={{ color: '#dc9c36', borderRadius: '50%' }}
                         >
                            <IoIosArrowDropleftCircle />
                         </div>
@@ -239,7 +239,7 @@ const ItemsPage = (props: Props) => {
                   passHref
                >
                   <div
-                     className={`${buttonState ? styles.greenButton : styles.grayButton} ${
+                     className={`${buttonState ? styles.yellowButton : styles.grayButton} ${
                         styles.priceOrder
                      } fixed flex flex-row font-semibold inset-x-0 bottom-0 py-4 px-8 cursor-pointer`}
                      onClick={() => {
