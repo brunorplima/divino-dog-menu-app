@@ -21,7 +21,8 @@ interface Props {
 
 const ItemsPage = (props: Props) => {
    // Importing useContext for local storage
-   const { menuItemGroups, addMenuItemGroup, addIdlessMenuItemGroup } = useContext(localStorageContext)
+   const { menuItemGroups, addMenuItemGroup, addIdlessMenuItemGroup } =
+      useContext(localStorageContext)
 
    // Importing requirements
    const { query } = props
@@ -117,13 +118,20 @@ const ItemsPage = (props: Props) => {
          )
          const finalInterface: Omit<MenuItemGroup, 'id'>[] = []
          for (let i = 0; i < quantity; i++) {
-            finalInterface.push({
-               menuItemId: theItem.id,
-               subTotal: price,
-               extraToppingIds: extraToppingIds,
-               extraSauceIds: extraSauceIds,
-               optionId: optionId[0],
-            })
+            optionId[0] !== undefined
+               ? finalInterface.push({
+                    menuItemId: theItem.id,
+                    subTotal: price,
+                    extraToppingIds: extraToppingIds,
+                    extraSauceIds: extraSauceIds,
+                    optionId: optionId[0],
+                 })
+               : finalInterface.push({
+                    menuItemId: theItem.id,
+                    subTotal: price,
+                    extraToppingIds: extraToppingIds,
+                    extraSauceIds: extraSauceIds,
+                 })
          }
          return finalInterface
       }
@@ -251,6 +259,7 @@ const ItemsPage = (props: Props) => {
                      onClick={() => {
                         if (buttonState) {
                            !itemsIds && saveInLocalStorage()
+                           //console.log('Items Page 2', menuItemGroups)
                         }
                      }}
                   >
