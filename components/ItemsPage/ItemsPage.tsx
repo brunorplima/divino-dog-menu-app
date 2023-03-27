@@ -4,7 +4,6 @@ import AddOns from './AddOns'
 import styles from './ItemsPage.module.scss'
 import { MenuItemGroup } from '../../models/interfaces'
 import * as R from 'ramda'
-import { addMenuItemGroup } from '../../utils/localStorageHelper'
 import { checkPromoDate, formatPrice } from '../../utils/dataHelper'
 import Link from 'next/link'
 import { IoIosArrowDropleftCircle } from 'react-icons/io'
@@ -13,7 +12,6 @@ import { stringToArray } from '../../utils/dataHelper'
 import { getServerDate } from '../../utils/apiHelper'
 import { settingsContext } from '../contexts/SettingsProvider'
 import { localStorageContext } from '../contexts/LocalStorageProvider'
-import { generateID } from '../../utils/modelHelper'
 
 interface Props {
    query: NextParsedUrlQuery
@@ -118,20 +116,15 @@ const ItemsPage = (props: Props) => {
          )
          const finalInterface: Omit<MenuItemGroup, 'id'>[] = []
          for (let i = 0; i < quantity; i++) {
-            optionId[0] !== undefined
-               ? finalInterface.push({
-                    menuItemId: theItem.id,
-                    subTotal: price,
-                    extraToppingIds: extraToppingIds,
-                    extraSauceIds: extraSauceIds,
-                    optionId: optionId[0],
-                 })
-               : finalInterface.push({
-                    menuItemId: theItem.id,
-                    subTotal: price,
-                    extraToppingIds: extraToppingIds,
-                    extraSauceIds: extraSauceIds,
-                 })
+            finalInterface.push(
+               R.reject((key) => key === undefined, {
+                  menuItemId: theItem.id,
+                  subTotal: price,
+                  extraToppingIds: extraToppingIds,
+                  extraSauceIds: extraSauceIds,
+                  optionId: optionId[0],
+               })
+            )
          }
          return finalInterface
       }
