@@ -24,11 +24,9 @@ export default function OrderPage() {
    )
 
    const priceWatcher = () => {
-      let bill = 0
-      manageableLocalStorage.forEach((unique, idx) => {
-         bill += unique.order.subTotal * unique.ids.length
-      })
-      return bill
+      return manageableLocalStorage.reduce((total, unique) => {
+         return total + unique.order.subTotal * unique.ids.length
+      }, 0)
    }
 
    useEffect(() => {

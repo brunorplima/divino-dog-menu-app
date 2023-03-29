@@ -19,8 +19,7 @@ interface Props {
 
 const ItemsPage = (props: Props) => {
    // Importing useContext for local storage
-   const { menuItemGroups, addMenuItemGroup, addIdlessMenuItemGroup } =
-      useContext(localStorageContext)
+   const { addIdlessMenuItemGroup } = useContext(localStorageContext)
 
    // Importing requirements
    const { query } = props
@@ -252,7 +251,6 @@ const ItemsPage = (props: Props) => {
                      onClick={() => {
                         if (buttonState) {
                            !itemsIds && saveInLocalStorage()
-                           //console.log('Items Page 2', menuItemGroups)
                         }
                      }}
                   >
