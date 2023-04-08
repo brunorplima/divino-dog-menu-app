@@ -30,7 +30,7 @@ export default function Listing({ item, isPromotionActive }: Props) {
             <div className={`${style.menuItem} relative grid mb-8 w-screen`}>
                <div>
                   <h3 className={`${style.itemTitle} font-extrabold`}>
-                     {`${item.name}`}{' '}{!activation && `(Em falta)`}
+                     {`${item.name}`}{' '}{!item.isAvailable && `(Em falta)`}
                      <span
                         className={
                            item.availableDaysToString() !== '' ? style.weekDays : style.hidden
