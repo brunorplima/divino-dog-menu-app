@@ -2,7 +2,7 @@
    height: 88vh;
 
    a {
-      color: #edbd1e;
+      color: var(--global-anchor-color);
       text-decoration: underline;
    }
 }
@@ -44,7 +44,7 @@
 }
 
 .yellowTitle {
-   color: #dc9c36;
+   color: var(--global-primary-color);
    font-size: 1.5rem;
 }
 

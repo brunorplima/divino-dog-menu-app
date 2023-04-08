@@ -163,7 +163,7 @@ const ItemsPage = (props: Props) => {
                      <Link href={`${itemsIds === undefined ? '/' : '/checkout'}`} passHref>
                         <div
                            className='bg-black fixed z-20 top-4 left-4 text-5xl'
-                           style={{ color: '#dc9c36', borderRadius: '50%' }}
+                           style={{ color: 'var(--global-primary-color)', borderRadius: '50%' }}
                         >
                            <IoIosArrowDropleftCircle />
                         </div>

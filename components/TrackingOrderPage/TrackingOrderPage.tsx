@@ -72,7 +72,7 @@ const TrackingOrderPage = () => {
       <div className='text-gray-300'>
          <div
             className='text-black py-4 px-10 text-xl mt-11'
-            style={{ backgroundColor: '#dc9c36' }}
+            style={{ backgroundColor: 'var(--global-primary-color)' }}
          >
             <strong>Acompanhe seu Pedido</strong>
          </div>

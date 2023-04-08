@@ -140,7 +140,7 @@ export default function OrderPage() {
                   className='rounded-lg font-semibold'
                   style={
                      storedData.length !== 0
-                        ? { background: '#dc9c36', color: 'black', padding: '0.70rem' }
+                        ? { background: 'var(--global-primary-color)', color: 'black', padding: '0.70rem' }
                         : { background: 'lightgray', color: 'gray', padding: '0.70rem' }
                   }
                   disabled={storedData.length === 0}

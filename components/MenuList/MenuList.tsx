@@ -73,7 +73,7 @@ export default function MenuList() {
                <div id={withoutSpaces(category.name)} key={category.id} className='scroll-m-10'>
                   <h2
                      className={`${style.categories} text-2xl pl-5 mt-10 font-extrabold mb-5 text-white italic`}
-                     style={{ color: '#dc9c36' }}
+                     style={{ color: 'var(--global-primary-color)' }}
                   >
                      {capitalizeFirstLetter(category.name)}
                   </h2>

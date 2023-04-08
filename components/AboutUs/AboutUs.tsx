@@ -21,14 +21,14 @@ function AboutUs() {
          <div className={`${style.thirdDiv} relative font-semibold my-4 mx-6`}>
             {settingsModel && (
                <>
-                  <p>
+                  <div>
                      <LogoComponent
                         text='Divino Dog'
                         side='right'
                         fontSize={20}
                         verticalAlign='32.5%'
                      />
-                  </p>
+                  </div>
                   <br />
                   <p className={`${style.yellowTitle}`}>Quem somos nós</p>
                   <br />
