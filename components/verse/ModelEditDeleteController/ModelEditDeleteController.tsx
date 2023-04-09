@@ -18,13 +18,13 @@ const ModelEditDeleteController:React.FC<Props> = ({ action, setMode, onDelete }
 
    return (
       <div className='flex gap-3 mb-6'>
-         {action === 'edit' || action === 'create' && (
+         {action !== 'view' && (
             <PrimaryButton
                label='Cancelar'
                icon={<IoMdArrowRoundBack />}
                clickHandler={() => {
                   if (action === 'create') setMode()
-                  else if (action === 'edit') setMode('view')
+                  else setMode('view')
                }}
             />
          )}
