@@ -20,7 +20,7 @@ export default function Listing({ item, isPromotionActive }: Props) {
       })
    }, [])
 
-   const activation = activeItem&&item.isAvailable
+   const activation = activeItem && item.isAvailable
 
    return (
       <ConditionalLinkRender link={activation} item={item}>
