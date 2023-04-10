@@ -10,6 +10,7 @@ import MenuItemModel from '../../models/MenuItemModel'
 import CategoryModel from '../../models/CategoryModel'
 import { getServerDate } from '../../utils/apiHelper'
 import { PROMOTION_ID_CATEGORY } from '../../constants/promotionConstants'
+import { globalPrimaryColor } from '../../constants/cssConstants'
 
 export default function MenuList() {
    const { menuItems, categories } = useContext(menuContext)
@@ -36,7 +37,11 @@ export default function MenuList() {
    ) => {
       const isPromotionActive = checkPromoDate(item, serverDate)
 
-      if (item.promoPrice !== undefined && category.id === PROMOTION_ID_CATEGORY && isPromotionActive)
+      if (
+         item.promoPrice !== undefined &&
+         category.id === PROMOTION_ID_CATEGORY &&
+         isPromotionActive
+      )
          return true
       if (
          (item.promoPrice === undefined || !isPromotionActive) &&
@@ -73,7 +78,7 @@ export default function MenuList() {
                <div id={withoutSpaces(category.name)} key={category.id} className='scroll-m-10'>
                   <h2
                      className={`${style.categories} text-2xl pl-5 mt-10 font-extrabold mb-5 text-white italic`}
-                     style={{ color: 'var(--global-primary-color)' }}
+                     style={{ color: globalPrimaryColor }}
                   >
                      {capitalizeFirstLetter(category.name)}
                   </h2>
@@ -93,7 +98,7 @@ export default function MenuList() {
             ))}
          </div>
 
-         <LoaderComponent show={menuItems.length === 0}/>
+         <LoaderComponent show={menuItems.length === 0} />
       </div>
    )
 }

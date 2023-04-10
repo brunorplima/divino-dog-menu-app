@@ -12,6 +12,7 @@ import { stringToArray } from '../../utils/dataHelper'
 import { getServerDate } from '../../utils/apiHelper'
 import { settingsContext } from '../contexts/SettingsProvider'
 import { localStorageContext } from '../contexts/LocalStorageProvider'
+import { globalPrimaryColor } from '../../constants/cssConstants'
 
 interface Props {
    query: NextParsedUrlQuery
@@ -169,7 +170,7 @@ const ItemsPage = (props: Props) => {
                      <Link href={`${itemsIds === undefined ? '/' : '/checkout'}`} passHref>
                         <div
                            className='bg-black fixed z-20 top-4 left-4 text-5xl'
-                           style={{ color: 'var(--global-primary-color)', borderRadius: '50%' }}
+                           style={{ color: globalPrimaryColor, borderRadius: '50%' }}
                         >
                            <IoIosArrowDropleftCircle />
                         </div>
