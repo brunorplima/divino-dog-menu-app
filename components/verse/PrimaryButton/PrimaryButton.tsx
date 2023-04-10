@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useMemo } from 'react'
+import React from 'react'
 
 type BgColor = 'none' | 'gray' | 'green' | 'red'
 
@@ -21,19 +21,22 @@ const PrimaryButton: React.FC<Props> = ({
    bgColor = 'gray',
    className = '',
 }) => {
-   const bgColorStyle = useMemo(() => {
-      let className = bgColor != 'none' ? `bg-${bgColor}-500` : ''
-      if (!disabled) className += bgColor != 'none' ? ` hover:bg-${bgColor}-400` : ''
-      return className
-   }, [bgColor, disabled])
+   const colorMap = {
+      red: 'rgba(239, 68, 68, 1)',
+      gray: 'rgba(107, 107, 107, 1)',
+      green: 'rgba(16, 185, 129, 1)',
+      none: 'none',
+   }
+   const style = {
+      backgroundColor: colorMap[bgColor],
+   } as React.CSSProperties
 
    return (
       <button
          type={type}
-         className={`
-         ${bgColorStyle} py-2 px-10 w-8 text-white min-w-max flex gap-2 rounded-lg 
-            duration-300 ${disabled && 'cursor-not-allowed text-gray-400'} ${className}
-         `}
+         className={`py-2 px-10 w-8 text-white min-w-max flex items-center gap-2 rounded-lg 
+            duration-300 ${disabled && 'cursor-not-allowed text-gray-400'} ${className}`}
+         style={style}
          disabled={disabled}
          onClick={() => clickHandler()}
       >

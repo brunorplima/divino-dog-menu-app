@@ -152,15 +152,12 @@ export default function OrderPage() {
          <div>
             {manageableLocalStorage.length > 0 && (
                <div
-                  className={`${style.singleItem} relative grid gap-3 my-1 w-screen`}
+                  className={`relative flex justify-end gap-3 my-1 w-screen py-4 px-5`}
                   style={{ background: 'none' }}
                >
-                  <div></div>
-                  <div></div>
-                  <div></div>
                   <div>
                      <PrimaryButton
-                        label=''
+                        label='Apagar tudo'
                         bgColor='red'
                         icon={<FaTrashAlt />}
                         clickHandler={() => setNotification(true)}
