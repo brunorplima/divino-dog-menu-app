@@ -12,13 +12,25 @@ interface Props {
       el: HTMLInputElement | null,
       ElementReffed: MutableRefObject<HTMLInputElement[]>
    ) => void
+   blocker?: boolean
+   activationList?: string[]
 }
 
 function CheckBox(props: Props) {
-   const { func, id, name, value, state, reffed, reffer } = props
+   const { func, id, name, value, state, reffed, reffer, blocker, activationList } = props
+
+   const checkboxInactivation =
+      activationList !== undefined &&
+      !activationList.includes(id) &&
+      blocker !== undefined &&
+      blocker
 
    return (
-      <div className={`${styles.checkBoxDiv} relative justify-center item-center`}>
+      <div
+         className={`${styles.checkBoxDiv} ${
+            checkboxInactivation ? styles.inactive : ''
+         } relative justify-center item-center`}
+      >
          <input
             onClick={(event) => {
                func(event)

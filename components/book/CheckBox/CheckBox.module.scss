@@ -32,3 +32,12 @@
       left: 0.8rem;
    }
 }
+
+.inactive {
+   input[type='checkbox'] {
+      background: #555658 !important;
+   }
+   input[type='checkbox']::before {
+      background: #555658 !important;
+   }
+}
