@@ -14,6 +14,7 @@ import { localStorageContext } from '../contexts/LocalStorageProvider'
 import { createManageableStorage } from '../../utils/localStorageHelper'
 import { generateID } from '../../utils/modelHelper'
 import PrimaryButton from '../verse/PrimaryButton'
+import { globalPrimaryColor } from '../../constants/cssConstants'
 
 export default function OrderPage() {
    const router = useRouter()
@@ -212,7 +213,7 @@ export default function OrderPage() {
                   className='rounded-lg font-semibold'
                   style={
                      menuItemGroups.length !== 0
-                        ? { background: '#29fd53', color: 'black', padding: '0.70rem' }
+                        ? { background: globalPrimaryColor, color: 'black', padding: '0.70rem' }
                         : { background: 'lightgray', color: 'gray', padding: '0.70rem' }
                   }
                   disabled={menuItemGroups.length === 0}

@@ -12,6 +12,7 @@ import PrimaryButton from '../../verse/PrimaryButton'
 import DatePickerField from '../fields/DatePickerField'
 import FileFormField from '../fields/FileFormField'
 import SelectFormField from '../fields/SelectFormField'
+import Momento from '../../../utils/Momento'
 
 export type MenuItemFormSchema = Partial<Omit<MenuItem, 'id' | 'price'>> & {
    img?: File | string
@@ -87,6 +88,10 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
             if (!has('promoPrice', errors)) errors.promoPrice = {}
             errors.promoPrice.price = 'Preencha ambos preço e prazo ou deixe-os em branco'
             errors.promoPrice.dateLimit = 'Preencha ambos preço e prazo ou deixe-os em branco'
+         }
+         if (promoPrice.dateLimit && !Momento.isDateTodayOrAfter(promoPrice.dateLimit)) {
+            if (!has('promoPrice', errors)) errors.promoPrice = {}
+            errors.promoPrice.dateLimit = 'Prazo Não pode ser no passado'
          }
       }
       return errors
