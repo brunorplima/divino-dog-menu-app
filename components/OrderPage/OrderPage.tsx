@@ -3,7 +3,7 @@ import { formatPrice } from '../../utils/dataHelper'
 import { menuContext } from '../contexts/MenuProvider'
 import style from './OrderPage.module.scss'
 import { MenuItemGroup } from '../../models/interfaces'
-import { FaWindowClose } from 'react-icons/fa'
+import { FaWindowClose, FaTrashAlt } from 'react-icons/fa'
 import LoaderComponent from '../verse/LoaderComponent'
 import { MenegeableStorage } from '../../hooks/useStoredCheckout'
 import { CURRENT_ORDERS_KEY } from '../../constants/localStorageConstants'
@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { localStorageContext } from '../contexts/LocalStorageProvider'
 import { createManageableStorage } from '../../utils/localStorageHelper'
 import { generateID } from '../../utils/modelHelper'
+import PrimaryButton from '../verse/PrimaryButton'
 import { globalPrimaryColor } from '../../constants/cssConstants'
 
 export default function OrderPage() {
@@ -72,6 +73,8 @@ export default function OrderPage() {
       const res = objArray.find((a) => a.id === comparator)
       return res !== undefined ? res.name : `Absent Model: ${comparator}`
    }
+
+   const [notification, setNotification] = useState(false)
 
    return (
       <div className={`${style.orderPageOuterDiv} ${style.hideScroller} font-medium my-12 mb-52`}>
@@ -147,6 +150,47 @@ export default function OrderPage() {
                </div>
             </div>
          ))}
+         <div>
+            {manageableLocalStorage.length > 0 && (
+               <div
+                  className={`relative flex justify-end gap-3 my-1 w-screen py-4 px-5`}
+                  style={{ background: 'none' }}
+               >
+                  <div>
+                     <PrimaryButton
+                        label='Apagar tudo'
+                        bgColor='red'
+                        icon={<FaTrashAlt />}
+                        clickHandler={() => setNotification(true)}
+                     />
+                  </div>
+               </div>
+            )}
+         </div>
+         <div
+            className='absolute inset-0 flex justify-center items-center w-screen h-screen bg-black bg-opacity-80 z-30'
+            style={{ display: notification ? 'flex' : 'none' }}
+         >
+            <div
+               className='flex flex-col justify-center items-center border-4 h-56 w-80'
+               style={{ background: '#222327', borderColor: '#d3d3d3' }}
+            >
+               <p className='relative m-4'>
+                  Você tem certeza que deseja apagar todos os itens do seu pedido?
+               </p>
+               <div className='flex flex-row gap-3'>
+                  <PrimaryButton label='Não' clickHandler={() => setNotification(false)} />
+                  <PrimaryButton
+                     label='Sim'
+                     bgColor='none'
+                     clickHandler={() => {
+                        clearMenuItemGroups()
+                        setNotification(false)
+                     }}
+                  />
+               </div>
+            </div>
+         </div>
          <br />
          <br />
          <br />
