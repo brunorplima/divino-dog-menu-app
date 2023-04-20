@@ -132,8 +132,6 @@ const AddOns = ({
                   >
                      <div className='text-base'>
                         <label>{item.name}</label>
-                        <br />
-                        <label>{item.id}</label>
                      </div>
                      <div className='justify-center items-center w-4/5 row-start-1 row-end-3 col-start-2 h-full'>
                         <CheckBox
@@ -163,9 +161,6 @@ const AddOns = ({
                   id='addonsLimiterDialog'
                   isOpen={dialog}
                   onClose={() => setDialog(false)}
-                  children={`Você só pode escolher ${maxAmount} ${
-                     maxAmount > 1 ? 'adicionais' : 'adicional'
-                  }. Remova um item para selecionar outro.`}
                   footer={[
                      {
                         label: 'Fechar',
@@ -174,7 +169,11 @@ const AddOns = ({
                         },
                      },
                   ]}
-               />
+               >
+                  {`Você só pode escolher ${maxAmount} ${
+                     maxAmount > 1 ? 'adicionais' : 'adicional'
+                  }. Remova um item para selecionar outro.`}
+               </Dialog>
             )}
          </div>
       </div>
