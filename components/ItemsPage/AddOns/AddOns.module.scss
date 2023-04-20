@@ -6,4 +6,7 @@
       background-color: #333438;
       border: 2px solid lightgray;
    }
+   .checkedItemInfo {
+      border-color: var(--global-anchor-color);
+   }
 }

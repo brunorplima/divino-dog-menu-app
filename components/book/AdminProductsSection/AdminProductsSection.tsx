@@ -70,7 +70,7 @@ const AdminProductsSection = () => {
    }, [currentProduct])
    const categoryRelatedMenuItems = useMemo<JSX.Element>(() => {
       if (currentCategory && currentCategory.item) {
-         const associatedMenuItems = filter(propEq('categoryId', currentCategory.item.id), menuItems)
+         const associatedMenuItems = filter(item => currentCategory.item.doesItemBelong(item), menuItems)
          const menuItemNames = pluck('name', associatedMenuItems)
          if (menuItemNames.length) {
             return (
@@ -391,7 +391,7 @@ const AdminProductsSection = () => {
                   categories
                      .sort((a, b) => a.listOrder - b.listOrder)
                      .map((item) => {
-                        const relatedMenuItems = filter(propEq('categoryId', item.id), menuItems)
+                        const relatedMenuItems = filter(menuItem => item.doesItemBelong(menuItem), menuItems)
                         return (
                            <Fragment key={item.id}>
                               <div

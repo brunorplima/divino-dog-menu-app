@@ -13,7 +13,7 @@
       transition: 0.3s;
    }
    input:checked[type='checkbox'] {
-      background: #29fd53;
+      background: var(--global-anchor-color);
    }
    input[type='checkbox']::before {
       content: '';

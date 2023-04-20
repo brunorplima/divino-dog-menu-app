@@ -1,13 +1,13 @@
-import React, { MouseEventHandler, useMemo } from 'react'
+import React from 'react'
 
-type BgColor = 'gray' | 'green'
+type BgColor = 'none' | 'gray' | 'green' | 'red'
 
 interface Props {
-   readonly label: string,
+   readonly label: string
    readonly disabled?: boolean
-   readonly type?: 'button' | 'submit' | 'reset',
+   readonly type?: 'button' | 'submit' | 'reset'
    readonly clickHandler?: Function
-   readonly icon?: any,
+   readonly icon?: any
    readonly bgColor?: BgColor
    readonly className?: string
 }
@@ -19,30 +19,30 @@ const PrimaryButton: React.FC<Props> = ({
    clickHandler = () => {},
    type = 'button',
    bgColor = 'gray',
-   className = ''
+   className = '',
 }) => {
-
-   const bgColorStyle = useMemo(() => {
-      let className = bgColor === 'gray' ? 'bg-gray-500' : 'bg-green-500'
-      if (!disabled) className += bgColor === 'gray' ? ' hover:bg-gray-400' : ' hover:bg-green-700'
-      return className
-   }, [bgColor, disabled])
+   const colorMap = {
+      red: 'rgba(239, 68, 68, 1)',
+      gray: 'rgba(107, 107, 107, 1)',
+      green: 'rgba(16, 185, 129, 1)',
+      none: 'none',
+   }
+   const style = {
+      backgroundColor: colorMap[bgColor],
+   } as React.CSSProperties
 
    return (
       <button
          type={type}
-         className={`
-            ${bgColorStyle} py-2 px-10 w-8 text-white min-w-max flex gap-2 rounded-lg 
-            duration-300 ${disabled && 'cursor-not-allowed text-gray-400'} ${className}
-         `}
+         className={`py-2 px-10 w-8 text-white min-w-max flex items-center gap-2 rounded-lg 
+            duration-300 ${disabled && 'cursor-not-allowed text-gray-400'} ${className}`}
+         style={style}
          disabled={disabled}
          onClick={() => clickHandler()}
       >
          {icon && (
             <>
-               <span className={label ? 'translate-y-' : ''}>
-                  {icon}
-               </span>
+               <span className={label ? 'translate-y-' : ''}>{icon}</span>
                {label && ' '}
             </>
          )}
