@@ -30,6 +30,6 @@ $neonRed: #ff3131;
    }
 
    .neonPrice {
-      color: $neonGreen;
+      color: var(--global-primary-color);
    }
 }
