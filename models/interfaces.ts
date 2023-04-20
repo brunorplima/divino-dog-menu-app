@@ -55,6 +55,7 @@ export interface Category {
    readonly id: string
    readonly name: string
    readonly listOrder: number
+   readonly isPromotion: boolean
 }
 
 // Orders (Firestore path: orders)
