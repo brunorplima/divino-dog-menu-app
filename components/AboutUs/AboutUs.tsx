@@ -7,7 +7,10 @@ import style from './AboutUs.module.scss'
 function AboutUs() {
    const { settingsModel } = useContext(settingsContext)
 
-   const backImageFileName = 'hotdog-with-ketchup-mustard-lettuce-wooden-surface.jpg'
+   const backImageFileName = 'hot-dog-divino-dog.JPG'
+
+   const ownerLucas = 'lucas.jpg'
+   const ownerVitor = 'vitor.jpg'
 
    return (
       <div className={`${style.allDiv} h-screen text-lg`}>
@@ -18,35 +21,49 @@ function AboutUs() {
          <div className={`${style.thirdDiv} relative font-semibold my-4 mx-6`}>
             {settingsModel && (
                <>
-                  <p>
+                  <div>
                      <LogoComponent
                         text='Divino Dog'
                         side='right'
                         fontSize={20}
                         verticalAlign='32.5%'
                      />
-                  </p>
+                  </div>
                   <br />
-                  <p className={`${style.greenTitle}`}>Quem somos nós</p>
+                  <p className={`${style.yellowTitle}`}>Quem somos nós</p>
                   <br />
-                  <div className='whitespace-pre-wrap mb-32'>
-                     {settingsModel.aboutUsContent}
+                  <div className={`${style.company} whitespace-pre-wrap mb-32`}>
+                     <p>{settingsModel.aboutUsContent}</p>
+                     <div>
+                        <span>
+                           <img
+                              src={`./assets/owners/${ownerLucas}`}
+                              className={`${style.faceImage}`}
+                           />
+                        </span>
+                        <span>
+                           <img
+                              src={`./assets/owners/${ownerVitor}`}
+                              className={`${style.faceImage}`}
+                           />
+                        </span>
+                        <span>Lucas</span>
+                        <span>Vitor</span>
+                     </div>
                   </div>
                </>
             )}
-            <p className={`${style.greenTitle}`}>Nossos desenvolvedores</p>
+            <p className={`${style.yellowTitle}`}>Nossos desenvolvedores</p>
             <br />
             <div className={`${style.developers} grid grid-cols-1 gap-6`}>
                <div>
                   <img src='./assets/developers/bruno.jpg' className={`${style.faceImage}`} />
                   <p>
-                     Bruno é um programador fullstack muito experiente. Socialista convicto e
-                     cristão reformado, reside na terra do pé grande, o Canadá. Apoiou as políticas
-                     de Trudeau durante a pandemia e tomou 7 doses de vacinas de diferentes marcas
-                     só por precaução: &quot;Vai que a gente pega isso daí e vira
-                     borboleta!?&quot;&nbsp;
+                     Bruno é um desenvolvedor fullstack com experiência em desenvolvimento de
+                     aplicativos web. Trabalha com HTML, CSS, Javascript e React no frontend e Ruby
+                     on Rails no backend.&nbsp;
                      <Link href='https://brunoreactdeveloper.web.app/'>
-                        <a target='_blank'>Você também pode me encontrar online</a>
+                        <a target='_blank'>Você também pode encontrá-lo online</a>
                      </Link>
                      .
                   </p>
@@ -54,9 +71,13 @@ function AboutUs() {
                <div>
                   <img src='./assets/developers/eric.jpg' className={`${style.faceImage}`} />
                   <p>
-                     Eric é um desenvolvedor frontend e um cristão reformado convicto. Possuidor de
-                     conhecimentos sobre marketing, economia, estatística, história e política é um
-                     liberal clássico. Gosta muito de hot dog.
+                     Eric é um desenvolvedor frontend com conhecimentos de SEO, Business
+                     Intelligence, Google Ads, Facebook Ads e Python. Ele também gosta muito de hot
+                     dog.&nbsp;
+                     <Link href='https://ericlima.com.br/'>
+                        <a target='_blank'>Você também pode encontrá-lo online</a>
+                     </Link>
+                     .
                   </p>
                </div>
             </div>

@@ -5,6 +5,7 @@ import { collection, deleteDoc, doc, getDoc, onSnapshot, query, Query, setDoc, U
 import Model from './Model';
 import { generateID, removeOutdatedPromotion } from '../utils/modelHelper';
 import { WEEK_DAYS } from '../constants/modelsConstants'
+import Momento from '../utils/Momento'
 
 export default class MenuItemModel extends Model<MenuItem> {
 
@@ -143,6 +144,11 @@ export default class MenuItemModel extends Model<MenuItem> {
       if (this.promoPrice && this.promoPrice.dateLimit && this.promoPrice.price) return true
       else if (!this.promoPrice) return true
       else return false
+   }
+
+   hasValidPromotion() {
+      if (!this.promoPrice?.dateLimit || !this.promoPrice?.price || !this.promoPrice) return false
+      return Momento.isDateTodayOrAfter(this.promoPrice.dateLimit)
    }
 
    values() {

@@ -2,7 +2,7 @@
    height: 88vh;
 
    a {
-      color: #29fd53;
+      color: var(--global-anchor-color);
       text-decoration: underline;
    }
 }
@@ -43,8 +43,8 @@
    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
 }
 
-.greenTitle {
-   color: #29fd53;
+.yellowTitle {
+   color: var(--global-primary-color);
    font-size: 1.5rem;
 }
 
@@ -60,4 +60,20 @@
    border-radius: 50%;
    margin-right: 20px;
    width: 100px;
+}
+
+.company {
+   div {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 20px;
+
+      img,
+      span {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+      }
+   }
 }

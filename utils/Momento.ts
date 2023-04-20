@@ -96,6 +96,12 @@ class Momento {
       if (!padded) return month.toString()
       return month < 10 ? `0${month}` : month.toString()
    }
+
+   static isDateTodayOrAfter(date: Date): boolean {
+      const momentDate = moment(date)
+      const now = moment(new Date())
+      return momentDate.isAfter(now) || momentDate.isSame(now, 'day')
+   }
 }
 
 export default Momento
