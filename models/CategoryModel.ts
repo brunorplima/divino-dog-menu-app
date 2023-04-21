@@ -4,6 +4,7 @@ import { db } from '../firebase/app'
 import { collection, deleteDoc, doc, getDoc, onSnapshot, query, Query, setDoc, Unsubscribe } from "firebase/firestore";
 import Model from './Model';
 import { generateID } from '../utils/modelHelper';
+import MenuItemModel from './MenuItemModel'
 
 export default class CategoryModel extends Model<Category> {
 
@@ -50,6 +51,7 @@ export default class CategoryModel extends Model<Category> {
    get id()          { return this.category.id }
    get name()        { return this.category.name }
    get listOrder()   { return this.category.listOrder }
+   get isPromotion() { return this.category.isPromotion }
 
    static listenToQuery(q: Query, setFunction: Function): Unsubscribe {
       const unsubscribe = onSnapshot(q, snapshot => {
@@ -66,6 +68,13 @@ export default class CategoryModel extends Model<Category> {
 
    values() {
       return this.category
+   }
+
+   doesItemBelong(item: MenuItemModel): boolean {
+      if (this.isPromotion) {
+         return item.hasValidPromotion() || item.categoryId === this.id
+      }
+      return item.categoryId === this.id
    }
 
    isValid() {

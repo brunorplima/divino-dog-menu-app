@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { filter, find, pluck, join, propEq, isNil } from 'ramda'
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import CategoryModel from '../../../models/CategoryModel'
 import MenuItemOptionModel from '../../../models/MenuItemOptionModel'
 import MenuItemModel from '../../../models/MenuItemModel'
@@ -16,6 +16,10 @@ interface Props {
 
 const AdminMenuItemView: React.FC<Props> = ({ item }) => {
    const { categories, toppings, sauces, menuItemOptions } = useContext(menuContext)
+
+   useEffect(() => {
+      if (item.promoPrice && !item.hasValidPromotion()) item.dissoc(['promoPrice'])
+   }, [item])
 
    const category = useMemo(() => {
       return find<CategoryModel>(propEq('id', item?.categoryId), categories)
@@ -97,7 +101,7 @@ const AdminMenuItemView: React.FC<Props> = ({ item }) => {
             )
          }
          {
-            item.promoPrice && (
+            item.promoPrice && item.hasValidPromotion() && (
                <ModelStandardFieldInfo
                   label='Promoção em vigor'
                   info={(

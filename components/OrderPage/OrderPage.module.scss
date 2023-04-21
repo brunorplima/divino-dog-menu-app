@@ -1,5 +1,5 @@
 .b {
-   background-color: #29fd53;
+   background-color: var(--global-primary-color);
    border-radius: 5px;
    color: #222327;
    font-weight: 900;
@@ -10,7 +10,7 @@
    height: 55vh;
 
    .topTitle {
-      background: #29fd53;
+      background: var(--global-primary-color);
       color: black;
       padding: 1rem 3rem;
    }
@@ -24,10 +24,6 @@
          color: lightgray;
          font-size: 0.85rem;
       }
-
-      /* div {
-         margin: auto;
-      } */
    }
 
    .bottomPrice {
