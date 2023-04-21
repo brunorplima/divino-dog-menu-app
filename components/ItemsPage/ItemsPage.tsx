@@ -143,7 +143,7 @@ const ItemsPage = (props: Props) => {
       else return true
    }
 
-   const defineButtonState = (addOnsTester: any[] = []) => {
+   const defineButtonState = (addOnsTester: (string | undefined)[] = []) => {
       if (!theItem?.isAvailable) return false
       if (theItem?.optionIds && theItem?.optionIds?.length > 0 && addOnsTester.includes(undefined))
          return false
