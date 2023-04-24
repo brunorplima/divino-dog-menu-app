@@ -1,9 +1,9 @@
 import { MenuItem } from './interfaces'
 import * as R from 'ramda'
 import { db } from '../firebase/app'
-import { collection, deleteDoc, doc, getDoc, onSnapshot, query, Query, setDoc, Unsubscribe } from "firebase/firestore";
-import Model from './Model';
-import { generateID, removeOutdatedPromotion } from '../utils/modelHelper';
+import { collection, deleteDoc, doc, getDoc, onSnapshot, query, Query, setDoc, Unsubscribe } from "firebase/firestore"
+import Model from './Model'
+import { generateID, removeOutdatedPromotion } from '../utils/modelHelper'
 import { WEEK_DAYS } from '../constants/modelsConstants'
 import Momento from '../utils/Momento'
 

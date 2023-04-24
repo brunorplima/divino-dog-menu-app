@@ -50,6 +50,7 @@ const SignupPage: NextPage = () => {
             emailAddress: firebaseUser.email as string,
             firstName,
             lastName,
+            signUpDate: new Date()
          })
          await updateProfile(firebaseUser, { displayName: user.toString() })
          await sendEmailVerification(firebaseUser)
@@ -60,7 +61,7 @@ const SignupPage: NextPage = () => {
       } catch (e: any) {
          setLoginError(getAuthErrorMessage(e.message))
          setLoading(false)
-         return
+         return false
       }
    }
 

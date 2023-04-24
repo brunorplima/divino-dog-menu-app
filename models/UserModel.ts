@@ -22,7 +22,7 @@ export default class UserModel extends Model<User> {
 
    constructor(user: Omit<User, 'admin' | 'master'>) {
       super()
-      this.user = user
+      this.user = this.ensureDateType(user)
    }
    
    static get PATH(): string { return 'users' }
@@ -54,6 +54,9 @@ export default class UserModel extends Model<User> {
             const user = document.data()
             if (user.dateOfBirth) {
                user.dateOfBirth = user.dateOfBirth.toDate()
+            }
+            if (user.signUpDate) {
+               user.signUpDate = user.signUpDate.toDate()
             }
             const userModel = new UserModel(user as User)
             users.push(userModel)
@@ -91,6 +94,7 @@ export default class UserModel extends Model<User> {
    get dateOfBirth()    { return this.user.dateOfBirth }
    get admin()          { return this.user.admin }
    get master()         { return this.user.master }
+   get signUpDate()     { return this.user.signUpDate }
 
    get fullName()       { return `${this.user.firstName} ${this.user.lastName}` }
 
@@ -136,5 +140,18 @@ export default class UserModel extends Model<User> {
 
    toString() {
       return `${this.firstName} ${this.lastName}`
+   }
+
+   signUpDateToString() {
+      const day = this.signUpDate.getDate() < 10 ?`0${this.signUpDate.getDate()}` : this.signUpDate.getDate()
+      const month = this.signUpDate.getMonth() + 1 < 10 ? `0${this.signUpDate.getMonth() + 1}` : this.signUpDate.getMonth() + 1
+      const year = this.signUpDate.getFullYear()
+      return `${day}/${month}/${year}`
+   }
+
+   private ensureDateType(values: User): User {
+      if (values.signUpDate instanceof Date) return values
+      const timestamp: any = values.signUpDate
+      return R.assoc('signUpDate', timestamp.toDate(), R.dissoc('signUpDate', R.clone(values)))
    }
 }

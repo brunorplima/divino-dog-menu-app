@@ -26,6 +26,7 @@ const AdminUsersSearchItem: React.FC<Props> = ({ user, setUserToEdit }) => {
             </div>
             <div>{user.emailAddress}</div>
             <div className='my-1'>{user?.mainAddressToString()}</div>
+            {user.signUpDate && <div className='my-1 text-sm'>Desde {user.signUpDateToString()}</div>}
             {user.phoneContact1 && <div>Contato 1: {user.phoneContact1}</div>}
             {user.phoneContact2 && <div>Contato 2: {user.phoneContact2}</div>}
          </div>

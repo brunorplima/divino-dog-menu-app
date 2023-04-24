@@ -76,6 +76,7 @@ export interface User {
    readonly firstName: string
    readonly lastName: string
    readonly emailAddress: string
+   readonly signUpDate: Date
    readonly phoneContact1?: string
    readonly addresses?: UserAddress[]
    readonly phoneContact2?: string

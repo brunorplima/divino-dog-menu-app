@@ -44,7 +44,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       if (fbUser) {
          unsubscribe.current = onSnapshot(doc(db, 'users', fbUser.uid), doc => {
             const incomingUser = doc.data() as User
-            if (!equals(incomingUser, user)) setUser(new UserModel(incomingUser))
+            if (!equals(incomingUser, user?.values())) setUser(new UserModel(incomingUser))
          })
       }
       else {
