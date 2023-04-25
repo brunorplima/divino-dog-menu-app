@@ -120,6 +120,11 @@ const AdminMenuItemView: React.FC<Props> = ({ item }) => {
                />
             )
          }
+         <ModelStandardFieldInfo
+            label='Dias disponíveis'
+            info={item.weekDays?.length ? item.availableDaysToString() : 'Todo dia'}
+            col
+         />
       </div>
    )
 }

@@ -1,4 +1,4 @@
-import { limit, orderBy, QueryConstraint, where } from 'firebase/firestore'
+import { orderBy, QueryConstraint, where } from 'firebase/firestore'
 import * as R from 'ramda'
 import React, { useContext, useEffect, useState } from 'react'
 import UserModel from '../../../models/UserModel'
@@ -27,8 +27,7 @@ const AdminUsersSection = () => {
    }, [filteredUsers])
 
    async function fetchUsers() {
-      const constraints: QueryConstraint[] = [orderBy('firstName', 'asc'), limit(20)]
-      const userRes = await UserModel.findMany(constraints)
+      const userRes = await UserModel.findMany()
       setUsers(userRes)
    }
 
@@ -40,19 +39,11 @@ const AdminUsersSection = () => {
             setLoadingSearch(false)
             return
          }
-         const whereClauses: QueryConstraint[] = []
-         if (searchProp === 'firstName') {
-            whereClauses.push(where('firstName', '==', searchText))
-         }
-         if (searchProp === 'lastName') {
-            whereClauses.push(where('lastName', '==', searchText))
-         }
-         if (searchProp === 'emailAddress') {
-            whereClauses.push(where('emailAddress', '==', searchText))
-         }
-         const usersList = await UserModel.findMany(whereClauses)
+         type Prop = 'firstName' | 'lastName' | 'emailAddress'
+         const getFilteredUsers = (prop: Prop) =>
+            R.filter(user => user[prop].toLowerCase().includes(searchText.toLowerCase()), users)
+         setFilteredUsers(getFilteredUsers(searchProp))
          setSearchValues(values)
-         setFilteredUsers(usersList)
          setLoadingSearch(false)
       } catch (err: any) {
          setLoadingSearch(false)
@@ -78,12 +69,14 @@ const AdminUsersSection = () => {
             <h1 className='text-xl'>Usuários</h1>
          </div>
 
-         <AdminUsersSearchForm onSubmit={onSearchSubmit} isLoading={loadingSearch} />
+         <AdminUsersSearchForm onSubmit={onSearchSubmit} isLoading={loadingSearch} searchValues={searchValues} />
 
          <AdminUsersSearchResults
             users={users}
             filteredUsers={filteredUsers}
             searchValues={searchValues}
+            setSearchValues={setSearchValues}
+            userToEdit={userToEdit}
             setUserToEdit={setUserToEdit}
             setFilteredUsers={setFilteredUsers}
          />

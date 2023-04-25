@@ -59,6 +59,10 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
             }
             if (item.hasPromo() && !has('promoPrice', values)) item.removeProp('promoPrice')
             item.modify(omit(['img'], { ...nonEmptyValues, price: nonEmptyValues.price as number }))
+            if (values.weekDays !== item.weekDays) {
+               if (values.weekDays?.length) item.modify({ weekDays: values.weekDays })
+               else item.removeProp('weekDays')
+            }
             item.save()
          }
          else {
