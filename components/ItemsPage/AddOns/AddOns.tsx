@@ -21,7 +21,7 @@ interface Props {
    setPrice: React.Dispatch<React.SetStateAction<number>>
    minimumPrice: number
    boxes: string | string[] | undefined
-   maxAmount: number | undefined
+   maxAmount: number
 }
 
 const AddOns = ({
@@ -73,7 +73,7 @@ const AddOns = ({
          setPrice(price - priceParsed < minimumPrice ? minimumPrice : price - priceParsed)
          setAddOns(addOns.filter((a) => a !== idEvaluator))
          modifyCheckbox(idEvaluator, false)
-      } else if (maxAmount !== undefined && selectedItems.length < maxAmount) {
+      } else if (maxAmount !== 0 && selectedItems.length < maxAmount) {
          if (evaluator) {
             setPrice(price + priceParsed)
             if (verOption) {
@@ -144,7 +144,7 @@ const AddOns = ({
                            value={item.price}
                            state={lightBoxes[idx].state}
                            activationList={selectedItems}
-                           blocker={maxAmount !== undefined && selectedItems.length >= maxAmount}
+                           blocker={maxAmount !== 0 && selectedItems.length >= maxAmount}
                            reffed={ElementReffed}
                            reffer={ElementReffer}
                         />
@@ -156,7 +156,7 @@ const AddOns = ({
                )
          )}
          <div>
-            {maxAmount !== undefined && (
+            {maxAmount !== 0 && (
                <Dialog
                   id='addonsLimiterDialog'
                   isOpen={dialog}

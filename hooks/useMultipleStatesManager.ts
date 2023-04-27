@@ -39,7 +39,7 @@ const useMultipleStatesManager = <T extends { id: string; price: number | undefi
          tempBoxes.forEach((box) => {
             box.id !== currentId ? box.setState(false) : box.setState(true)
          })
-      } else if (maxAmount !== undefined) {
+      } else if (maxAmount !== undefined && maxAmount !== 0) {
          const currentObj = lightBoxes[index]
          if (maxAmount <= newIds.length && !newIds.includes(currentObj.id)) {
             setDialog(true)

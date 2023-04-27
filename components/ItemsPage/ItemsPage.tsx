@@ -28,7 +28,7 @@ const ItemsPage = (props: Props) => {
    const { menuItems, toppings, sauces, menuItemOptions } = useContext(menuContext)
 
    const { settingsModel } = useContext(settingsContext)
-   const maxAmount = settingsModel?.maxAmountOfAddons ? settingsModel?.maxAmountOfAddons : undefined
+   const maxAmount = settingsModel?.maxAmountOfAddons ? settingsModel?.maxAmountOfAddons : 0
    const toppingsAllowed = settingsModel?.allowUserToAddToppings
       ? settingsModel?.allowUserToAddToppings
       : false
@@ -179,9 +179,10 @@ const ItemsPage = (props: Props) => {
                         <div className='text-4xl font-bold'>{theItem.name}</div>
                         <div>{theItem.description}</div>
                         {(theItem.optionIds?.length === 0 || !theItem.optionIds) &&
-                           toppingsAllowed && (
+                           toppingsAllowed &&
+                           maxAmount !== 0 && (
                               <div className='pt-4 font-semibold'>
-                                 {maxAmount != undefined && maxAmount === 1
+                                 {maxAmount === 1
                                     ? `Somente 1 adicional permitido`
                                     : `Até ${maxAmount} adicionais permitidos`}
                               </div>
@@ -189,26 +190,25 @@ const ItemsPage = (props: Props) => {
                         <div>
                            {sections.map((section) => (
                               <Fragment key={section.title}>
-                                 {maxAmount == undefined ||
-                                    (maxAmount > 0 &&
-                                       (toppingsAllowed || section.singleOption) &&
-                                       addonAvailability(section.sect) &&
-                                       section.sect !== undefined && (
-                                          <AddOns
-                                             addOnIds={section.sect}
-                                             title={section.title}
-                                             subTitle={section.subTitle}
-                                             singleOption={section.singleOption}
-                                             addonList={section.addonList}
-                                             addOns={addOns}
-                                             setAddOns={setAddOns}
-                                             price={price}
-                                             setPrice={setPrice}
-                                             minimumPrice={minimumPrice}
-                                             boxes={boxes}
-                                             maxAmount={maxAmount}
-                                          />
-                                       ))}
+                                 {maxAmount > 0 &&
+                                    (toppingsAllowed || section.singleOption) &&
+                                    addonAvailability(section.sect) &&
+                                    section.sect !== undefined && (
+                                       <AddOns
+                                          addOnIds={section.sect}
+                                          title={section.title}
+                                          subTitle={section.subTitle}
+                                          singleOption={section.singleOption}
+                                          addonList={section.addonList}
+                                          addOns={addOns}
+                                          setAddOns={setAddOns}
+                                          price={price}
+                                          setPrice={setPrice}
+                                          minimumPrice={minimumPrice}
+                                          boxes={boxes}
+                                          maxAmount={maxAmount}
+                                       />
+                                    )}
                               </Fragment>
                            ))}
                         </div>
