@@ -179,10 +179,12 @@ const ItemsPage = (props: Props) => {
                         <div className='text-4xl font-bold'>{theItem.name}</div>
                         <div>{theItem.description}</div>
                         {(theItem.optionIds?.length === 0 || !theItem.optionIds) &&
-                           toppingsAllowed && (
+                           toppingsAllowed &&
+                           maxAmount !== 0 && (
                               <div className='pt-4 font-semibold'>
-                                 {maxAmount === 1 && `Somente 1 adicional permitido`}
-                                 {maxAmount >= 2 && `Até ${maxAmount} adicionais permitidos`}
+                                 {maxAmount === 1
+                                    ? `Somente 1 adicional permitido`
+                                    : `Até ${maxAmount} adicionais permitidos`}
                               </div>
                            )}
                         <div>

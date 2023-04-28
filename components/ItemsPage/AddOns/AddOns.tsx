@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import useMultipleStatesManager from '../../../hooks/useMultipleStatesManager'
 import MenuItemOptionModel from '../../../models/MenuItemOptionModel'
 import CheckBox from '../../book/CheckBox'
+import Dialog from '../../chapter/Dialog'
 
 interface Props {
    addOnIds: string[]
@@ -37,9 +38,12 @@ const AddOns = ({
    boxes,
    maxAmount,
 }: Props) => {
+   // Opens and close the dialog when there is an amount limit
+   const [dialog, setDialog] = useState(false)
    const { lightBoxes, runLightBoxesState } = useMultipleStatesManager<
       ToppingModel | SauceModel | MenuItemOptionModel
-   >(addonList, boxes)
+   >(addonList, boxes, setDialog, maxAmount)
+   const selectedItems = lightBoxes.map((box) => box.state && box.id).filter(Boolean) as string[]
 
    const { ElementReffed, ElementReffer } = useElementRefList<HTMLInputElement>()
 
@@ -53,45 +57,38 @@ const AddOns = ({
       }
    }
 
+   const modifyCheckbox = (idValue: string, bool: boolean) => {
+      ElementReffed.current.forEach((el) => {
+         el.id === idValue &&
+            changeCheckBoxClass(el.parentElement?.parentElement?.parentElement, bool)
+      })
+   }
    const setAllValues = (
-      
-      priceParsed: number,
-     
-      evaluator: boolean,
-     
-      idEvaluator: string,
-     
-      verOption: boolean
-   
+      priceParsed: number /* adds the additional price of toppings etc */,
+      evaluator: boolean /* returns true when checkbox is marked */,
+      idEvaluator: string /* id of the topping etc */,
+      verOption: boolean /* when true means that there could be only one option checked */
    ) => {
-      if (evaluator) {
-         setPrice(price + priceParsed)
-         if  (verOption) {
-            const uniqAddOns = lightBoxes.find((box) => box.state)
-            uniqAddOns && setAddOns([uniqAddOns.id])
-         } else setAddOns([...addOns, idEvaluator])
-         ElementReffed.current.forEach((el) => {
-            el.id === idEvaluator &&
-               changeCheckBoxClass(el.parentElement?.parentElement?.parentElement, true)
-         })
-      } else {
+      if (!evaluator || selectedItems.includes(idEvaluator)) {
          setPrice(price - priceParsed < minimumPrice ? minimumPrice : price - priceParsed)
          setAddOns(addOns.filter((a) => a !== idEvaluator))
-         ElementReffed.current.forEach((el) => {
-            el.id === idEvaluator &&
-               changeCheckBoxClass(el.parentElement?.parentElement?.parentElement, false)
-         })
+         modifyCheckbox(idEvaluator, false)
+      } else if (maxAmount !== 0 && selectedItems.length < maxAmount) {
+         if (evaluator) {
+            setPrice(price + priceParsed)
+            if (verOption) {
+               const uniqAddOns = lightBoxes.find((box) => box.state)
+               uniqAddOns && setAddOns([uniqAddOns.id])
+            } else setAddOns([...addOns, idEvaluator])
+            modifyCheckbox(idEvaluator, true)
+         }
       }
    }
 
    const changePrice = (
-      
       event: React.MouseEvent<HTMLInputElement, MouseEvent>,
-     
       value: number,
-     
       verOption = false
-   
    ) => {
       const checker = event.currentTarget.checked
       const currElId = event.currentTarget.id
@@ -106,11 +103,10 @@ const AddOns = ({
    const [addOnsHelper, setAddOnsHelper] = useState<string>('')
 
    useEffect(() => {
-      if  (singleOption) {
+      if (singleOption) {
          const selectedBox = lightBoxes.filter((box) => box.state)
          setAddOnsHelper(selectedBox[0]?.id)
          const aditionalPrice =
-           
             selectedBox[0]?.subTotal === undefined ? 0 : selectedBox[0]?.subTotal
          setPrice(minimumPrice + aditionalPrice)
       }
@@ -119,24 +115,6 @@ const AddOns = ({
    useEffect(() => {
       singleOption && setAddOns([addOnsHelper])
    }, [addOnsHelper])
-
-   const handleStateAndPrices = (
-      index: number,
-      event: React.MouseEvent<HTMLInputElement, MouseEvent>,
-      item: ToppingModel | SauceModel | MenuItemOptionModel,
-      state: boolean
-   ) => {
-      const execution = () => {
-         runLightBoxesState(index, singleOption)
-         changePrice(event, item.price ? item.price : 0)
-      }
-
-      if (state) {
-         execution()
-      } else if (addOns.length < maxAmount) {
-         execution()
-      }
-   }
 
    return (
       <div className={`${styles.topAddons} static`}>
@@ -149,9 +127,7 @@ const AddOns = ({
                checkCanBeExtra(item) && (
                   <div
                      key={item.id}
-                     className={`${styles.itemInfo} ${
-                        lightBoxes[idx].state && styles.checkedItemInfo
-                     } grid my-2 p-4 rounded-xl font-medium w-full`}
+                     className={`${styles.itemInfo} grid my-2 p-4 rounded-xl font-medium w-full`}
                      onClick={(e) => e.target}
                   >
                      <div className='text-base'>
@@ -167,6 +143,8 @@ const AddOns = ({
                            name={item.id}
                            value={item.price}
                            state={lightBoxes[idx].state}
+                           activationList={selectedItems}
+                           blocker={maxAmount !== 0 && selectedItems.length >= maxAmount}
                            reffed={ElementReffed}
                            reffer={ElementReffer}
                         />
@@ -177,6 +155,27 @@ const AddOns = ({
                   </div>
                )
          )}
+         <div>
+            {maxAmount !== 0 && (
+               <Dialog
+                  id='addonsLimiterDialog'
+                  isOpen={dialog}
+                  onClose={() => setDialog(false)}
+                  footer={[
+                     {
+                        label: 'Fechar',
+                        onClick: () => {
+                           setDialog(false)
+                        },
+                     },
+                  ]}
+               >
+                  {`Você só pode escolher ${maxAmount} ${
+                     maxAmount > 1 ? 'adicionais' : 'adicional'
+                  }. Remova um item para selecionar outro.`}
+               </Dialog>
+            )}
+         </div>
       </div>
    )
 }
