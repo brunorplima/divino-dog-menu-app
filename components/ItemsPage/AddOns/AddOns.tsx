@@ -120,50 +120,54 @@ const AddOns = ({
       <div className={`${styles.topAddons} static`}>
          <div className='font-semibold'>{title}</div>
          <div className='mb-5 mt-1 ml-2 text-sm font-semibold'>{subTitle}</div>
-         {addonList.map(
-            (item, idx) =>
-               addOnIds.includes(item.id) &&
-               item.isAvailable &&
-               checkCanBeExtra(item) && (
-                  <div
-                     key={item.id}
-                     className={`${styles.itemInfo} grid my-2 p-4 rounded-xl font-medium w-full`}
-                     onClick={(e) => e.target}
-                  >
-                     <div className='text-base'>
-                        <label>{item.name}</label>
+         <div data-action='toppings-menu'>
+            {addonList.map(
+               (item, idx) =>
+                  addOnIds.includes(item.id) &&
+                  item.isAvailable &&
+                  checkCanBeExtra(item) && (
+                     <div
+                        key={item.id}
+                        className={`${styles.itemInfo} grid my-2 p-4 rounded-xl font-medium w-full`}
+                        onClick={(e) => e.target}
+                     >
+                        <div className='text-base'>
+                           <label>{item.name}</label>
+                        </div>
+                        <div className='justify-center items-center w-4/5 row-start-1 row-end-3 col-start-2 h-full'>
+                           <CheckBox
+                              func={(event) => {
+                                 runLightBoxesState(idx, singleOption)
+                                 changePrice(event, item.price ? item.price : 0)
+                              }}
+                              id={item.id}
+                              name={item.name}
+                              value={item.price}
+                              state={lightBoxes[idx].state}
+                              activationList={selectedItems}
+                              blocker={maxAmount !== 0 && selectedItems.length >= maxAmount}
+                              reffed={ElementReffed}
+                              reffer={ElementReffer}
+                           />
+                        </div>
+                        <div className='text-base'>
+                           {item.price !== undefined && item.price > 0 && formatPrice(item.price)}
+                        </div>
                      </div>
-                     <div className='justify-center items-center w-4/5 row-start-1 row-end-3 col-start-2 h-full'>
-                        <CheckBox
-                           func={(event) => {
-                              runLightBoxesState(idx, singleOption)
-                              changePrice(event, item.price ? item.price : 0)
-                           }}
-                           id={item.id}
-                           name={item.id}
-                           value={item.price}
-                           state={lightBoxes[idx].state}
-                           activationList={selectedItems}
-                           blocker={maxAmount !== 0 && selectedItems.length >= maxAmount}
-                           reffed={ElementReffed}
-                           reffer={ElementReffer}
-                        />
-                     </div>
-                     <div className='text-base'>
-                        {item.price !== undefined && item.price > 0 && formatPrice(item.price)}
-                     </div>
-                  </div>
-               )
-         )}
+                  )
+            )}
+         </div>
          <div>
             {maxAmount !== 0 && (
                <Dialog
                   id='addonsLimiterDialog'
+                  dataAction='item-modal-notification'
                   isOpen={dialog}
                   onClose={() => setDialog(false)}
                   footer={[
                      {
                         label: 'Fechar',
+                        dataLabel: 'button-close',
                         onClick: () => {
                            setDialog(false)
                         },

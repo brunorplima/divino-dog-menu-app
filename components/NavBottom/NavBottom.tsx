@@ -13,10 +13,10 @@ export default function NavBottom() {
 
    const buttons = useMemo(
       () => [
-         { name: 'Cardápio', icon: <MdRestaurantMenu />, link: '/' },
-         { name: 'Pedidos', icon: <BiCart />, link: '/checkout' },
-         { name: 'Progresso', icon: <AiOutlineFileSync />, link: '/track_order' },
-         { name: 'Sobre nós', icon: <BiStore />, link: '/aboutus' },
+         { name: 'Cardápio', icon: <MdRestaurantMenu />, link: '/', dataLabel: 'nav-menu' },
+         { name: 'Pedidos', icon: <BiCart />, link: '/checkout', dataLabel: 'nav-order' },
+         { name: 'Progresso', icon: <AiOutlineFileSync />, link: '/track_order', dataLabel: 'nav-progress' },
+         { name: 'Sobre nós', icon: <BiStore />, link: '/aboutus', dataLabel: 'nav-about-us' },
       ],
       []
    )
@@ -45,7 +45,7 @@ export default function NavBottom() {
       <div
          className={`${style.navigation} m-auto lg:w-1/2 fixed -bottom-12 flex justify-center items-center h-32 rounded-t-3xl bg-white w-full z-20`}
       >
-         <div className={`flex`}>
+         <div className={`flex`} data-action='navbar'>
             {buttons.map((button, index) => (
                <Fragment key={button.name}>
                   <div
@@ -55,13 +55,16 @@ export default function NavBottom() {
                      }`}
                      ref={(el) => ElementReffer(el, ElementReffed)}
                      onClick={activeClass}
+                     data-label={button.dataLabel}
                   >
                      <Link href={button.link}>
                         <a className='relative flex justify-center items-center flex-col w-full text-center font-light'>
                            <span className={`${style.icon} relative block text-center`}>
                               {/* number of chosen menu item groups removed until related issues are resolved. More Details on PR #102 */}
                               {menuItemGroups.length > 0 && button.link === '/checkout' && (
-                                 <span className={`${style.number} absolute -top-7 -right-4 text-base font-bold`}>
+                                 <span
+                                    className={`${style.number} absolute -top-7 -right-4 text-base font-bold`}
+                                 >
                                     {menuItemGroups.length}
                                  </span>
                               )}

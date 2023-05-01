@@ -10,12 +10,14 @@ interface Props {
    readonly icon?: any
    readonly bgColor?: BgColor
    readonly className?: string
+   readonly dataLabel?: string
 }
 
 const PrimaryButton: React.FC<Props> = ({
    label,
    disabled,
    icon,
+   dataLabel,
    clickHandler = () => {},
    type = 'button',
    bgColor = 'gray',
@@ -39,6 +41,7 @@ const PrimaryButton: React.FC<Props> = ({
          style={style}
          disabled={disabled}
          onClick={() => clickHandler()}
+         data-label={dataLabel ? dataLabel : ''}
       >
          {icon && (
             <>
