@@ -43,7 +43,7 @@ function CheckBox(props: Props) {
             value={value}
             ref={(el) => reffed && reffer && reffer(el, reffed)}
             checked={state}
-            data-label={name.toLowerCase().replace(' ', '-')}
+            data-label={`item-${name.toLowerCase().replace(' ', '-')}`}
          />
       </div>
    )
