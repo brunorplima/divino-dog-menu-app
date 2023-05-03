@@ -1,12 +1,10 @@
-/// <reference types="cypress" />
-
 import {
    numberToArray,
    categoriesList,
    categoriesListLength,
    itemsPageRepeater,
    textPriceToFloat,
-} from './functions/functions'
+} from './functions'
 
 describe('User journey', () => {
    before('Getting to homepage', () => {
