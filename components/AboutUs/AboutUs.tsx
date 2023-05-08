@@ -62,7 +62,7 @@ function AboutUs() {
                      Bruno é um desenvolvedor fullstack com experiência em desenvolvimento de
                      aplicativos web. Trabalha com HTML, CSS, Javascript e React no frontend e Ruby
                      on Rails no backend.&nbsp;
-                     <Link href='https://brunoreactdeveloper.web.app/'>
+                     <Link href='https://brunolima.vercel.app/'>
                         <a target='_blank'>Você também pode encontrá-lo online</a>
                      </Link>
                      .
