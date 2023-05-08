@@ -5,6 +5,7 @@ import PrimaryButton from '../../verse/PrimaryButton'
 interface DialogFooter {
    readonly label: string
    readonly onClick: () => any
+   readonly dataLabel?: string
 }
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
    readonly onClose?: () => void
    readonly footer?: DialogFooter[]
    readonly children?: React.ReactNode
+   readonly dataAction?: string
 }
 
 const Dialog: React.FC<Props> = ({
@@ -20,21 +22,27 @@ const Dialog: React.FC<Props> = ({
    isOpen,
    onClose = () => {},
    footer,
-   children
+   children,
+   dataAction,
 }) => {
    return (
       <ReactModal
          isOpen={isOpen}
-         appElement={typeof document !== 'undefined' ? document.getElementById(id) as HTMLElement : undefined}
+         appElement={
+            typeof document !== 'undefined'
+               ? (document.getElementById(id) as HTMLElement)
+               : undefined
+         }
          ariaHideApp={false}
          className={`h-screen max-w-2xl mr-auto ml-auto overflow-scroll grid place-items-center text-gray-300`}
          onRequestClose={onClose}
          shouldCloseOnOverlayClick
       >
-         <div className='max-w-lg bg-gray-600 border-2 border-gray-200 opacity-100 mx-9 rounded'>
-            <div className='p-5'>
-               {children}
-            </div>
+         <div
+            className='max-w-lg bg-gray-600 border-2 border-gray-200 opacity-100 mx-9 rounded'
+            data-action={dataAction ? dataAction : ''}
+         >
+            <div className='p-5'>{children}</div>
 
             {footer && (
                <div className='p-5 flex justify-end gap-2 pt-0'>
@@ -42,6 +50,7 @@ const Dialog: React.FC<Props> = ({
                      <PrimaryButton
                         key={JSON.stringify(element) + idx}
                         label={element.label}
+                        dataLabel={element.dataLabel ? element.dataLabel : ''}
                         clickHandler={element.onClick}
                      />
                   ))}

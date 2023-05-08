@@ -24,6 +24,7 @@ export default function Listing({ item, isPromotionActive }: Props) {
       <ConditionalLinkRender link={activeItem} item={item}>
          <div
             className={`${!activeItem ? style.lineThrough : ''} relative bg-white cursor-pointer`}
+            data-label={`menu-item-${item.name.toLowerCase().replace(' ', '-')}`}
          >
             <div className={`${style.menuItem} relative grid mb-8 w-screen`}>
                <div>

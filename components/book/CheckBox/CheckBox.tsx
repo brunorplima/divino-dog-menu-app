@@ -39,10 +39,11 @@ function CheckBox(props: Props) {
             className='relative block'
             type='checkbox'
             id={id}
-            name={name}
+            name={id}
             value={value}
             ref={(el) => reffed && reffer && reffer(el, reffed)}
             checked={state}
+            data-label={`item-${name.toLowerCase().replace(' ', '-')}`}
          />
       </div>
    )

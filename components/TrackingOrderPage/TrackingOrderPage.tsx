@@ -94,11 +94,13 @@ const TrackingOrderPage = () => {
 
          <Dialog
             id='paymentReminderDialog'
+            dataAction='track-model-notification'
             isOpen={dialogIsOpen}
             onClose={() => setDialogIsOpen(false)}
             footer={[
                {
                   label: 'Ok',
+                  dataLabel: 'button-ok',
                   onClick: () => {
                      setDialogIsOpen(false)
                      router.push('/track_order')

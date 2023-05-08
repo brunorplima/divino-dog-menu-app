@@ -29,33 +29,36 @@ const TrackOrderInfo: React.FC<Props> = ({ order }) => {
    const { menuItems, toppings, sauces } = useContext(menuContext)
    const [open, setOpen] = useState(false)
 
-   const statusInfo = useMemo<StatusInfo>(() => ({
-      confirmar: {
-         text: 'Pedido não confirmado',
-         percent: 0,
-         previousStatuses: []
-      },
-      confirmado: {
-         text: 'Pagamento e pedido confirmados',
-         percent: 33,
-         previousStatuses: ['confirmar']
-      },
-      preparando: {
-         text: 'Pedido está sendo preparado',
-         percent: 66,
-         previousStatuses: ['confirmar', 'confirmado']
-      },
-      finalizado: {
-         text: 'Pedido finalizado',
-         percent: 100,
-         previousStatuses: ['confirmar', 'confirmado', 'preparando']
-      },
-      cancelado: {
-         text: 'Pedido foi cancelado',
-         percent: 0,
-         previousStatuses: []
-      }
-   }), [])
+   const statusInfo = useMemo<StatusInfo>(
+      () => ({
+         confirmar: {
+            text: 'Pedido não confirmado',
+            percent: 0,
+            previousStatuses: [],
+         },
+         confirmado: {
+            text: 'Pagamento e pedido confirmados',
+            percent: 33,
+            previousStatuses: ['confirmar'],
+         },
+         preparando: {
+            text: 'Pedido está sendo preparado',
+            percent: 66,
+            previousStatuses: ['confirmar', 'confirmado'],
+         },
+         finalizado: {
+            text: 'Pedido finalizado',
+            percent: 100,
+            previousStatuses: ['confirmar', 'confirmado', 'preparando'],
+         },
+         cancelado: {
+            text: 'Pedido foi cancelado',
+            percent: 0,
+            previousStatuses: [],
+         },
+      }),
+      []
+   )
 
    if (!order) return null
    return (
@@ -68,7 +71,7 @@ const TrackOrderInfo: React.FC<Props> = ({ order }) => {
          <div className='border-8' style={{ borderColor: 'rgb(68, 69, 73)' }}>
             <div className='px-4 py-3'>
                <div>Status do pedido:</div>
-               {statusInfo[order.status]?.previousStatuses?.map(status => (
+               {statusInfo[order.status]?.previousStatuses?.map((status) => (
                   <div key={JSON.stringify(status)} className='text-green-500 line-through'>
                      {statusInfo[status]?.text}
                   </div>
@@ -86,10 +89,9 @@ const TrackOrderInfo: React.FC<Props> = ({ order }) => {
                      style={{
                         backgroundColor: 'rgb(41, 253, 83)',
                         width: `${statusInfo[order.status]?.percent}%`,
-                        height: '100%'
+                        height: '100%',
                      }}
-                  >
-                  </div>
+                  ></div>
                </div>
             </div>
 
@@ -97,33 +99,48 @@ const TrackOrderInfo: React.FC<Props> = ({ order }) => {
                <div
                   className='text-lg flex gap-2'
                   onClick={() => setOpen(!open)}
+                  data-action='order-details'
+                  data-label={`order-details-${order.codeNumber}`}
                >
                   <div>Detalhes do pedido</div>
-                  <span className='translate-y-2'>{open ? <BiUpArrow size={13} /> : <BiDownArrow size={13} />}</span>
+                  <span className='translate-y-2'>
+                     {open ? <BiUpArrow size={13} /> : <BiDownArrow size={13} />}
+                  </span>
                </div>
-               {open && order.items.map(item => {
-                  const menuItem = find(propEq('id', item.menuItemId), menuItems)
-                  const extraToppings = filter(topping => item?.extraToppingIds?.includes(topping.id) || false, toppings)
-                  const extraSauces = filter(sauce => item?.extraSauceIds?.includes(sauce.id) || false, sauces)
-                  return (
-                     <div key={item.id} className='ml-3 mb-3'>
-                        <div className='flex gap-2'>
-                           <span><GoArrowSmallRight size={24}/></span>
-                           {menuItem?.name}
+               {open &&
+                  order.items.map((item) => {
+                     const menuItem = find(propEq('id', item.menuItemId), menuItems)
+                     const extraToppings = filter(
+                        (topping) => item?.extraToppingIds?.includes(topping.id) || false,
+                        toppings
+                     )
+                     const extraSauces = filter(
+                        (sauce) => item?.extraSauceIds?.includes(sauce.id) || false,
+                        sauces
+                     )
+                     return (
+                        <div key={item.id} className='ml-3 mb-3'>
+                           <div className='flex gap-2'>
+                              <span>
+                                 <GoArrowSmallRight size={24} />
+                              </span>
+                              {menuItem?.name}
+                           </div>
+                           {extraToppings.length > 0 &&
+                              extraToppings.map((topping) => (
+                                 <div key={topping.id} className='ml-5'>
+                                    + {topping.name}
+                                 </div>
+                              ))}
+                           {extraSauces.length > 0 &&
+                              extraSauces.map((sauce) => (
+                                 <div key={sauce.id} className='ml-5'>
+                                    + {sauce.name}
+                                 </div>
+                              ))}
                         </div>
-                        {extraToppings.length > 0 && extraToppings.map(topping => (
-                           <div key={topping.id} className='ml-5'>
-                              + {topping.name}
-                           </div>
-                        ))}
-                        {extraSauces.length > 0 && extraSauces.map(sauce => (
-                           <div key={sauce.id} className='ml-5'>
-                              + {sauce.name}
-                           </div>
-                        ))}
-                     </div>
-                  )
-               })}
+                     )
+                  })}
                <div className='mt-4 font-bold'>Total: R$ {order.totalPrice.toFixed(2)}</div>
             </div>
          </div>

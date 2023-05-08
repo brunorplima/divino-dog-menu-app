@@ -171,6 +171,8 @@ const ItemsPage = (props: Props) => {
                         <div
                            className='bg-black fixed z-20 top-4 left-4 text-5xl'
                            style={{ color: globalPrimaryColor, borderRadius: '50%' }}
+                           data-action='icon-button'
+                           data-label='return'
                         >
                            <IoIosArrowDropleftCircle />
                         </div>
@@ -216,8 +218,11 @@ const ItemsPage = (props: Props) => {
                            className={`${styles.itemQuantity} relative text-base p-4 inset-x-0 items-center justify-center text-center mb-40`}
                         >
                            <div className={`mb-3`}>Quantidade</div>
-                           <div className={`${styles.innerItemQuantity} grid font-semibold`}>
-                              <div>
+                           <div
+                              className={`${styles.innerItemQuantity} grid font-semibold`}
+                              data-action='item-quantity-setters'
+                           >
+                              <div data-label='item-downwards'>
                                  <a
                                     onClick={() => {
                                        setQuant(quant - 1 <= 0 ? 1 : quant - 1)
@@ -229,7 +234,7 @@ const ItemsPage = (props: Props) => {
                               <div>
                                  <span>{quant}</span>
                               </div>
-                              <div>
+                              <div data-label='item-upwards'>
                                  <a
                                     onClick={() => {
                                        setQuant(quant + 1)
@@ -256,6 +261,8 @@ const ItemsPage = (props: Props) => {
                            !itemsIds && saveInLocalStorage()
                         }
                      }}
+                     data-action='cta-button'
+                     data-label='send-order'
                   >
                      <div className='block w-full text-left'>
                         {quantity !== undefined ? 'Alterar Pedido' : 'Adicionar'}

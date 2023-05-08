@@ -65,7 +65,7 @@ export default function MenuList() {
          <div
             className={`${style.fixedMenu} text-white font-extrabold whitespace-nowrap overflow-x-scroll`}
          >
-            <div className={`static z-20`}>
+            <div className={`static z-20`} data-action='top-category-menu'>
                {excludeEmptyCategory(serverDate).map((category) => (
                   <Fragment key={category.id}>
                      <MenuCategories name={category.name} link={withoutSpaces(category.name)} />
@@ -82,18 +82,20 @@ export default function MenuList() {
                   >
                      {capitalizeFirstLetter(category.name)}
                   </h2>
-                  {menuItems
-                     .sort((a, b) => a.listOrder - b.listOrder)
-                     .map((item) => (
-                        <Fragment key={item.id}>
-                           {checkCategoriesAndPromo(item, category, serverDate) && (
-                              <ListingItems
-                                 item={item}
-                                 isPromotionActive={checkPromoDate(item, serverDate)}
-                              />
-                           )}
-                        </Fragment>
-                     ))}
+                  <div data-action={`menu-${category.name.toLowerCase().replace(' ', '-')}`}>
+                     {menuItems
+                        .sort((a, b) => a.listOrder - b.listOrder)
+                        .map((item) => (
+                           <Fragment key={item.id}>
+                              {checkCategoriesAndPromo(item, category, serverDate) && (
+                                 <ListingItems
+                                    item={item}
+                                    isPromotionActive={checkPromoDate(item, serverDate)}
+                                 />
+                              )}
+                           </Fragment>
+                        ))}
+                  </div>
                </div>
             ))}
          </div>

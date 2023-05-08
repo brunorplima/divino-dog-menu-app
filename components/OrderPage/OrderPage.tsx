@@ -89,12 +89,13 @@ export default function OrderPage() {
          {manageableLocalStorage.map((e, idx) => (
             <div key={e.order.menuItemId + String(idx)} id={String(idx)}>
                <div className={`${style.singleItem} relative grid gap-3 my-1 w-screen`}>
-                  <div className='flex flex-col'>
+                  <div className='flex flex-col' data-action='orderquantity-setters'>
                      <p
                         className={`text-center m-auto h-7 w-14 ${style.b}`}
                         onClick={() => {
                            settingLocalStorage(e, 'addition', idx)
                         }}
+                        data-label='order-upwards'
                      >
                         +
                      </p>
@@ -104,6 +105,7 @@ export default function OrderPage() {
                         onClick={() => {
                            settingLocalStorage(e, 'subtraction', idx)
                         }}
+                        data-label='order-downwards'
                      >
                         -
                      </p>
@@ -145,7 +147,9 @@ export default function OrderPage() {
                         removeSingleItem(idx)
                      }}
                   >
-                     <FaWindowClose size={20} />
+                     <span data-action='icon-button' data-label='delete-item'>
+                        <FaWindowClose size={20} />
+                     </span>
                   </div>
                </div>
             </div>
@@ -156,7 +160,7 @@ export default function OrderPage() {
                   className={`relative flex justify-end gap-3 my-1 w-screen py-4 px-5`}
                   style={{ background: 'none' }}
                >
-                  <div>
+                  <div data-action='cta-button' data-label='delete-all-items'>
                      <PrimaryButton
                         label='Apagar tudo'
                         bgColor='red'
@@ -178,10 +182,15 @@ export default function OrderPage() {
                <p className='relative m-4'>
                   Você tem certeza que deseja apagar todos os itens do seu pedido?
                </p>
-               <div className='flex flex-row gap-3'>
-                  <PrimaryButton label='Não' clickHandler={() => setNotification(false)} />
+               <div className='flex flex-row gap-3' data-action='order-modal-notification'>
+                  <PrimaryButton
+                     label='Não'
+                     dataLabel='button-no'
+                     clickHandler={() => setNotification(false)}
+                  />
                   <PrimaryButton
                      label='Sim'
+                     dataLabel='button-yes'
                      bgColor='none'
                      clickHandler={() => {
                         clearMenuItemGroups()
@@ -208,7 +217,7 @@ export default function OrderPage() {
                bottom: '7rem',
             }}
          >
-            <div className='text-left'>
+            <div className='text-left w-full' data-action='cta-button' data-label='confirm-order'>
                <button
                   className='rounded-lg font-semibold'
                   style={
@@ -228,7 +237,7 @@ export default function OrderPage() {
                   Confirmar Pedido
                </button>
             </div>
-            <div className='text-right'>{formatPrice(priceWatcher())}</div>
+            <div className='text-right w-full'>{formatPrice(priceWatcher())}</div>
          </div>
 
          <LoaderComponent show={menuItems.length === 0} />
