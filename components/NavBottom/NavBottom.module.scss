@@ -1,5 +1,5 @@
 .navigation {
-   border-top: 0.6rem solid #222327;
+   border-top: 0.7rem solid #222327;
 
    .button {
       width: 4.375rem;
@@ -19,7 +19,6 @@
       }
 
       a {
-
          .icon {
             line-height: 4.688rem;
             font-size: 1.5em;
@@ -44,6 +43,21 @@
    }
 }
 
+@media (min-width: 770px) {
+   .navigation {
+      bottom: 0;
+      width: var(--width-layout);
+      height: 100px;
+
+      .button.active a .icon {
+         transform: translateY(-1rem);
+      }
+      .button.active a .text {
+         transform: translateY(2rem);
+      }
+   }
+}
+
 .indicator {
    top: -1.875rem;
    width: 4.375rem;
@@ -54,7 +68,7 @@
    transition: 0.5s;
 
    &::before {
-      content: "";
+      content: '';
       position: absolute;
       top: 41.5%;
       left: -23px;
@@ -66,7 +80,7 @@
    }
 
    &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 41.5%;
       right: -23px;
