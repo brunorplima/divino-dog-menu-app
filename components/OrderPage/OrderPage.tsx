@@ -16,7 +16,7 @@ import { generateID } from '../../utils/modelHelper'
 import PrimaryButton from '../verse/PrimaryButton'
 import { globalPrimaryColor } from '../../constants/cssConstants'
 import Dialog from '../chapter/Dialog'
-import { all, complement, filter, identity, isEmpty, map, pipe, pluck } from 'ramda'
+import { filter, isEmpty, pluck } from 'ramda'
 import MenuItemModel from '../../models/MenuItemModel'
 
 export default function OrderPage() {
