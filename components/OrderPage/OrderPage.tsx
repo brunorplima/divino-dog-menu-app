@@ -15,6 +15,9 @@ import { createManageableStorage } from '../../utils/localStorageHelper'
 import { generateID } from '../../utils/modelHelper'
 import PrimaryButton from '../verse/PrimaryButton'
 import { globalPrimaryColor } from '../../constants/cssConstants'
+import Dialog from '../chapter/Dialog'
+import { all, complement, filter, identity, isEmpty, map, pipe, pluck } from 'ramda'
+import MenuItemModel from '../../models/MenuItemModel'
 
 export default function OrderPage() {
    const router = useRouter()
@@ -75,6 +78,26 @@ export default function OrderPage() {
    }
 
    const [notification, setNotification] = useState(false)
+
+   const [notifyRemotion, setNotifyRemotion] = useState(false)
+   useEffect(() => {
+      const filteredItemsids: MenuItemModel[] = filter(
+         (obj) => obj.isAvailable === false,
+         menuItems
+      )
+      if (!isEmpty(filteredItemsids)) {
+         const idsOfUnavailables: string[] = pluck('id', filteredItemsids)
+         const toBeRemovedObjs = filter(
+            (obj) => idsOfUnavailables.includes(obj.menuItemId),
+            menuItemGroups
+         )
+         if (!isEmpty(toBeRemovedObjs)) {
+            setNotifyRemotion(true)
+            const toBeRemovedIds = pluck('id', toBeRemovedObjs)
+            removeMenuItemGroup(toBeRemovedIds)
+         }
+      }
+   }, [menuItems])
 
    return (
       <div className={`${style.orderPageOuterDiv} ${style.hideScroller} font-medium my-12 mb-52`}>
@@ -230,6 +253,22 @@ export default function OrderPage() {
             </div>
             <div className='text-right'>{formatPrice(priceWatcher())}</div>
          </div>
+
+         <>
+            <Dialog
+               id='OrderPageRemoveAbsentItem'
+               isOpen={notifyRemotion}
+               footer={[
+                  {
+                     label: 'Fechar',
+                     onClick: () => setNotifyRemotion(false),
+                  },
+               ]}
+            >
+               Percebemos que um dos produtos que você escolheu para comprar não está mais
+               disponível, por isso removemos ele da sua lista de compras.
+            </Dialog>
+         </>
 
          <LoaderComponent show={menuItems.length === 0} />
       </div>
