@@ -61,9 +61,7 @@ export default function NavBottom() {
                            <span className={`${style.icon} relative block text-center`}>
                               {/* number of chosen menu item groups removed until related issues are resolved. More Details on PR #102 */}
                               {menuItemGroups.length > 0 && button.link === '/checkout' && (
-                                 <span
-                                    className={`${style.number} absolute -top-7 -right-4 text-base font-bold`}
-                                 >
+                                 <span className={`${style.number} absolute -top-7 -right-4 text-base font-bold`}>
                                     {menuItemGroups.length}
                                  </span>
                               )}

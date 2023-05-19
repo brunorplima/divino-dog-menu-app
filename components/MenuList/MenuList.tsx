@@ -10,7 +10,7 @@ import MenuItemModel from '../../models/MenuItemModel'
 import CategoryModel from '../../models/CategoryModel'
 import { getServerDate } from '../../utils/apiHelper'
 import { PROMOTION_ID_CATEGORY } from '../../constants/promotionConstants'
-import { GLOBAL_PRIMARY_COLOR } from '../../constants/cssConstants'
+import { globalPrimaryColor } from '../../constants/cssConstants'
 
 export default function MenuList() {
    const { menuItems, categories } = useContext(menuContext)
@@ -78,7 +78,7 @@ export default function MenuList() {
                <div id={withoutSpaces(category.name)} key={category.id} className='scroll-m-10'>
                   <h2
                      className={`${style.categories} text-2xl pl-5 mt-10 font-extrabold mb-5 text-white italic`}
-                     style={{ color: GLOBAL_PRIMARY_COLOR }}
+                     style={{ color: globalPrimaryColor }}
                   >
                      {capitalizeFirstLetter(category.name)}
                   </h2>

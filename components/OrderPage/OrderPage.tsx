@@ -14,7 +14,7 @@ import { localStorageContext } from '../contexts/LocalStorageProvider'
 import { createManageableStorage } from '../../utils/localStorageHelper'
 import { generateID } from '../../utils/modelHelper'
 import PrimaryButton from '../verse/PrimaryButton'
-import { GLOBAL_PRIMARY_COLOR } from '../../constants/cssConstants'
+import { globalPrimaryColor } from '../../constants/cssConstants'
 
 export default function OrderPage() {
    const router = useRouter()
@@ -79,7 +79,7 @@ export default function OrderPage() {
    return (
       <div className={`${style.orderPageOuterDiv} ${style.hideScroller} font-medium my-12 mb-52`}>
          <div
-            className={`${style.topTitle} ${style.hideScroller} relative font-semibold text-xl my-12 w-full`}
+            className={`${style.topTitle} ${style.hideScroller} relative font-semibold text-xl my-12 w-screen`}
          >
             <div className={`${style.hideScroller} text-left`}>Cart</div>
          </div>
@@ -198,11 +198,14 @@ export default function OrderPage() {
          <br />
          <br />
          <div
-            className='flex justify-between gap-3 font-semibold mt-12'
+            className='fixed flex justify-between gap-3 font-semibold mt-12'
             style={{
                background: '#444549',
                borderTop: '5px solid #222327',
                padding: '1rem 3rem',
+               left: '-1rem',
+               right: '-1rem',
+               bottom: '7rem',
             }}
          >
             <div className='text-left'>
@@ -210,7 +213,7 @@ export default function OrderPage() {
                   className='rounded-lg font-semibold'
                   style={
                      menuItemGroups.length !== 0
-                        ? { background: GLOBAL_PRIMARY_COLOR, color: 'black', padding: '0.70rem' }
+                        ? { background: globalPrimaryColor, color: 'black', padding: '0.70rem' }
                         : { background: 'lightgray', color: 'gray', padding: '0.70rem' }
                   }
                   disabled={menuItemGroups.length === 0}
