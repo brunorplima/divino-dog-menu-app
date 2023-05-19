@@ -12,7 +12,7 @@ import { stringToArray } from '../../utils/dataHelper'
 import { getServerDate } from '../../utils/apiHelper'
 import { settingsContext } from '../contexts/SettingsProvider'
 import { localStorageContext } from '../contexts/LocalStorageProvider'
-import { GLOBAL_PRIMARY_COLOR } from '../../constants/cssConstants'
+import { globalPrimaryColor } from '../../constants/cssConstants'
 
 interface Props {
    query: NextParsedUrlQuery
@@ -158,7 +158,7 @@ const ItemsPage = (props: Props) => {
          {theItem && (
             <>
                {theItem.categoryId === catId && (
-                  <div className='relative'>
+                  <>
                      <div
                         className={`${styles.foodImage} absolute ${theItem.img && 'bg-cover'}`}
                         style={{
@@ -169,8 +169,8 @@ const ItemsPage = (props: Props) => {
                      ></div>
                      <Link href={`${itemsIds === undefined ? '/' : '/checkout'}`} passHref>
                         <div
-                           className='bg-black absolute z-20 top-4 text-5xl'
-                           style={{ color: GLOBAL_PRIMARY_COLOR, borderRadius: '50%' }}
+                           className='bg-black fixed z-20 top-4 left-4 text-5xl'
+                           style={{ color: globalPrimaryColor, borderRadius: '50%' }}
                         >
                            <IoIosArrowDropleftCircle />
                         </div>
@@ -241,28 +241,26 @@ const ItemsPage = (props: Props) => {
                            </div>
                         </div>
                      </div>
-                  </div>
+                  </>
                )}
                <Link
                   href={`${buttonState ? (itemsIds === undefined ? '/' : '/checkout') : '#'}`}
                   passHref
                >
-                  <div className={`${styles.buttonContainer} relative`}>
-                     <div
-                        className={`${buttonState ? styles.yellowButton : styles.grayButton} ${
-                           styles.priceOrder
-                        } fixed flex flex-row font-semibold inset-x-0 bottom-0 py-4 px-8 cursor-pointer m-auto`}
-                        onClick={() => {
-                           if (buttonState) {
-                              !itemsIds && saveInLocalStorage()
-                           }
-                        }}
-                     >
-                        <div className='block w-full text-left'>
-                           {quantity !== undefined ? 'Alterar Pedido' : 'Adicionar'}
-                        </div>
-                        <div className='block w-full text-right'>{formatPrice(quant * price)}</div>
+                  <div
+                     className={`${buttonState ? styles.yellowButton : styles.grayButton} ${
+                        styles.priceOrder
+                     } fixed flex flex-row font-semibold inset-x-0 bottom-0 py-4 px-8 cursor-pointer`}
+                     onClick={() => {
+                        if (buttonState) {
+                           !itemsIds && saveInLocalStorage()
+                        }
+                     }}
+                  >
+                     <div className='block w-full text-left'>
+                        {quantity !== undefined ? 'Alterar Pedido' : 'Adicionar'}
                      </div>
+                     <div className='block w-full text-right'>{formatPrice(quant * price)}</div>
                   </div>
                </Link>
             </>
