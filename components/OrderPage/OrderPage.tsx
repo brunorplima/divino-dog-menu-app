@@ -84,7 +84,7 @@ export default function OrderPage() {
             <div className={`${style.hideScroller} text-left`}>Cart</div>
          </div>
          {menuItemGroups.length === 0 && (
-            <div className='text-4xl m-6'>You haven't added an item yet</div>
+            <div className='text-4xl m-6'>You haven&apos;t added an item yet</div>
          )}
          {manageableLocalStorage.map((e, idx) => (
             <div key={e.order.menuItemId + String(idx)} id={String(idx)}>
