@@ -37,7 +37,7 @@ const AdminUserEditForm: React.FC<Props> = ({ user, onSubmit }) => {
             {({ values }) => (
                <Form>
                   <SelectFormField
-                     label='Tipo de Usuário'
+                     label='Type of user'
                      name='userType'
                      className='mb-4'
                      options={[
@@ -52,7 +52,7 @@ const AdminUserEditForm: React.FC<Props> = ({ user, onSubmit }) => {
                      ]}
                   />
                   <PrimaryButton
-                     label='Salvar'
+                     label='Save'
                      disabled={values.userType === initialValue.userType}
                      clickHandler={() => setDialogOpen(true)}
                   />

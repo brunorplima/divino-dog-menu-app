@@ -90,12 +90,12 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
       if (promoPrice) {
          if ((promoPrice.price && !promoPrice.dateLimit) || (!promoPrice.price && promoPrice.dateLimit)) {
             if (!has('promoPrice', errors)) errors.promoPrice = {}
-            errors.promoPrice.price = 'Preencha ambos preço e prazo ou deixe-os em branco'
-            errors.promoPrice.dateLimit = 'Preencha ambos preço e prazo ou deixe-os em branco'
+            errors.promoPrice.price = 'Fill out both price and expiration date or leave them blank'
+            errors.promoPrice.dateLimit = 'Fill out both price and expiration date or leave them blank'
          }
          if (promoPrice.dateLimit && !Momento.isDateTodayOrAfter(promoPrice.dateLimit)) {
             if (!has('promoPrice', errors)) errors.promoPrice = {}
-            errors.promoPrice.dateLimit = 'Prazo Não pode ser no passado'
+            errors.promoPrice.dateLimit = 'Expiration date cannot be in the past'
          }
       }
       return errors
@@ -121,7 +121,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
                   <>
                      <Form onSubmit={handleSubmit}>
                         <FileFormField
-                           label='Imagem'
+                           label='Image'
                            name='img'
                            containerClassName='mb-3'
                            values={values}
@@ -130,7 +130,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
                         />
 
                         <FormField
-                           label='Nome'
+                           label='Name'
                            name='name'
                            containerClassName='mb-3'
                            error={errors.name}
@@ -138,7 +138,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
                         />
                         
                         <FormField
-                           label='Preço'
+                           label='Price'
                            name='price'
                            type='number'
                            containerClassName='mb-3'
@@ -147,7 +147,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
                         />
                         
                         <FormField
-                           label='Descrição'
+                           label='Description'
                            name='description'
                            as='textarea'
                            containerClassName='mb-3'
@@ -166,14 +166,14 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
                                     onChange={handleChange}
                                     checked={values.isAvailable ? true : false}
                                  />
-                                 <label htmlFor="isAvailable">Em estoque</label>
+                                 <label htmlFor="isAvailable">In stock</label>
                               </div>
                            )}
                         </Field>
 
                         <SelectFormField
                            name='categoryId'
-                           label='Categoria'
+                           label='Category'
                            containerClassName='mb-3'
                            options={getOptionsFromList(categories)}
                            error={errors.categoryId}
@@ -181,7 +181,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
                         />
                         
                         <FormField
-                           label='Ordem de categoria'
+                           label='Category order'
                            name='listOrder'
                            type='number'
                            containerClassName='mb-3'
@@ -191,7 +191,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
 
                         <SelectFormField
                            name='toppingIds'
-                           label='Ingredientes'
+                           label='Toppings'
                            containerClassName='mb-3'
                            options={getOptionsFromList(toppings)}
                            isMulti
@@ -201,7 +201,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
 
                         <SelectFormField
                            name='sauceIds'
-                           label='Molhos'
+                           label='Sauces'
                            containerClassName='mb-3'
                            options={getOptionsFromList(sauces)}
                            isMulti
@@ -211,7 +211,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
 
                         <SelectFormField
                            name='optionIds'
-                           label='Opções'
+                           label='Options'
                            containerClassName='mb-3'
                            options={getOptionsFromList(menuItemOptions)}
                            isMulti
@@ -221,7 +221,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
 
                         <SelectFormField
                            name='weekDays'
-                           label='Dias Disponíveis (se não servir todo dia)'
+                           label='Available weekdays (if not served everyday)'
                            containerClassName='mb-3'
                            options={getWeekDayOptions()}
                            isMulti
@@ -229,14 +229,14 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
                            touched={touched.sauceIds}
                         />
 
-                        <span className='text-gray-100'>Adicionar promoção</span>
+                        <span className='text-gray-100'>Add promotion</span>
                         <div className="p-3 mb-3 bg-gray-700 rounded">
                            <div className={`text-gray-100 mb-2 text-sm`}>
-                              {item?.promoPrice ? 'Promoção em vigor' : 'Não há promoção atualmente'}
+                              {item?.promoPrice ? 'Valid promotion' : 'Not in promotion'}
                            </div>
                            <div className="my-2">
                               <PrimaryButton
-                                 label='Apagar Campos'
+                                 label='Delete fields'
                                  clickHandler={(e: React.SyntheticEvent) => {
                                     setFieldValue('promoPrice.price', '')
                                     setFieldValue('promoPrice.dateLimit', '')
@@ -247,7 +247,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
                               />
                            </div>
                            <FormField
-                              label='Preço promocional'
+                              label='Promotional price'
                               name='promoPrice.price'
                               type='number'
                               containerClassName='mb-3'
@@ -256,7 +256,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
                            />
                            
                            <DatePickerField
-                              label='Prazo'
+                              label='Expiration date'
                               name='promoPrice.dateLimit'
                               containerClassName='mb-10'
                               error={getIn(errors, 'promoPrice.dateLimit')}
@@ -266,7 +266,7 @@ const MenuItemForm: React.FC<Props> = ({ onClose, onCloseWithItem, item }) => {
 
                         <div className="flex justify-center">
                            <PrimaryButton
-                              label='Salvar'
+                              label='Save'
                               type='submit'
                            />
                         </div>

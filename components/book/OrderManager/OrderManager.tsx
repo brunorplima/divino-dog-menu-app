@@ -11,12 +11,12 @@ import styles from './OrderManager.module.scss'
 const MINUTE_IN_MS = 20000
 
 const statusTitle = {
-   confirmar: 'Não Confirmados',
-   confirmado: 'Confirmados',
-   preparando: 'Preparando',
+   confirmar: 'Not Confirmed',
+   confirmado: 'Confirmed',
+   preparando: 'Preparing',
    finalizando: 'Finalizando',
-   finalizado: 'Finalizado',
-   cancelado: 'Cancelados',
+   finalizado: 'Finalized',
+   cancelado: 'Cancelled',
 }
 
 const OrderManager = () => {

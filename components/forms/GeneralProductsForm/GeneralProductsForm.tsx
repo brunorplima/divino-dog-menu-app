@@ -84,7 +84,7 @@ const GeneralProductsForm: React.FC<Props> = ({ item, onClose, hasCanBeExtra, on
                   <>
                      <Form onSubmit={handleSubmit}>
                         <FormField
-                           label='Nome'
+                           label='Name'
                            name='name'
                            containerClassName='mb-3'
                            error={errors.name}
@@ -92,7 +92,7 @@ const GeneralProductsForm: React.FC<Props> = ({ item, onClose, hasCanBeExtra, on
                         />
                         
                         <FormField
-                           label='Preço'
+                           label='Price'
                            name='price'
                            type='number'
                            containerClassName='mb-3'
@@ -110,7 +110,7 @@ const GeneralProductsForm: React.FC<Props> = ({ item, onClose, hasCanBeExtra, on
                                     onChange={handleChange}
                                     checked={values.isAvailable}
                                  />
-                                 <label htmlFor="isAvailable">Em estoque</label>
+                                 <label htmlFor="isAvailable">In stock</label>
                               </div>
                            )}
                         </Field>
@@ -126,7 +126,7 @@ const GeneralProductsForm: React.FC<Props> = ({ item, onClose, hasCanBeExtra, on
                                        onChange={handleChange}
                                        checked={values.canBeExtra}
                                     />
-                                    <label htmlFor="canBeExtra">Adicionável</label>
+                                    <label htmlFor="canBeExtra">User may add</label>
                                  </div>
                               )}
                            </Field>
@@ -134,7 +134,7 @@ const GeneralProductsForm: React.FC<Props> = ({ item, onClose, hasCanBeExtra, on
 
                         <div className="flex justify-center">
                            <PrimaryButton
-                              label='Salvar'
+                              label='Save'
                               type='submit'
                            />
                         </div>

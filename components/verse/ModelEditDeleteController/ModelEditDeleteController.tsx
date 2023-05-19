@@ -20,7 +20,7 @@ const ModelEditDeleteController:React.FC<Props> = ({ action, setMode, onDelete }
       <div className='flex gap-3 mb-6'>
          {action !== 'view' && (
             <PrimaryButton
-               label='Cancelar'
+               label='Cancel'
                icon={<IoMdArrowRoundBack />}
                clickHandler={() => {
                   if (action === 'create') setMode()
@@ -30,7 +30,7 @@ const ModelEditDeleteController:React.FC<Props> = ({ action, setMode, onDelete }
          )}
          {action === 'view' && (
                <PrimaryButton
-                  label='Editar'
+                  label='Edit'
                   icon={<BiEditAlt />}
                   clickHandler={() => setMode('edit')}
                />
@@ -39,7 +39,7 @@ const ModelEditDeleteController:React.FC<Props> = ({ action, setMode, onDelete }
          {onDelete && action !== 'create' && (
             <>
                <PrimaryButton
-                  label='Deletar'
+                  label='Delete'
                   icon={<MdDeleteOutline />}
                   clickHandler={() => setIsOpen(true)}
                />
@@ -49,16 +49,16 @@ const ModelEditDeleteController:React.FC<Props> = ({ action, setMode, onDelete }
                   onClose={() => setIsOpen(false)}
                   footer={[
                      {
-                        label: 'Cancelar',
+                        label: 'Cancel',
                         onClick: () => setIsOpen(false)
                      },
                      {
-                        label: 'Sim',
+                        label: 'Yes',
                         onClick: async () => await onDelete()
                      }
                   ]}
                >
-                  Tem certeza que quer deletar esse item?
+                  Are you sure you want to delete this item?
                </Dialog>
             </>
          )}

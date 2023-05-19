@@ -102,28 +102,28 @@ const AdminProductsSection = () => {
    return (
       <div className='text-gray-200 max-w-3xl ml-auto mr-auto mb-10'>
          <div className="grid place-content-center my-4 relative">
-            <h1 className='text-xl'>Produtos</h1>
+            <h1 className='text-xl'>Products</h1>
             <div className=''>
                <DropdownMenuButton
                   options={[
                      {
-                        label: 'Principal',
+                        label: 'Main',
                         onClick: () => setMenuItemEditMode('create')
                      },
                      {
-                        label: 'Ingrediente',
+                        label: 'Topping',
                         onClick: () => setProductEditMode('create', 'toppings')
                      },
                      {
-                        label: 'Molho',
+                        label: 'Sauce',
                         onClick: () => setProductEditMode('create', 'sauces')
                      },
                      {
-                        label: 'Opção',
+                        label: 'Option',
                         onClick: () => setProductEditMode('create', 'menuItemOptions')
                      },
                      {
-                        label: 'Categoria',
+                        label: 'Category',
                         onClick: () => setCategoryEditMode('create')
                      }
                   ]}
@@ -139,7 +139,7 @@ const AdminProductsSection = () => {
                )} hover:bg-gray-700 rounded rounded-br-none rounded-bl-none`}
                onClick={() => setTab('menu items')}
             >
-               Principais
+               Main
             </div>
             <div
                className={`max-w-max cursor-pointer px-3 py-2 ${getActive(
@@ -147,7 +147,7 @@ const AdminProductsSection = () => {
                )} hover:bg-gray-700 rounded rounded-br-none rounded-bl-none`}
                onClick={() => setTab('toppings')}
             >
-               Ingredientes
+               Toppings
             </div>
             <div
                className={`max-w-max cursor-pointer px-3 py-2 ${getActive(
@@ -155,7 +155,7 @@ const AdminProductsSection = () => {
                )} hover:bg-gray-700 rounded rounded-br-none rounded-bl-none`}
                onClick={() => setTab('sauces')}
             >
-               Molhos
+               Sauces
             </div>
             <div
                className={`max-w-max cursor-pointer px-3 py-2 ${getActive(
@@ -163,7 +163,7 @@ const AdminProductsSection = () => {
                )} hover:bg-gray-700 rounded rounded-br-none rounded-bl-none`}
                onClick={() => setTab('menuItemOptions')}
             >
-               Opções
+               Options
             </div>
             <div
                className={`max-w-max cursor-pointer px-3 py-2 ${getActive(
@@ -171,7 +171,7 @@ const AdminProductsSection = () => {
                )} hover:bg-gray-700 rounded rounded-br-none rounded-bl-none`}
                onClick={() => setTab('categories')}
             >
-               Categorias
+               Categories
             </div>
          </div>
          

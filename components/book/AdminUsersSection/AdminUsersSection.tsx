@@ -66,7 +66,7 @@ const AdminUsersSection = () => {
    return (
       <div className='text-gray-200 mb-14 max-w-3xl ml-auto mr-auto'>
          <div className='grid place-content-center my-4'>
-            <h1 className='text-xl'>Usuários</h1>
+            <h1 className='text-xl'>Users</h1>
          </div>
 
          <AdminUsersSearchForm onSubmit={onSearchSubmit} isLoading={loadingSearch} searchValues={searchValues} />
@@ -84,7 +84,7 @@ const AdminUsersSection = () => {
          <PrimaryModal
             id='editUserModal'
             isOpen={!R.isNil(userToEdit)}
-            title='Editar Usuário'
+            title='Edit User'
             onClose={() => setUserToEdit(null)}
          >
             {userToEdit && <AdminUserEditForm user={userToEdit} onSubmit={onEditSubmit} />}

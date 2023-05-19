@@ -33,7 +33,7 @@ const AdminMenuItemView: React.FC<Props> = ({ item }) => {
    return (
       <div className='text-white'>
          <h2 className='text-xl text-green-500 mb-6'>
-            Detalhes
+            Details
          </h2>
          {
             item.img && (
@@ -51,32 +51,32 @@ const AdminMenuItemView: React.FC<Props> = ({ item }) => {
          {
             item.description && (
                <ModelStandardFieldInfo
-                  label='Descrição'
+                  label='Description'
                   info={item.description || ''}
                   col
                />
             )
          }
          <ModelStandardFieldInfo
-            label='Preço'
+            label='Price'
             info={priceToString(item.price)}
          />
          <ModelStandardFieldInfo
-            label='Em estoque'
+            label='In stock'
             info={item.isAvailable ? 'Sim' : 'Não'}
          />
          <ModelStandardFieldInfo
-            label='Categoria'
+            label='Category'
             info={category?.name || ''}
          />
          <ModelStandardFieldInfo
-            label='Ordem na categoria'
+            label="Category's order"
             info={item.listOrder}
          />
          {
             item.toppingIds && item.toppingIds.length > 0 && (
                <ModelStandardFieldInfo
-                  label='Ingredientes'
+                  label='Toppings'
                   info={getListString<ToppingModel>(toppings, item.toppingIds)}
                   col
                />
@@ -85,7 +85,7 @@ const AdminMenuItemView: React.FC<Props> = ({ item }) => {
          {
             item.sauceIds && item.sauceIds.length > 0 && (
                <ModelStandardFieldInfo
-                  label='Molhos'
+                  label='Sauces'
                   info={getListString<SauceModel>(sauces, item.sauceIds)}
                   col
                />
@@ -94,7 +94,7 @@ const AdminMenuItemView: React.FC<Props> = ({ item }) => {
          {
             item.optionIds && item.optionIds.length > 0 && (
                <ModelStandardFieldInfo
-                  label='Opções'
+                  label='Options'
                   info={getListString<MenuItemOptionModel>(menuItemOptions, item.optionIds)}
                   col
                />
@@ -103,11 +103,11 @@ const AdminMenuItemView: React.FC<Props> = ({ item }) => {
          {
             item.promoPrice && item.hasValidPromotion() && (
                <ModelStandardFieldInfo
-                  label='Promoção em vigor'
+                  label='Current promotion'
                   info={(
                      <div className='py-2'>
                         <div className="border-l-4 border-gray-400 px-4 py-1">
-                           Validade: {moment(item.promoPrice.dateLimit).format('DD/MM/YYYY')}
+                           Expires at: {moment(item.promoPrice.dateLimit).format('MM-DD-YYYY')}
                         </div>
                         {!isNil(item.promoPrice.price) &&
                            <div className='border-l-4 border-gray-400 px-4 py-1'>
@@ -121,8 +121,8 @@ const AdminMenuItemView: React.FC<Props> = ({ item }) => {
             )
          }
          <ModelStandardFieldInfo
-            label='Dias disponíveis'
-            info={item.weekDays?.length ? item.availableDaysToString() : 'Todo dia'}
+            label='Available weekdays'
+            info={item.weekDays?.length ? item.availableDaysToString() : 'Everyday'}
             col
          />
       </div>

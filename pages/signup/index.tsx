@@ -69,7 +69,7 @@ const SignupPage: NextPage = () => {
       <div className='text-xl flex justify-center items-center'>
          <div className='lg:w-1/2 p-5 w-80 rounded-lg'>
             <div className='text-center mb-7'>
-               <h1 className='text-2xl text-white'>Cadastro de Usuário</h1>
+               <h1 className='text-2xl text-white'>User Signup</h1>
             </div>
 
             {loginError && (
@@ -93,13 +93,13 @@ const SignupPage: NextPage = () => {
                         <div className='flex flex-col gap-3'>
                            <FormField
                               name='firstName'
-                              label='Primeiro Nome'
+                              label='First name'
                               error={errors.firstName}
                               touched={touched.firstName}
                            />
                            <FormField
                               name='lastName'
-                              label='Nome de família'
+                              label='Last name'
                               error={errors.lastName}
                               touched={touched.lastName}
                            />
@@ -113,7 +113,7 @@ const SignupPage: NextPage = () => {
                            <FormField
                               name='password'
                               type='password'
-                              label='Senha'
+                              label='Password'
                               error={errors.password}
                               touched={touched.password}
                            />
@@ -123,7 +123,7 @@ const SignupPage: NextPage = () => {
                               type='submit'
                               disabled={loading}
                               icon={<RiLoginBoxLine />}
-                              label='Cadastrar'
+                              label='Submit'
                            />
                         </div>
                      </Form>

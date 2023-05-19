@@ -30,19 +30,19 @@ const RegularUserAccount: React.FC<Props> = ({ user, logout }) => {
                   <span>{user?.emailAddress ? user.emailAddress : '--'}</span>
                </div>
                <div className="flex justify-between">
-                  <span>Endereço:</span>
+                  <span>Address:</span>
                   <span>{user?.addresses && user.addresses.length ? user.addresses[0].description : '--'}</span>
                </div>
                <div className="flex justify-between">
-                  <span>Contato 1:</span>
+                  <span>Contact 1:</span>
                   <span>{user?.phoneContact1 ? user.phoneContact1 : '--'}</span>
                </div>
                <div className="flex justify-between">
-                  <span>Contato 2:</span>
+                  <span>Contact 2:</span>
                   <span>{user?.phoneContact2 ? user.phoneContact2 : '--'}</span>
                </div>
                <div className="flex justify-between">
-                  <span>Data Nascimento:</span>
+                  <span>DOB:</span>
                   <span>{user?.dateOfBirth ? user.dateOfBirth.toLocaleDateString() : '--'}</span>
                </div>
             </div>

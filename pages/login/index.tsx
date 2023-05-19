@@ -103,8 +103,8 @@ const LoginPage: NextPage = () => {
 
             <div>
                <div className='flex flex-col items-center'>
-                  <div className='text-green-400 hover:text-green-500 cursor-pointer mb-2'>Esqueceu a senha?</div>
-                  <Link href='/signup'><a className='text-green-400 hover:text-green-500 cursor-pointer'>Novo usuário?</a></Link>
+                  <div className='text-green-400 hover:text-green-500 cursor-pointer mb-2'>Forgot Password?</div>
+                  <Link href='/signup'><a className='text-green-400 hover:text-green-500 cursor-pointer'>New user?</a></Link>
                </div>
             </div>
          </div>

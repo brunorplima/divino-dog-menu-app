@@ -18,28 +18,28 @@ const AdminAccountFrame: React.FC<Props> = ({ children, setSection, user }) => {
    const getNavBarOptions = () => {
       const options = [
          {
-            label: 'Pedidos',
+            label: 'Orders',
             Icon: FaColumns,
             clickHandler: () => setSection('orders')
          },
          {
-            label: 'Produtos',
+            label: 'Products',
             Icon: GiHotDog,
             clickHandler: () => setSection('products')
          },
          {
-            label: 'Configurações',
+            label: 'Settings',
             Icon: IoSettingsSharp,
             clickHandler: () => setSection('settings')
          },
          {
-            label: 'Pedidos Cancelados',
+            label: 'Cancelled Orders',
             Icon: MdOutlineCreditCardOff,
             clickHandler: () => setSection('canceledOrders')
          }
       ]
       const usersOption = {
-         label: 'Usuários',
+         label: 'Users',
          Icon: FaUsers,
          clickHandler: () => setSection('users')
       }

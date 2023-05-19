@@ -54,7 +54,7 @@ const FormComponent: React.FC<Props> = ({ values, isLoading, resetForm, searchVa
                   name='searchProp'
                   value='firstName'
                />{' '}
-               <label htmlFor='radioFirstName'>Nome</label>
+               <label htmlFor='radioFirstName'>First name</label>
             </div>
             <div>
                <Field
@@ -63,7 +63,7 @@ const FormComponent: React.FC<Props> = ({ values, isLoading, resetForm, searchVa
                   name='searchProp'
                   value='lastName'
                />{' '}
-               <label htmlFor='radioLastName'>Nome de Família</label>
+               <label htmlFor='radioLastName'>Last name</label>
             </div>
          </div>
       </Form>
