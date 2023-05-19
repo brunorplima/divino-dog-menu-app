@@ -72,7 +72,7 @@ const TrackingOrderPage = () => {
             className='text-black py-4 px-10 text-xl mt-11'
             style={{ backgroundColor: globalPrimaryColor }}
          >
-            <strong>Order's progress</strong>
+            <strong>Order&apos;s progress</strong>
          </div>
 
          {orders && orders.length > 0 ? (
