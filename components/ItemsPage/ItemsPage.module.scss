@@ -57,17 +57,36 @@
             }
          }
       }
+      @media (width > 770px) {
+         .itemQuantity {
+            width: 110%;
+         }
+      }
    }
 
-   .priceOrder {
-      color: #222327;
-      font-size: 1.375rem;
+   .buttonContainer {
+      .priceOrder {
+         color: #222327;
+         font-size: 1.375rem;
+      }
+
+      .grayButton {
+         background: lightgrey;
+      }
+      .yellowButton {
+         background: var(--global-primary-color);
+      }
    }
 
-   .grayButton {
-      background: lightgrey;
-   }
-   .yellowButton {
-      background: var(--global-primary-color);
+   @media (width > 770px) {
+      .buttonContainer {
+         width: 400px;
+
+         .priceOrder {
+            top: calc(var(--top-and-height-layout) - 60px);
+            width: var(--width-layout);
+            height: 60px;
+         }
+      }
    }
 }
