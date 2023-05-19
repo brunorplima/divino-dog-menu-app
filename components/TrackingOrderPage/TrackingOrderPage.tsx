@@ -72,7 +72,7 @@ const TrackingOrderPage = () => {
             className='text-black py-4 px-10 text-xl mt-11'
             style={{ backgroundColor: GLOBAL_PRIMARY_COLOR }}
          >
-            <strong>Acompanhe seu Pedido</strong>
+            <strong>Order's progress</strong>
          </div>
 
          {orders && orders.length > 0 ? (
@@ -88,7 +88,7 @@ const TrackingOrderPage = () => {
             </div>
          ) : (
             <div className='px-4 mt-16 text-2xl'>
-               Nenhum pedido foi enviado para a cozinha ainda!
+               No orders were placed yet!
             </div>
          )}
 
@@ -106,7 +106,7 @@ const TrackingOrderPage = () => {
                },
             ]}
          >
-            <>Para confirmar seu pedido é preciso realizar o pagamento</>
+            <>Payment at the cashier is required for your order to be confirmed</>
          </Dialog>
 
          <LoaderComponent show={isNil(orders)} />

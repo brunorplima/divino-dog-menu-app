@@ -30,7 +30,7 @@ function AboutUs() {
                      />
                   </div>
                   <br />
-                  <p className={`${style.yellowTitle}`}>Quem somos nós</p>
+                  <p className={`${style.yellowTitle}`}>About Us</p>
                   <br />
                   <div className={`${style.company} whitespace-pre-wrap mb-32`}>
                      <p>{settingsModel.aboutUsContent}</p>
@@ -59,11 +59,11 @@ function AboutUs() {
                <div>
                   <img src='./assets/developers/bruno.jpg' className={`${style.faceImage}`} />
                   <p>
-                     Bruno é um desenvolvedor fullstack com experiência em desenvolvimento de
-                     aplicativos web. Trabalha com HTML, CSS, Javascript e React no frontend e Ruby
-                     on Rails no backend.&nbsp;
+                     Bruno is a fullstack developer with experience in developing web applications.
+                     He works with HTML, CSS, Typescript and React in the frontend and Ruby on Rails
+                     in the backend.&nbsp;
                      <Link href='https://brunolima.vercel.app/'>
-                        <a target='_blank'>Você também pode encontrá-lo online</a>
+                        <a target='_blank'>You can find him online</a>
                      </Link>
                      .
                   </p>
@@ -71,11 +71,10 @@ function AboutUs() {
                <div>
                   <img src='./assets/developers/eric.jpg' className={`${style.faceImage}`} />
                   <p>
-                     Eric é um desenvolvedor frontend com conhecimentos de SEO, Business
-                     Intelligence, Google Ads, Facebook Ads e Python. Ele também gosta muito de hot
-                     dog.&nbsp;
+                     Eric is a frontend developer with knowledge in SEO, Business Intelligence,
+                     Google Ads, Facebook Ads and Python. He likes hot dog a lot.&nbsp;
                      <Link href='https://ericlima.com.br/'>
-                        <a target='_blank'>Você também pode encontrá-lo online</a>
+                        <a target='_blank'>You can find him online</a>
                      </Link>
                      .
                   </p>

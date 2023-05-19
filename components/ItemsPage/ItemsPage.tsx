@@ -81,7 +81,7 @@ const ItemsPage = (props: Props) => {
    const sections = [
       {
          sect: theItem?.toppingIds,
-         title: 'Escolha seus Adicionais',
+         title: 'Extras',
          addonList: toppings,
          singleOption: false,
       },
@@ -93,9 +93,9 @@ const ItemsPage = (props: Props) => {
       }, */
       {
          sect: theItem?.optionIds,
-         title: 'Escolha sua Opção',
+         title: 'Choose an option',
          addonList: menuItemOptions,
-         subTitle: 'Escolha obrigatória',
+         subTitle: 'Required',
          singleOption: true,
       },
    ]
@@ -183,8 +183,8 @@ const ItemsPage = (props: Props) => {
                            maxAmount !== 0 && (
                               <div className='pt-4 font-semibold'>
                                  {maxAmount === 1
-                                    ? `Somente 1 adicional permitido`
-                                    : `Até ${maxAmount} adicionais permitidos`}
+                                    ? `Only 1 addition allowed`
+                                    : `Up to ${maxAmount} extra toppings`}
                               </div>
                            )}
                         <div>
@@ -215,7 +215,7 @@ const ItemsPage = (props: Props) => {
                         <div
                            className={`${styles.itemQuantity} relative text-base p-4 inset-x-0 items-center justify-center text-center mb-40`}
                         >
-                           <div className={`mb-3`}>Quantidade</div>
+                           <div className={`mb-3`}>Quantity</div>
                            <div className={`${styles.innerItemQuantity} grid font-semibold`}>
                               <div>
                                  <a
@@ -259,7 +259,7 @@ const ItemsPage = (props: Props) => {
                         }}
                      >
                         <div className='block w-full text-left'>
-                           {quantity !== undefined ? 'Alterar Pedido' : 'Adicionar'}
+                           {quantity !== undefined ? 'Change Item' : 'Add'}
                         </div>
                         <div className='block w-full text-right'>{formatPrice(quant * price)}</div>
                      </div>

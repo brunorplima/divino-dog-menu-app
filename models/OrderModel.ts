@@ -181,7 +181,7 @@ export default class OrderModel extends Model<Order> {
    }
 
    toString() {
-      return `Pedido # ${this.codeNumber}: R$ ${this.totalPrice.toFixed(2)}`
+      return `Pedido # ${this.codeNumber}: $ ${this.totalPrice.toFixed(2)}`
    }
 
    private generateOrderCodeNumber = (existingCodeNumbers: string[]) => {
