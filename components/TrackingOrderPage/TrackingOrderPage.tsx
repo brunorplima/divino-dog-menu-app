@@ -13,7 +13,7 @@ import { deleteLocalStorageItem } from '../../utils/localStorageHelper'
 import TrackOrderInfo from '../book/TrackOrderInfo'
 import Dialog from '../chapter/Dialog'
 import LoaderComponent from '../verse/LoaderComponent'
-import { globalPrimaryColor } from '../../constants/cssConstants'
+import { GLOBAL_PRIMARY_COLOR } from '../../constants/cssConstants'
 
 const TrackingOrderPage = () => {
    const router = useRouter()
@@ -67,10 +67,10 @@ const TrackingOrderPage = () => {
    }
 
    return (
-      <div className='text-gray-300'>
+      <div className='text-gray-300 h-screen'>
          <div
             className='text-black py-4 px-10 text-xl mt-11'
-            style={{ backgroundColor: globalPrimaryColor }}
+            style={{ backgroundColor: GLOBAL_PRIMARY_COLOR }}
          >
             <strong>Acompanhe seu Pedido</strong>
          </div>

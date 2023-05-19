@@ -1,1 +1,1 @@
-export const globalPrimaryColor = 'var(--global-primary-color)'
+export const GLOBAL_PRIMARY_COLOR = 'var(--global-primary-color)'
