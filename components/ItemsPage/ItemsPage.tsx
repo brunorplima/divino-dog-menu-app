@@ -13,6 +13,8 @@ import { getServerDate } from '../../utils/apiHelper'
 import { settingsContext } from '../contexts/SettingsProvider'
 import { localStorageContext } from '../contexts/LocalStorageProvider'
 import { globalPrimaryColor } from '../../constants/cssConstants'
+import Dialog from '../chapter/Dialog'
+import { useRouter } from 'next/router'
 
 interface Props {
    query: NextParsedUrlQuery
@@ -141,15 +143,19 @@ const ItemsPage = (props: Props) => {
       else return true
    }
 
-   const defineButtonState = (addOnsTester: any[] = []) => {
+   const defineButtonState = (addOnsTester: (string | undefined)[] = []) => {
+      if (!theItem?.isAvailable) return false
       if (theItem?.optionIds && theItem?.optionIds?.length > 0 && addOnsTester.includes(undefined))
          return false
-      else return true
+      return true
    }
+   const [dialog, setDialog] = useState(false)
+   const router = useRouter()
    const [buttonState, setButtonState] = useState(defineButtonState())
    useEffect(() => {
       setButtonState(defineButtonState(addOns))
-   }, [addOns])
+      !theItem?.isAvailable && setDialog(true)
+   }, [addOns, theItem])
 
    return (
       <div
@@ -254,6 +260,8 @@ const ItemsPage = (props: Props) => {
                      onClick={() => {
                         if (buttonState) {
                            !itemsIds && saveInLocalStorage()
+                        } else if (!theItem?.isAvailable) {
+                           setDialog(true)
                         }
                      }}
                   >
@@ -265,6 +273,19 @@ const ItemsPage = (props: Props) => {
                </Link>
             </>
          )}
+         <Dialog
+            id='absentItemItemsPage'
+            isOpen={dialog}
+            footer={[
+               {
+                  label: 'Voltar',
+                  onClick: () => router.back(),
+               },
+            ]}
+         >
+            Infelizmente esse item acabou enquanto você o escolhia. <br />
+            Clique para voltar ao menu principal.
+         </Dialog>
       </div>
    )
 }

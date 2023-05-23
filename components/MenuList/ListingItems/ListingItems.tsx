@@ -20,15 +20,18 @@ export default function Listing({ item, isPromotionActive }: Props) {
       })
    }, [])
 
+   const activation = activeItem && item.isAvailable
+
    return (
-      <ConditionalLinkRender link={activeItem} item={item}>
+      <ConditionalLinkRender link={activation} item={item}>
          <div
-            className={`${!activeItem ? style.lineThrough : ''} relative bg-white cursor-pointer`}
+            className={`${!activation ? style.lineThrough : ''} relative bg-white cursor-pointer`}
          >
             <div className={`${style.menuItem} relative grid mb-8 w-screen`}>
                <div>
                   <h3 className={`${style.itemTitle} font-extrabold`}>
                      {`${item.name}`}{' '}
+                     {item.availableDaysToString() === '' && !item.isAvailable && `(Em falta)`}
                      <span
                         className={
                            item.availableDaysToString() !== '' ? style.weekDays : style.hidden
@@ -39,7 +42,7 @@ export default function Listing({ item, isPromotionActive }: Props) {
                <div>{item.description}</div>
                <div
                   className={`${
-                     !activeItem ? style.gray : style.neonPrice
+                     !activation ? style.gray : style.neonPrice
                   } relative bottom-0 font-semibold`}
                >
                   {item.promoPrice !== undefined && isPromotionActive
