@@ -68,7 +68,7 @@ const OrderManager = () => {
             className='flex flex-col items-center gap-3 text-gray-300 overflow-y-scroll mb-4 border border-gray-200 rounded p-2'
             style={{ minWidth: 280 }}
          >
-            <h2 className='text-2xl'>Finalizados</h2>
+            <h2 className='text-2xl'>Finalized</h2>
             {latestFinalizedOrders.map((order) => (
                <OrderManagerItem key={order.id} order={order} />
             ))}
