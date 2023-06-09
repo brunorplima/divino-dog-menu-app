@@ -57,7 +57,7 @@ const OrderManager = () => {
                      <h2 className='text-2xl'>{statusTitle[status]}</h2>
                      {ordersByStatus[status] &&
                         ordersByStatus[status].map((order) => (
-                           <OrderManagerItem key={order.id} order={order} buttonLabel='Próximo' />
+                           <OrderManagerItem key={order.id} order={order} buttonLabel='Next' />
                         ))
                      }
                   </div>
