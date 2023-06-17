@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { stringToArray } from '../utils/dataHelper'
 
 interface MultipleStates {
@@ -28,7 +28,7 @@ const useMultipleStatesManager = <T extends { id: string; price: number | undefi
    }
 
    modelList.forEach((add) => {
-      appendedLightBoxes(add.id, add.price ? add.price : 0, stringToArray(url).includes(add.id))
+      appendedLightBoxes(add.id, add.price ?? 0, stringToArray(url).includes(add.id))
    })
 
    const newIds = lightBoxes.map((box) => box.state && box.id).filter(Boolean) as string[]
@@ -37,7 +37,8 @@ const useMultipleStatesManager = <T extends { id: string; price: number | undefi
       if (singleOption) {
          const tempBoxes = [...lightBoxes]
          tempBoxes.forEach((box) => {
-            box.id !== currentId ? box.setState(false) : box.setState(true)
+            box.id !== currentId && box.setState(false)
+            box.id === currentId && box.setState(!box.state)
          })
       } else if (maxAmount !== undefined && maxAmount !== 0) {
          const currentObj = lightBoxes[index]

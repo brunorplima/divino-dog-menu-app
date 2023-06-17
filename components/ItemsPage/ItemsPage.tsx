@@ -30,10 +30,8 @@ const ItemsPage = (props: Props) => {
    const { menuItems, toppings, sauces, menuItemOptions } = useContext(menuContext)
 
    const { settingsModel } = useContext(settingsContext)
-   const maxAmount = settingsModel?.maxAmountOfAddons ? settingsModel?.maxAmountOfAddons : 0
-   const toppingsAllowed = settingsModel?.allowUserToAddToppings
-      ? settingsModel?.allowUserToAddToppings
-      : false
+   const maxAmount = settingsModel?.maxAmountOfAddons ?? 0
+   const toppingsAllowed = settingsModel?.allowUserToAddToppings ?? false
 
    const definePrice = (serverDate?: Date) => {
       let price = 0
@@ -149,12 +147,14 @@ const ItemsPage = (props: Props) => {
          return false
       return true
    }
+   const [isUseEffectSecondLoad, setIsUseEffectSecondLoad] = useState(false)
    const [dialog, setDialog] = useState(false)
    const router = useRouter()
    const [buttonState, setButtonState] = useState(defineButtonState())
    useEffect(() => {
       setButtonState(defineButtonState(addOns))
-      !theItem?.isAvailable && setDialog(true)
+      isUseEffectSecondLoad && !theItem?.isAvailable && setDialog(true)
+      !isUseEffectSecondLoad && setIsUseEffectSecondLoad(true)
    }, [addOns, theItem])
 
    return (
