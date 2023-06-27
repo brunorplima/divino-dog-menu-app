@@ -61,6 +61,9 @@ const AddOns = ({
       ElementReffed.current.forEach((el) => {
          el.id === idValue &&
             changeCheckBoxClass(el.parentElement?.parentElement?.parentElement, bool)
+         singleOption &&
+            el.id !== idValue &&
+            changeCheckBoxClass(el.parentElement?.parentElement?.parentElement, false)
       })
    }
    const setAllValues = (
