@@ -27,7 +27,7 @@ export default function Listing({ item, isPromotionActive }: Props) {
          <div
             className={`${!activation ? style.lineThrough : ''} relative bg-white cursor-pointer`}
          >
-            <div className={`${style.menuItem} relative grid mb-8 w-screen`}>
+            <div className={`${style.menuItem} relative grid mb-8 w-full`}>
                <div>
                   <h3 className={`${style.itemTitle} font-extrabold`}>
                      {`${item.name}`}{' '}
