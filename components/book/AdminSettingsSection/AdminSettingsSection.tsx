@@ -4,14 +4,14 @@ import { settingsContext } from '../../contexts/SettingsProvider'
 import { FIELD_CLASS_NAME } from '../../../constants/formConstants'
 
 const expiryTimes = [
-   ['15 minutos', 900],
-   ['30 minutos', 1800],
-   ['1 hora', 3600],
-   ['1 hora e 30 minutos', 5400],
-   ['3 horas', 10800],
-   ['5 horas', 18000],
-   ['10 horas', 36000],
-   ['1 dia', 86400],
+   ['15 minutes', 900],
+   ['30 minutes', 1800],
+   ['1 hour', 3600],
+   ['1 hour and 30 minutes', 5400],
+   ['3 hours', 10800],
+   ['5 hours', 18000],
+   ['10 hours', 36000],
+   ['1 day', 86400],
 ]
 
 const AdminSettingsSection = () => {
@@ -46,7 +46,7 @@ const AdminSettingsSection = () => {
    return (
       <div className='text-gray-200 mb-14 max-w-3xl ml-auto mr-auto'>
          <div className='grid place-content-center my-4'>
-            <h1 className='text-xl'>Configurações</h1>
+            <h1 className='text-xl'>Settings</h1>
          </div>
 
          <div
@@ -54,9 +54,9 @@ const AdminSettingsSection = () => {
          >
             <div className='flex justify-between gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
                <label htmlFor='orderDetailsOpenByDefault' className='flex-1'>
-                  <div className='text-lg'>Detalhes de pedidos abertos</div>
+                  <div className='text-lg'>Order details opened</div>
                   <div className='text-gray-400'>
-                     Manter os detalhes dos pedidos sempre abertos, caso contrário será preciso abri-los manualmente.
+                     Keep the order&apos;s details always opened, otherwise it will require opening manually
                   </div>
                </label>
                <input
@@ -81,9 +81,9 @@ const AdminSettingsSection = () => {
             
             <div className='flex justify-between gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
                <label htmlFor='allowUserToAddToppings' className='flex-1'>
-                  <div className='text-lg'>Permitir usuário adicionar ingredientes</div>
+                  <div className='text-lg'>Allow users to add extra toppings</div>
                   <div className='text-gray-400'>
-                     Permite usuário escolher ingredientes de um item para serem adicionados
+                     Allows Users to choose toppings to be added to a specific menu item
                   </div>
                </label>
                <input
@@ -108,9 +108,9 @@ const AdminSettingsSection = () => {
 
             <div className='flex flex-col gap-3 my-4 text-gray-200 items-center max-w-sm ml-auto mr-auto'>
                <label htmlFor='maxAmountOfAddons' className='flex-1'>
-                  <div className='text-lg'>Adicionais permitidos</div>
+                  <div className='text-lg'>Additions allowed</div>
                   <div className='text-gray-400'>
-                     A quantidade máxima de ingredientes adicionais que o usuário pode escolher para cada item.
+                     The maximun amount of additional toppings the user will be allowed to add for each menu item
                   </div>
                </label>
                <select
@@ -220,9 +220,9 @@ const AdminSettingsSection = () => {
 
             <div className='flex flex-col gap-3 my-4 text-gray-200 items-center'>
                <label htmlFor='unconfirmedOrderExpiryTime' className='flex-1'>
-                  <div className='text-lg'>Prazo limite de pedidos não confirmados</div>
+                  <div className='text-lg'>Deadline for unconfirmed orders</div>
                   <div className='text-gray-400'>
-                     Atingido esse limite, pedidos que não foram confirmados terão seus status mudado para cancelado.
+                     Once this deadline is reached for an unpaid order, it will become a cancelled order
                   </div>
                </label>
                <select
@@ -252,7 +252,7 @@ const AdminSettingsSection = () => {
 
             <div className='flex flex-col gap-3 my-4 text-gray-200 max-w-sm w-full'>
                <label htmlFor='aboutUsContent' className='flex-1 '>
-                  <div className='text-lg'>Conteúdo da página Sobre Nós</div>
+                  <div className='text-lg'>About us page content</div>
                </label>
                <textarea
                   className={`${FIELD_CLASS_NAME} w-full h-40 text-base`}

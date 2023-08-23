@@ -16,27 +16,27 @@ const AdminGeneralProductsView: React.FC<Props> = ({ item, associatedMenuItems, 
   return (
       <div className='text-white'>
          <h2 className='text-xl text-green-500 mb-6'>
-            Detalhes
+            Details
          </h2>
          
          <ModelStandardFieldInfo
-            label='Preço'
-            info={item.price ? priceToString(item.price) : 'Sem preço'}
+            label='Price'
+            info={item.price ? priceToString(item.price) : 'No price'}
          />
          <ModelStandardFieldInfo
-            label='Em estoque'
+            label='In stock'
             info={item.isAvailable ? 'Sim' : 'Não'}
          />
          {hasCanBeExtra && (
             <ModelStandardFieldInfo
-               label='Adicionável'
-               info={(item as ToppingModel | SauceModel).canBeExtra ? 'Sim' : 'Não'}
+               label='User can add'
+               info={(item as ToppingModel | SauceModel).canBeExtra ? 'Yes' : 'No'}
             />
          )}
          {
             associatedMenuItems && (
                <ModelStandardFieldInfo
-                  label='Usado por'
+                  label='Used by'
                   info={associatedMenuItems}
                   col
                />

@@ -56,12 +56,12 @@ const OrderManagerItem: React.FC<Props> = ({ order, buttonLabel }) => {
                   <span className='translate-y-1'>
                      {isOpen ? <FaAngleUp /> : <FaAngleDown />}
                   </span>
-                  Detalhes
+                  Details
                </div>
                
                <div className="flex justify-between gap-1">
                   {order.isDelivery ? 
-                     <><span className='translate-y-1 text text-lg text-green-400'><MdDeliveryDining /></span> Entrega</>
+                     <><span className='translate-y-1 text text-lg text-green-400'><MdDeliveryDining /></span> Delivery</>
                      : ''
                   }
                </div>

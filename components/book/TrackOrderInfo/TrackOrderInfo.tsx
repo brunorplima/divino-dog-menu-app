@@ -31,27 +31,27 @@ const TrackOrderInfo: React.FC<Props> = ({ order }) => {
 
    const statusInfo = useMemo<StatusInfo>(() => ({
       confirmar: {
-         text: 'Pedido não confirmado',
+         text: 'Awaiting payment',
          percent: 0,
          previousStatuses: []
       },
       confirmado: {
-         text: 'Pagamento e pedido confirmados',
+         text: 'Order confirmed',
          percent: 33,
          previousStatuses: ['confirmar']
       },
       preparando: {
-         text: 'Pedido está sendo preparado',
+         text: 'Preparing order',
          percent: 66,
          previousStatuses: ['confirmar', 'confirmado']
       },
       finalizado: {
-         text: 'Pedido finalizado',
+         text: 'Order\'s ready!',
          percent: 100,
          previousStatuses: ['confirmar', 'confirmado', 'preparando']
       },
       cancelado: {
-         text: 'Pedido foi cancelado',
+         text: 'Order was cancelled',
          percent: 0,
          previousStatuses: []
       }
@@ -61,13 +61,13 @@ const TrackOrderInfo: React.FC<Props> = ({ order }) => {
    return (
       <div className='mt-10 px-3 rounded overflow-hidden'>
          <div className='px-4 py-3 flex gap-3' style={{ backgroundColor: 'rgb(68, 69, 73)' }}>
-            <div className='flex items-end'>Pedido</div>
+            <div className='flex items-end'>Order</div>
             <span className='text-3xl rounded'>{order.codeNumber}</span>
          </div>
 
          <div className='border-8' style={{ borderColor: 'rgb(68, 69, 73)' }}>
             <div className='px-4 py-3'>
-               <div>Status do pedido:</div>
+               <div>Order status:</div>
                {statusInfo[order.status]?.previousStatuses?.map(status => (
                   <div key={JSON.stringify(status)} className='text-green-500 line-through'>
                      {statusInfo[status]?.text}
@@ -98,7 +98,7 @@ const TrackOrderInfo: React.FC<Props> = ({ order }) => {
                   className='text-lg flex gap-2'
                   onClick={() => setOpen(!open)}
                >
-                  <div>Detalhes do pedido</div>
+                  <div>Order Details</div>
                   <span className='translate-y-2'>{open ? <BiUpArrow size={13} /> : <BiDownArrow size={13} />}</span>
                </div>
                {open && order.items.map(item => {
@@ -124,7 +124,7 @@ const TrackOrderInfo: React.FC<Props> = ({ order }) => {
                      </div>
                   )
                })}
-               <div className='mt-4 font-bold'>Total: R$ {order.totalPrice.toFixed(2)}</div>
+               <div className='mt-4 font-bold'>Total: $ {order.totalPrice.toFixed(2)}</div>
             </div>
          </div>
       </div>

@@ -60,7 +60,7 @@ const CategoryForm: React.FC<Props> = ({ item, onClose, onCloseWithItem }) => {
                   <>
                      <Form onSubmit={handleSubmit}>
                         <FormField
-                           label='Nome'
+                           label='Name'
                            name='name'
                            containerClassName='mb-3'
                            error={errors.name}
@@ -68,7 +68,7 @@ const CategoryForm: React.FC<Props> = ({ item, onClose, onCloseWithItem }) => {
                         />
                         
                         <FormField
-                           label='Ordem de lista'
+                           label="List's order"
                            name='listOrder'
                            type='number'
                            containerClassName='mb-3'
@@ -78,7 +78,7 @@ const CategoryForm: React.FC<Props> = ({ item, onClose, onCloseWithItem }) => {
 
                         <div className="flex justify-center">
                            <PrimaryButton
-                              label='Salvar'
+                              label='Save'
                               type='submit'
                            />
                         </div>

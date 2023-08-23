@@ -79,7 +79,7 @@ const AdminUsersSearchResults: React.FC<Props> = ({
                <div className="py-2 mb-3">
                   <div className='flex'>
                      <MdAdminPanelSettings size={20}/>
-                     <div className='ml-2'>Administradores</div>
+                     <div className='ml-2'>Admins</div>
                   </div>
                </div>
                {userListing.adminUsers.map((user) => <AdminUsersSearchItem key={user.id} {...{ user, setUserToEdit }} />)}
@@ -94,7 +94,7 @@ const AdminUsersSearchResults: React.FC<Props> = ({
                   <div className='flex'>
                      <HiUsers size={20}/>
                      <div className='ml-2 flex justify-between w-full'>
-                        <div>{regularUsersNumber} usuário{regularUsersNumber !== 1 && 's'}</div>
+                        <div>{regularUsersNumber} user{regularUsersNumber !== 1 && 's'}</div>
                         <div className='flex gap-5 justify-center'>
                            <div
                               onClick={() => changePagination(pagination - 1)}

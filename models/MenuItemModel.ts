@@ -122,10 +122,10 @@ export default class MenuItemModel extends Model<MenuItem> {
             else {
                if (isFollowingDay && idx + 1 !== arr.length) {
                   isFollowingDay = false
-                  if (returnCount > 1) availableDaysString += ` à ${WEEK_DAYS[arr[idx - 1]]}, ${WEEK_DAYS[num]}`
+                  if (returnCount > 1) availableDaysString += ` to ${WEEK_DAYS[arr[idx - 1]]}, ${WEEK_DAYS[num]}`
                   else availableDaysString += `, ${WEEK_DAYS[arr[idx - 1]]}, ${WEEK_DAYS[num]}`
                } else if (isFollowingDay && idx + 1 === arr.length) {
-                  availableDaysString += ` à ${WEEK_DAYS[num]}`
+                  availableDaysString += ` to ${WEEK_DAYS[num]}`
                } else {
                   availableDaysString += `, ${WEEK_DAYS[num]}`
                }

@@ -47,7 +47,7 @@ const ProductItem: React.FC<Props> = ({
                      >
                         <BsCheck size={16} color='rgb(22,163,74)' />
                      </span>{' '}
-                     Em estoque
+                     In stock
                   </>
                ) : (
                   <>
@@ -59,7 +59,7 @@ const ProductItem: React.FC<Props> = ({
                      >
                         <CgUnavailable color='#f75' />
                      </span>{' '}
-                     Indisponível
+                     Unavailable
                   </>
                )}
             </div>

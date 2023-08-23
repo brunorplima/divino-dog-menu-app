@@ -11,17 +11,17 @@ const AdminCategoriesView: React.FC<Props> = ({ item, associatedMenuItems }) => 
   return (
       <div className='text-white'>
          <h2 className='text-xl text-green-500 mb-6'>
-            Detalhes
+            Details
          </h2>
          
          <ModelStandardFieldInfo
-            label='Ordem de lista'
+            label="List's order"
             info={item.listOrder}
          />
          {
             associatedMenuItems && (
                <ModelStandardFieldInfo
-                  label='Items dessa categoria'
+                  label='Items on this category'
                   info={associatedMenuItems}
                   col
                />

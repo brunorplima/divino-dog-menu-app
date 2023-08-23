@@ -5,11 +5,11 @@ export const getAuthErrorMessage = (message: string) => {
    switch (message) {
       case 'Firebase: Error (auth/user-not-found).':
       case 'Firebase: Error (auth/wrong-password).':
-         return 'E-mail ou senha incorretos'
+         return 'Incorrect email or password'
       case 'Firebase: Error (auth/email-already-in-use).':
-         return 'Email indisponível'
+         return 'Unavailable email'
       default:
-         return 'Não foi possivel completar seu login'
+         return 'It was not possible to complete the login'
    }
 }
 

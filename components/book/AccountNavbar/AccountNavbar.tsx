@@ -66,7 +66,7 @@ const AccountNavbar: React.FC<Props> = ({ options }) => {
                   onClick={() => setMenuOpen(false)}
                >
                   <span className='translate-y-1 w-1/12'><MdRestaurantMenu /></span>
-                  <span className="flex-1">Cardápio</span>
+                  <span className="flex-1">Menu</span>
                </a>
             </Link>
             <div

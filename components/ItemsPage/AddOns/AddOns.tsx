@@ -173,9 +173,9 @@ const AddOns = ({
                      },
                   ]}
                >
-                  {`Você só pode escolher ${maxAmount} ${
-                     maxAmount > 1 ? 'adicionais' : 'adicional'
-                  }. Remova um item para selecionar outro.`}
+                  {`You can only choose up to ${maxAmount} ${
+                     maxAmount > 1 ? 'extras' : 'extra'
+                  }. Uncheck an item to check another.`}
                </Dialog>
             )}
          </div>

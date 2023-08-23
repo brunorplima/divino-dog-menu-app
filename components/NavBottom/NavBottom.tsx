@@ -13,10 +13,10 @@ export default function NavBottom() {
 
    const buttons = useMemo(
       () => [
-         { name: 'Cardápio', icon: <MdRestaurantMenu />, link: '/' },
-         { name: 'Pedidos', icon: <BiCart />, link: '/checkout' },
-         { name: 'Progresso', icon: <AiOutlineFileSync />, link: '/track_order' },
-         { name: 'Sobre nós', icon: <BiStore />, link: '/aboutus' },
+         { name: 'Menu', icon: <MdRestaurantMenu />, link: '/' },
+         { name: 'Orders', icon: <BiCart />, link: '/checkout' },
+         { name: 'Progress', icon: <AiOutlineFileSync />, link: '/track_order' },
+         { name: 'About Us', icon: <BiStore />, link: '/aboutus' },
       ],
       []
    )

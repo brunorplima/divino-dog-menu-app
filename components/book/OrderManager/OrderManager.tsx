@@ -11,12 +11,12 @@ import styles from './OrderManager.module.scss'
 const MINUTE_IN_MS = 20000
 
 const statusTitle = {
-   confirmar: 'Não Confirmados',
-   confirmado: 'Confirmados',
-   preparando: 'Preparando',
+   confirmar: 'Not Confirmed',
+   confirmado: 'Confirmed',
+   preparando: 'Preparing',
    finalizando: 'Finalizando',
-   finalizado: 'Finalizado',
-   cancelado: 'Cancelados',
+   finalizado: 'Finalized',
+   cancelado: 'Cancelled',
 }
 
 const OrderManager = () => {
@@ -57,7 +57,7 @@ const OrderManager = () => {
                      <h2 className='text-2xl'>{statusTitle[status]}</h2>
                      {ordersByStatus[status] &&
                         ordersByStatus[status].map((order) => (
-                           <OrderManagerItem key={order.id} order={order} buttonLabel='Próximo' />
+                           <OrderManagerItem key={order.id} order={order} buttonLabel='Next' />
                         ))
                      }
                   </div>
@@ -68,7 +68,7 @@ const OrderManager = () => {
             className='flex flex-col items-center gap-3 text-gray-300 overflow-y-scroll mb-4 border border-gray-200 rounded p-2'
             style={{ minWidth: 280 }}
          >
-            <h2 className='text-2xl'>Finalizados</h2>
+            <h2 className='text-2xl'>Finalized</h2>
             {latestFinalizedOrders.map((order) => (
                <OrderManagerItem key={order.id} order={order} />
             ))}

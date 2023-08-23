@@ -104,10 +104,10 @@ export default function OrderPage() {
          <div
             className={`${style.topTitle} ${style.hideScroller} relative font-semibold text-xl my-12 w-screen`}
          >
-            <div className={`${style.hideScroller} text-left`}>Seu Pedido</div>
+            <div className={`${style.hideScroller} text-left`}>Cart</div>
          </div>
          {menuItemGroups.length === 0 && (
-            <div className='text-4xl m-6'>Você não selecionou nenhum item ainda.</div>
+            <div className='text-4xl m-6'>You haven&apos;t added an item yet</div>
          )}
          {manageableLocalStorage.map((e, idx) => (
             <div key={e.order.menuItemId + String(idx)} id={String(idx)}>
@@ -139,7 +139,7 @@ export default function OrderPage() {
                      <div className={`${style.itemInfo}`}>
                         {!!e.order.extraSauceIds && e.order.extraSauceIds.length !== 0 && (
                            <>
-                              <div className='font-semibold text-base'>Molhos</div>
+                              <div className='font-semibold text-base'>Sauces</div>
                               {e.order.extraSauceIds.map((id) => (
                                  <div key={id}>{findItemName(sauces, id)}</div>
                               ))}
@@ -147,7 +147,7 @@ export default function OrderPage() {
                         )}
                         {!!e.order.extraToppingIds && e.order.extraToppingIds.length !== 0 && (
                            <>
-                              <div className='font-semibold text-base'>Adicionais</div>
+                              <div className='font-semibold text-base'>Additions</div>
                               {e.order.extraToppingIds.map((id) => (
                                  <div key={id}>{findItemName(toppings, id)}</div>
                               ))}
@@ -181,7 +181,7 @@ export default function OrderPage() {
                >
                   <div>
                      <PrimaryButton
-                        label='Apagar tudo'
+                        label='Remove all'
                         bgColor='red'
                         icon={<FaTrashAlt />}
                         clickHandler={() => setNotification(true)}
@@ -199,12 +199,12 @@ export default function OrderPage() {
                style={{ background: '#222327', borderColor: '#d3d3d3' }}
             >
                <p className='relative m-4'>
-                  Você tem certeza que deseja apagar todos os itens do seu pedido?
+                  Are you sure you want to remove all items from the cart?
                </p>
                <div className='flex flex-row gap-3'>
-                  <PrimaryButton label='Não' clickHandler={() => setNotification(false)} />
+                  <PrimaryButton label='No' clickHandler={() => setNotification(false)} />
                   <PrimaryButton
-                     label='Sim'
+                     label='Yes'
                      bgColor='none'
                      clickHandler={() => {
                         clearMenuItemGroups()
@@ -248,7 +248,7 @@ export default function OrderPage() {
                      })
                   }
                >
-                  Confirmar Pedido
+                  Finish order
                </button>
             </div>
             <div className='text-right'>{formatPrice(priceWatcher())}</div>
